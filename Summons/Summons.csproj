@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2DA3741B-1AC5-4FD0-900D-9F4F4342046F}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Summons</RootNamespace>
+    <AssemblyName>Summons</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MonoGamePlatform>Windows</MonoGamePlatform>
+    <MonoGameContentBuilderExe>
+    </MonoGameContentBuilderExe>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Windows\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Windows\Release\</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Camera.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Coordinate.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MonoGame.Framework">
+      <HintPath>$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icon.ico" />
+    <Content Include="Media\Maps\map0.txt" />
+    <Content Include="Media\Maps\mapLarge.txt" />
+    <Content Include="Media\Maps\mapMedium.txt" />
+    <Content Include="Media\Maps\mapSmall.txt" />
+    <Content Include="Media\Tiles\grass64.jpg" />
+    <Content Include="Media\Tiles\move64.jpg" />
+    <Content Include="Media\Tiles\swamp64.jpg" />
+    <Content Include="Media\Tiles\water64.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <MonoGameContentReference Include="Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Engine\" />
+    <Folder Include="Media\Fonts\.svn\props\" />
+    <Folder Include="Media\Fonts\.svn\tmp\prop-base\" />
+    <Folder Include="Media\Fonts\.svn\tmp\props\" />
+    <Folder Include="Media\Fonts\.svn\tmp\text-base\" />
+    <Folder Include="Media\Tiles\.svn\props\" />
+    <Folder Include="Media\Tiles\.svn\tmp\prop-base\" />
+    <Folder Include="Media\Tiles\.svn\tmp\props\" />
+    <Folder Include="Media\Tiles\.svn\tmp\text-base\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Media\Fonts\.svn\all-wcprops" />
+    <None Include="Media\Fonts\.svn\entries" />
+    <None Include="Media\Fonts\.svn\prop-base\visitor.ttf.svn-base" />
+    <None Include="Media\Fonts\.svn\text-base\visitor.ttf.svn-base" />
+    <None Include="Media\Fonts\visitor.ttf" />
+    <None Include="Media\Tiles\.svn\all-wcprops" />
+    <None Include="Media\Tiles\.svn\entries" />
+    <None Include="Media\Tiles\.svn\prop-base\grass.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\prop-base\grass128.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\prop-base\grass64.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\prop-base\move64.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\prop-base\swamp64.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\prop-base\water.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\prop-base\water128.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\prop-base\water64.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\text-base\grass.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\text-base\grass128.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\text-base\grass64.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\text-base\move64.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\text-base\swamp64.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\text-base\water.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\text-base\water128.jpg.svn-base" />
+    <None Include="Media\Tiles\.svn\text-base\water64.jpg.svn-base" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
