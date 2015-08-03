@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Code/Summons/Summons/Content/Tiles/grass64.jpg</File>
+    <File>C:/Code/Summons/Summons/Content/Tiles/move64.jpg</File>
+    <File>C:/Code/Summons/Summons/Content/Tiles/swamp64.jpg</File>
+    <File>C:/Code/Summons/Summons/Content/Tiles/water64.jpg</File>
+    <File>C:/Code/Summons/Summons/Content/Tiles/mountain64.jpg</File>
+  </SourceFiles>
+</SourceFileCollection>

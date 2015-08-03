@@ -13,18 +13,17 @@ namespace Summons
     {
         static Settings instance = new Settings();
         
+        // Screen resolution
+        public static int SCREEN_WIDTH = 1000;
+        public static int SCREEN_HEIGHT = 800;
+        
         // Media locations
-        public static String MEDIA_ROOT = "../../../Media/";
+        public static String MEDIA_ROOT = "../../../Content/";
         public static String MAPS_ROOT = MEDIA_ROOT + "Maps/";
         public static String TILES_ROOT = MEDIA_ROOT + "Tiles/";
 
-        // Tileset mapping
+        // Tilesets
         public static int TILE_SIZE = 64;
-        public static List<KeyValuePair<char, String>> TILE_MAPPING = new List<KeyValuePair<char, String>>()
-        { 
-            new KeyValuePair<char, String>('0', "water64.jpg"),
-            new KeyValuePair<char, String>('1', "grass64.jpg")
-        };
 
         private Settings() {}
 

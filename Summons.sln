@@ -5,12 +5,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Summons", "Summons\Summons.
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DA3741B-1AC5-4FD0-900D-9F4F4342046F}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{2DA3741B-1AC5-4FD0-900D-9F4F4342046F}.Debug|x86.ActiveCfg = Debug|x86
 		{2DA3741B-1AC5-4FD0-900D-9F4F4342046F}.Debug|x86.Build.0 = Debug|x86
+		{2DA3741B-1AC5-4FD0-900D-9F4F4342046F}.Release|Any CPU.ActiveCfg = Release|x86
 		{2DA3741B-1AC5-4FD0-900D-9F4F4342046F}.Release|x86.ActiveCfg = Release|x86
 		{2DA3741B-1AC5-4FD0-900D-9F4F4342046F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection

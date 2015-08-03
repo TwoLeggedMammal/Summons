@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Summons
 {
@@ -8,18 +9,21 @@ namespace Summons
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Map map;
+        Camera camera;
 
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.IsFullScreen = false;
+            graphics.PreferredBackBufferWidth = Settings.SCREEN_WIDTH;
+            graphics.PreferredBackBufferHeight = Settings.SCREEN_HEIGHT;
             Content.RootDirectory = "Content";
         }
 
         protected override void Initialize()
         {
-            Map map = Map.getInstance();
-            map.LoadMap("map0.txt");
-
+            camera = Camera.getInstance();
             base.Initialize();
         }
 
@@ -29,20 +33,20 @@ namespace Summons
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            Assets.getInstance().LoadTextures(Content);
+            map = Map.getInstance();
+            map.LoadMap("map0.txt", GraphicsDevice);
+            camera.Width = Settings.SCREEN_WIDTH;
+            camera.Height = Settings.SCREEN_HEIGHT;
+            camera.XMax = map.width;
+            camera.YMax = map.height;
         }
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// game-specific content.
         /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
-        }
+        protected override void UnloadContent() {}
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -51,10 +55,23 @@ namespace Summons
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            this.Window.Title = Convert.ToString(1000.0 / gameTime.ElapsedGameTime.Milliseconds);
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            // Move the camera
+            if (GamePad.GetState(PlayerIndex.One).DPad.Right == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Right))
+                camera.X += 500.0 * Convert.ToDouble(gameTime.ElapsedGameTime.Milliseconds / 1000.0);
+
+            if (GamePad.GetState(PlayerIndex.One).DPad.Left == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Left))
+                camera.X -= 500.0 * Convert.ToDouble(gameTime.ElapsedGameTime.Milliseconds / 1000.0);
+
+            if (GamePad.GetState(PlayerIndex.One).DPad.Down == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Down))
+                camera.Y += 500.0 * Convert.ToDouble(gameTime.ElapsedGameTime.Milliseconds / 1000.0);
+
+            if (GamePad.GetState(PlayerIndex.One).DPad.Up == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Up))
+                camera.Y -= 500.0 * Convert.ToDouble(gameTime.ElapsedGameTime.Milliseconds / 1000.0);
 
             base.Update(gameTime);
         }
@@ -67,7 +84,8 @@ namespace Summons
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            // Have the map render
+            map.Draw(GraphicsDevice);
 
             base.Draw(gameTime);
         }
