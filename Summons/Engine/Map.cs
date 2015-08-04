@@ -41,11 +41,9 @@ namespace Summons
                 mapData = sr.ReadToEnd().Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
                 
                 // Set the dimensions of our map
-                this.height = mapData.Length * Settings.TILE_SIZE;
-                this.width = mapData[0].Length * Settings.TILE_SIZE;
+                this.height = mapData.Length;
+                this.width = mapData[0].Length;
             }
-
-            //GenerateMapTexture(graphics);
         }
 
         public void Draw(GraphicsDevice graphics)
@@ -85,7 +83,17 @@ namespace Summons
         public Stack<Coordinate> FindPath(int startX, int startY, int destX, int destY)
         {
             Stack<Coordinate> path = new Stack<Coordinate>();
-            double[,] moveMap = GetMovementMap(startX, startY, null, 10.0);
+            double[,] moveMap = GetMovementMap(startX, startY, null, 12.0);
+            Console.WriteLine(moveMap.GetLength(0).ToString());
+            Console.WriteLine(moveMap.GetLength(1).ToString());
+            for (int i = 0; i < moveMap.GetLength(0); i++)
+            {
+                for (int j = 0; j < moveMap.GetLength(1); j++)
+                {
+                    Console.Write(moveMap[i, j].ToString());
+                }
+                Console.WriteLine();
+            }
             return ExtractPath(moveMap, destX, destY);
         }
 
@@ -93,7 +101,7 @@ namespace Summons
         {
             if (moveMap == null)
             {
-                moveMap = new double[width, height];
+                moveMap = new double[height, width];
 
                 // Initialize the move map to -1 to show it's fresh
                 for (int i = 0; i < moveMap.GetLength(0); i++)
@@ -104,16 +112,18 @@ namespace Summons
                     }
                 }
             }
+            else
+            {
+                movement -= tileMoveCost[mapData[y][x]];  // we don't subtract movement for the starting location
+            }
    
             if (moveMap[y, x] < movement)
             {
                 moveMap[y, x] = movement;
             }
 
-            if (movement > 0 && movement - tileMoveCost[mapData[y][x]] >= 0)
+            if (movement > 0)
             {
-                movement -= tileMoveCost[mapData[y][x]];
-
                 if (x > 0)
                     GetMovementMap(x - 1, y, moveMap, movement);
                 if (x < width - 1)

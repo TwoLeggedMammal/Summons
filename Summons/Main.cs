@@ -44,8 +44,8 @@ namespace Summons
             map.LoadMap("map0.txt", GraphicsDevice);
             camera.Width = Settings.SCREEN_WIDTH;
             camera.Height = Settings.SCREEN_HEIGHT;
-            camera.XMax = map.width;
-            camera.YMax = map.height;
+            camera.XMax = map.width * Settings.TILE_SIZE;
+            camera.YMax = map.height * Settings.TILE_SIZE;
 
             mainCharacter = new Actor(4, 4);
             actorCollection.Add(mainCharacter);
