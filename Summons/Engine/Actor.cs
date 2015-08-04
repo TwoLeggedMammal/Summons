@@ -14,6 +14,7 @@ namespace Summons.Engine
         public double Y;
         Camera camera;
         SpriteBatch actorSprite;
+        public bool selected;
 
         public int TileX
         {
@@ -49,6 +50,8 @@ namespace Summons.Engine
 
         public void Draw(GraphicsDevice graphics)
         {
+            int highlightColor = Convert.ToInt32(170.0 + Math.Abs(((DateTime.Now.Ticks / (TimeSpan.TicksPerMillisecond * 10)) % 80) - 40));
+
             actorSprite = new SpriteBatch(graphics);
             actorSprite.Begin();
 
@@ -58,14 +61,19 @@ namespace Summons.Engine
                             new Rectangle
                             (
                                 Convert.ToInt32(X - Camera.getInstance().X),
-                                Convert.ToInt32(Y - Camera.getInstance().Y - 15.0),
+                                Convert.ToInt32(Y - Camera.getInstance().Y - 15.0),  // Actors sit a bit higher on the tile so they look 3D
                                 Settings.TILE_SIZE,
                                 Settings.TILE_SIZE
                             ),
-                            Color.White
+                            selected ? new Color(highlightColor, highlightColor, Convert.ToInt32(highlightColor * 0.8)) : Color.White
                         );
 
             actorSprite.End();
+        }
+
+        public void Select()
+        {
+            selected = !selected;
         }
     }
 }

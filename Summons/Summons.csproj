@@ -59,6 +59,7 @@
     <Compile Include="Engine\Actor.cs" />
     <Compile Include="Engine\Assets.cs" />
     <Compile Include="Engine\Camera.cs" />
+    <Compile Include="Engine\Input.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Engine\Coordinate.cs" />
     <Compile Include="Main.cs" />

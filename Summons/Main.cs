@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 using Summons.Engine;
 
 namespace Summons
@@ -12,8 +13,8 @@ namespace Summons
         SpriteBatch spriteBatch;
         Map map;
         Camera camera;
+        List<Actor> actorCollection;
         Actor mainCharacter;
-
 
         public Main()
         {
@@ -26,7 +27,9 @@ namespace Summons
 
         protected override void Initialize()
         {
+            this.IsMouseVisible = true;
             camera = Camera.getInstance();
+            actorCollection = new List<Actor>();
             base.Initialize();
         }
 
@@ -45,6 +48,7 @@ namespace Summons
             camera.YMax = map.height;
 
             mainCharacter = new Actor(4, 4);
+            actorCollection.Add(mainCharacter);
         }
 
         /// <summary>
@@ -77,6 +81,9 @@ namespace Summons
 
             if (GamePad.GetState(PlayerIndex.One).DPad.Up == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Up))
                 camera.Y -= 500.0 * Convert.ToDouble(gameTime.ElapsedGameTime.Milliseconds / 1000.0);
+
+            // Mouse input
+            Input.getInstance().HandleMouseInput(Mouse.GetState(), actorCollection);
 
             base.Update(gameTime);
         }
