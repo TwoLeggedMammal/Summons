@@ -16,6 +16,7 @@ namespace Summons.Engine
         SpriteBatch actorSprite;
         public bool Selected;
         Stack<Coordinate> path;
+        double speed = 300.0;
 
         public int TileX
         {
@@ -50,9 +51,33 @@ namespace Summons.Engine
             path = new Stack<Coordinate>();
         }
 
-        public void Update()
+        public void Update(double timeSinceLastFrame)
         {
+            if (path.Count > 0)
+            {
+                double xDiff = (path.Peek().x * Settings.TILE_SIZE) - X;
+                double yDiff = (path.Peek().y * Settings.TILE_SIZE) - Y;
+                double moveAmount = (speed * timeSinceLastFrame);
 
+                // If we've just got a little bit to move, then we only move that little bit this frame
+                if (moveAmount > Math.Max(Math.Abs(xDiff), Math.Abs(yDiff)))
+                    moveAmount = Math.Max(Math.Abs(xDiff), Math.Abs(yDiff));
+
+                if (xDiff > 0)
+                    X += moveAmount;
+                else if (xDiff < 0)
+                    X -= moveAmount;
+
+                if (yDiff > 0)
+                    Y += moveAmount;
+                else if (yDiff < 0)
+                    Y -= moveAmount;
+
+                if (xDiff == 0 && yDiff == 0)
+                {
+                    Console.WriteLine(path.Pop());
+                }
+            }
         }
         
         public void Draw(GraphicsDevice graphics)
@@ -87,9 +112,6 @@ namespace Summons.Engine
         {
             Selected = false;
             path = Map.getInstance().FindPath(TileX, TileY, x, y);
-
-            foreach (Coordinate c in path)
-                Console.WriteLine(c.ToString());
         }
     }
 }

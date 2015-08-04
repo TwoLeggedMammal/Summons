@@ -20,6 +20,7 @@ namespace Summons
         String[] mapData;
         private Map() {}
         public static SpriteBatch mapSprite;
+
         static Dictionary<char, double> tileMoveCost = new Dictionary<char, double>()
         {
             {'0', 100.0},  // water
@@ -83,9 +84,8 @@ namespace Summons
         public Stack<Coordinate> FindPath(int startX, int startY, int destX, int destY)
         {
             Stack<Coordinate> path = new Stack<Coordinate>();
-            double[,] moveMap = GetMovementMap(startX, startY, null, 12.0);
-            Console.WriteLine(moveMap.GetLength(0).ToString());
-            Console.WriteLine(moveMap.GetLength(1).ToString());
+            double[,] moveMap = GetMovementMap(startX, startY, null, 30.0);
+
             for (int i = 0; i < moveMap.GetLength(0); i++)
             {
                 for (int j = 0; j < moveMap.GetLength(1); j++)
@@ -116,22 +116,22 @@ namespace Summons
             {
                 movement -= tileMoveCost[mapData[y][x]];  // we don't subtract movement for the starting location
             }
-   
+
             if (moveMap[y, x] < movement)
             {
                 moveMap[y, x] = movement;
-            }
 
-            if (movement > 0)
-            {
-                if (x > 0)
-                    GetMovementMap(x - 1, y, moveMap, movement);
-                if (x < width - 1)
-                    GetMovementMap(x + 1, y, moveMap, movement);
-                if (y > 0)
-                    GetMovementMap(x, y - 1, moveMap, movement);
-                if (y < height - 1)
-                    GetMovementMap(x, y + 1, moveMap, movement);
+                if (movement > 0)
+                {
+                    if (x > 0)
+                        GetMovementMap(x - 1, y, moveMap, movement);
+                    if (x < width - 1)
+                        GetMovementMap(x + 1, y, moveMap, movement);
+                    if (y > 0)
+                        GetMovementMap(x, y - 1, moveMap, movement);
+                    if (y < height - 1)
+                        GetMovementMap(x, y + 1, moveMap, movement);
+                }
             }
 
             return moveMap;
@@ -141,30 +141,33 @@ namespace Summons
         {
             if (path == null)
                 path = new Stack<Coordinate>();
- 
-            path.Push(new Coordinate(x, y));
- 
-            double up, down, left, right;
-   
-            // Find out the remaining movement in each of the neighboring tiles
-            up = (y > 0 && moveMap[y - 1, x] != -1 && moveMap[y - 1, x] >= moveMap[y, x]) ? moveMap[y - 1, x] : -1;
-            down = (y < moveMap.GetLength(0) - 1 && moveMap[y + 1, x] != -1 && moveMap[y + 1, x] >= moveMap[y, x]) ? moveMap[y + 1, x] : -1;
-            left = (x > 0 && moveMap[y, x - 1] != -1 && moveMap[y, x - 1] >= moveMap[y, x]) ? moveMap[y, x - 1] : -1;
-            right = (x < moveMap.GetLength(1) - 1 && moveMap[y, x + 1] != -1 && moveMap[y, x + 1] >= moveMap[y, x]) ? moveMap[y, x + 1] : -1;
 
-            // As long as one neighbor is valid
-            if (up > -1 || down > -1 || left > -1 || right > -1)
+            if (moveMap[y, x] > -1)
             {
-                double maxMove = Math.Max(up, Math.Max(down, Math.Max(left, right)));
-                //Console.WriteLine(maxMove.ToString());
-                if (up == maxMove)
-                    path = ExtractPath(moveMap, x, y - 1, path);
-                else if (down == maxMove)
-                    path = ExtractPath(moveMap, x, y + 1, path);
-                else if (left == maxMove)
-                    path = ExtractPath(moveMap, x - 1, y, path);
-                else if (right == maxMove)
-                    path = ExtractPath(moveMap, x + 1, y, path);
+                path.Push(new Coordinate(x, y));
+
+                double up, down, left, right;
+
+                // Find out the remaining movement in each of the neighboring tiles
+                up = (y > 0 && moveMap[y - 1, x] != -1 && moveMap[y - 1, x] >= moveMap[y, x]) ? moveMap[y - 1, x] : -1;
+                down = (y < moveMap.GetLength(0) - 1 && moveMap[y + 1, x] != -1 && moveMap[y + 1, x] >= moveMap[y, x]) ? moveMap[y + 1, x] : -1;
+                left = (x > 0 && moveMap[y, x - 1] != -1 && moveMap[y, x - 1] >= moveMap[y, x]) ? moveMap[y, x - 1] : -1;
+                right = (x < moveMap.GetLength(1) - 1 && moveMap[y, x + 1] != -1 && moveMap[y, x + 1] >= moveMap[y, x]) ? moveMap[y, x + 1] : -1;
+
+                // As long as one neighbor is valid
+                if (up > -1 || down > -1 || left > -1 || right > -1)
+                {
+                    double maxMove = Math.Max(up, Math.Max(down, Math.Max(left, right)));
+                    //Console.WriteLine(maxMove.ToString());
+                    if (up == maxMove)
+                        path = ExtractPath(moveMap, x, y - 1, path);
+                    else if (down == maxMove)
+                        path = ExtractPath(moveMap, x, y + 1, path);
+                    else if (left == maxMove)
+                        path = ExtractPath(moveMap, x - 1, y, path);
+                    else if (right == maxMove)
+                        path = ExtractPath(moveMap, x + 1, y, path);
+                }
             }
 
             return path;

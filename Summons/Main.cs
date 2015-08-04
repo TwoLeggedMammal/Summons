@@ -64,7 +64,8 @@ namespace Summons
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            this.Window.Title = Convert.ToString(1000.0 / gameTime.ElapsedGameTime.Milliseconds);
+            double timeSinceLastFrame = gameTime.ElapsedGameTime.Milliseconds / 1000.0;
+            this.Window.Title = Convert.ToString(1.0 / timeSinceLastFrame);
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -84,6 +85,12 @@ namespace Summons
 
             // Mouse input
             Input.getInstance().HandleMouseInput(Mouse.GetState(), actorCollection);
+
+            // Update our actors
+            foreach (Actor actor in actorCollection)
+            {
+                actor.Update(timeSinceLastFrame);
+            }
 
             base.Update(gameTime);
         }
