@@ -14,3 +14,7 @@ Features in development:
 - Unit animations when moving and attack.
 - One time effect spells for summoners (instead of just summoning units).
 - Special effect where appropriate.
+
+Requirements:
+- Visual Studio 2010+
+- Monogame Framework (http://www.monogame.net/downloads/)
