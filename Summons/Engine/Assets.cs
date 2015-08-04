@@ -15,6 +15,7 @@ namespace Summons
     {
         static Assets instance = new Assets();
         public static Texture2D waterTile, grassTile, mountainTile, swampTile;
+        public static Texture2D summonerActor;
 
         private Assets() { }
 
@@ -30,6 +31,9 @@ namespace Summons
             grassTile = content.Load<Texture2D>("Tiles/grass64");
             mountainTile = content.Load<Texture2D>("Tiles/mountain64");
             swampTile = content.Load<Texture2D>("Tiles/swamp64");
+
+            // Load our actors
+            summonerActor = content.Load<Texture2D>("Actors/blackmage");
         }
     }
 }

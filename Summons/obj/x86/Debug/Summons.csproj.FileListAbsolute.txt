@@ -28,3 +28,4 @@ C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\move64.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\swamp64.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\water64.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\mountain64.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\Actors\blackmage.xnb

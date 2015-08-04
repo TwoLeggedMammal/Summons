@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using Summons.Engine;
 
 namespace Summons
 {
@@ -11,6 +12,8 @@ namespace Summons
         SpriteBatch spriteBatch;
         Map map;
         Camera camera;
+        Actor mainCharacter;
+
 
         public Main()
         {
@@ -40,6 +43,8 @@ namespace Summons
             camera.Height = Settings.SCREEN_HEIGHT;
             camera.XMax = map.width;
             camera.YMax = map.height;
+
+            mainCharacter = new Actor(4, 4);
         }
 
         /// <summary>
@@ -86,6 +91,9 @@ namespace Summons
 
             // Have the map render
             map.Draw(GraphicsDevice);
+
+            // Draw our characters
+            mainCharacter.Draw(GraphicsDevice);
 
             base.Draw(gameTime);
         }
