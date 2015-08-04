@@ -14,7 +14,8 @@ namespace Summons.Engine
         public double Y;
         Camera camera;
         SpriteBatch actorSprite;
-        public bool selected;
+        public bool Selected;
+        Stack<Coordinate> path;
 
         public int TileX
         {
@@ -46,8 +47,14 @@ namespace Summons.Engine
             TileY = y;
             texture = Assets.summonerActor;
             camera = Camera.getInstance();
+            path = new Stack<Coordinate>();
         }
 
+        public void Update()
+        {
+
+        }
+        
         public void Draw(GraphicsDevice graphics)
         {
             int highlightColor = Convert.ToInt32(170.0 + Math.Abs(((DateTime.Now.Ticks / (TimeSpan.TicksPerMillisecond * 10)) % 80) - 40));
@@ -65,7 +72,7 @@ namespace Summons.Engine
                                 Settings.TILE_SIZE,
                                 Settings.TILE_SIZE
                             ),
-                            selected ? new Color(highlightColor, highlightColor, Convert.ToInt32(highlightColor * 0.8)) : Color.White
+                            Selected ? new Color(highlightColor, highlightColor, Convert.ToInt32(highlightColor * 0.8)) : Color.White
                         );
 
             actorSprite.End();
@@ -73,7 +80,16 @@ namespace Summons.Engine
 
         public void Select()
         {
-            selected = !selected;
+            Selected = !Selected;
+        }
+
+        public void SetDestination(int x, int y)
+        {
+            Selected = false;
+            path = Map.getInstance().FindPath(TileX, TileY, x, y);
+
+            foreach (Coordinate c in path)
+                Console.WriteLine(c.ToString());
         }
     }
 }

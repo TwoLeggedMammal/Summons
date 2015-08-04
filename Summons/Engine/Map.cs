@@ -13,13 +13,20 @@ namespace Summons
     public class Map
     {
         static Map instance = new Map();
-        public double width = 0; // in tiles
-        public double height = 0; // in tiles
+        public int width = 0; // in tiles
+        public int height = 0; // in tiles
         double tileSize = Settings.TILE_SIZE;
         Dictionary<char, Texture2D> textureDict;
         String[] mapData;
         private Map() {}
         public static SpriteBatch mapSprite;
+        static Dictionary<char, double> tileMoveCost = new Dictionary<char, double>()
+        {
+            {'0', 100.0},  // water
+            {'1', 1.0},  // grass
+            {'2', 100.0}, // mountain
+            {'3', 2.0} // swamp
+        };
 
         public static Map getInstance()
         {
@@ -73,6 +80,84 @@ namespace Summons
             }
             
             mapSprite.End();
+        }
+
+        public Stack<Coordinate> FindPath(int startX, int startY, int destX, int destY)
+        {
+            Stack<Coordinate> path = new Stack<Coordinate>();
+            double[,] moveMap = GetMovementMap(startX, startY, null, 10.0);
+            return ExtractPath(moveMap, destX, destY);
+        }
+
+        private double[,] GetMovementMap(int x, int y, double[,] moveMap, double movement)
+        {
+            if (moveMap == null)
+            {
+                moveMap = new double[width, height];
+
+                // Initialize the move map to -1 to show it's fresh
+                for (int i = 0; i < moveMap.GetLength(0); i++)
+                {
+                    for (int j = 0; j < moveMap.GetLength(1); j++)
+                    {
+                        moveMap[i, j] = -1.0;
+                    }
+                }
+            }
+   
+            if (moveMap[y, x] < movement)
+            {
+                moveMap[y, x] = movement;
+            }
+
+            if (movement > 0 && movement - tileMoveCost[mapData[y][x]] >= 0)
+            {
+                movement -= tileMoveCost[mapData[y][x]];
+
+                if (x > 0)
+                    GetMovementMap(x - 1, y, moveMap, movement);
+                if (x < width - 1)
+                    GetMovementMap(x + 1, y, moveMap, movement);
+                if (y > 0)
+                    GetMovementMap(x, y - 1, moveMap, movement);
+                if (y < height - 1)
+                    GetMovementMap(x, y + 1, moveMap, movement);
+            }
+
+            return moveMap;
+        }
+
+        Stack<Coordinate> ExtractPath(double[,] moveMap, int x, int y, Stack<Coordinate> path = null)
+        {
+            if (path == null)
+                path = new Stack<Coordinate>();
+ 
+            path.Push(new Coordinate(x, y));
+ 
+            double up, down, left, right;
+   
+            // Find out the remaining movement in each of the neighboring tiles
+            up = (y > 0 && moveMap[y - 1, x] != -1 && moveMap[y - 1, x] >= moveMap[y, x]) ? moveMap[y - 1, x] : -1;
+            down = (y < moveMap.GetLength(0) - 1 && moveMap[y + 1, x] != -1 && moveMap[y + 1, x] >= moveMap[y, x]) ? moveMap[y + 1, x] : -1;
+            left = (x > 0 && moveMap[y, x - 1] != -1 && moveMap[y, x - 1] >= moveMap[y, x]) ? moveMap[y, x - 1] : -1;
+            right = (x < moveMap.GetLength(1) - 1 && moveMap[y, x + 1] != -1 && moveMap[y, x + 1] >= moveMap[y, x]) ? moveMap[y, x + 1] : -1;
+
+            // As long as one neighbor is valid
+            if (up > -1 || down > -1 || left > -1 || right > -1)
+            {
+                double maxMove = Math.Max(up, Math.Max(down, Math.Max(left, right)));
+                //Console.WriteLine(maxMove.ToString());
+                if (up == maxMove)
+                    path = ExtractPath(moveMap, x, y - 1, path);
+                else if (down == maxMove)
+                    path = ExtractPath(moveMap, x, y + 1, path);
+                else if (left == maxMove)
+                    path = ExtractPath(moveMap, x - 1, y, path);
+                else if (right == maxMove)
+                    path = ExtractPath(moveMap, x + 1, y, path);
+            }
+
+            return path;
         }
     }
 }

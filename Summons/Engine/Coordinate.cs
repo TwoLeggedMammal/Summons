@@ -58,6 +58,11 @@ namespace Summons
             return ((c1.x != c2.x) || (c1.y != c2.y));
         }
 
+        public override string ToString()
+        {
+            return String.Format("({0}, {1})", x.ToString(), y.ToString());
+        }
+
         // THIS METHOD ASSUMES THE 2 POINTS SHARE A AXIS, MEANING EITHER c1.x == c2.x or c1.y == c2.y!!!
         public static string GetDirection(Coordinate c1, Coordinate c2)
         {
