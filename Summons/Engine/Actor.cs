@@ -59,6 +59,9 @@ namespace Summons.Engine
                 double yDiff = (path.Peek().y * Settings.TILE_SIZE) - Y;
                 double moveAmount = (speed * timeSinceLastFrame);
 
+                // Slow down the movement based on the tile over which they are moving
+                moveAmount /= Map.getInstance().GetTileFactor(TileX, TileY);
+
                 // If we've just got a little bit to move, then we only move that little bit this frame
                 if (moveAmount > Math.Max(Math.Abs(xDiff), Math.Abs(yDiff)))
                     moveAmount = Math.Max(Math.Abs(xDiff), Math.Abs(yDiff));

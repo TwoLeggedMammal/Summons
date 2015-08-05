@@ -172,5 +172,10 @@ namespace Summons
 
             return path;
         }
+
+        public double GetTileFactor(int x, int y)
+        {
+            return tileMoveCost[mapData[y][x]];
+        }
     }
 }
