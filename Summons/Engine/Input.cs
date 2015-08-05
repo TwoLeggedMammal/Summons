@@ -26,6 +26,7 @@ namespace Summons.Engine
         {
             Camera camera = Camera.getInstance();
 
+            // Handle left clicks
             if ((previousMouseState == null || previousMouseState.LeftButton == ButtonState.Released) && mouseState.LeftButton == ButtonState.Pressed)
             {
                 bool actorClicked = false;
@@ -56,6 +57,35 @@ namespace Summons.Engine
                     }
                 }
             }
+
+            // Right button is down
+            if (mouseState.RightButton == ButtonState.Pressed)
+            {
+                camera.Panning = true;
+            }
+
+            // Right button was released
+            if ((previousMouseState != null && previousMouseState.RightButton == ButtonState.Pressed) && mouseState.RightButton == ButtonState.Released)
+            {
+                camera.Panning = false;
+                camera.calculateMomentum();
+            }
+
+            // Right button was pressed
+            if ((previousMouseState != null && previousMouseState.RightButton == ButtonState.Pressed) && mouseState.RightButton == ButtonState.Pressed)
+            {
+                if (camera.Panning)
+                {
+                    double xDiff = mouseState.Position.X - previousMouseState.Position.X;
+                    double yDiff = mouseState.Position.Y - previousMouseState.Position.Y;
+
+                    camera.X -= xDiff;
+                    camera.Y -= yDiff;
+
+                    camera.momentum.Push(new Coordinate(xDiff, yDiff));
+                }
+            }
+
             previousMouseState = Mouse.GetState();
         }
     }

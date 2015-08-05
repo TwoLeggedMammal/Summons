@@ -86,6 +86,9 @@ namespace Summons
             // Mouse input
             Input.getInstance().HandleMouseInput(Mouse.GetState(), actorCollection);
 
+            // Update our camera
+            camera.Update(timeSinceLastFrame);
+
             // Update our actors
             foreach (Actor actor in actorCollection)
             {

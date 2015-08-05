@@ -199,10 +199,10 @@ namespace Summons
             set { panning = value; }
         }
 
-        public void calculateMomentum(float fps)
+        public void calculateMomentum()
         {
             Coordinate sum = new Coordinate();
-            int readings = Convert.ToInt32(numberOfReadings * (200.0 / fps));
+            int readings = Convert.ToInt32(numberOfReadings * (200.0 / 60.0));  // #TODO: replace hard code of 60 fps with actual
 
             for (int i = 0; i < readings; i++)
             {
@@ -218,29 +218,29 @@ namespace Summons
             speed = sum / Convert.ToDouble(numberOfReadings);
         }
 
-        public void Update(float fps)
+        public void Update(double timeSinceLastFrame)
         {
             if (panning) momentum.Push(new Coordinate());
 
             pos -= speed;
             if (speed.x > 0)
             {
-                speed.x -= deceleration / fps;
+                speed.x -= deceleration / (1 / timeSinceLastFrame);
                 if (speed.x < 0.0) speed.x = 0.0;
             }
             if (speed.y > 0)
             {
-                speed.y -= deceleration / fps;
+                speed.y -= deceleration / (1 / timeSinceLastFrame);
                 if (speed.y < 0.0) speed.y = 0.0;
             }
             if (speed.x < 0)
             {
-                speed.x += deceleration / fps;
+                speed.x += deceleration / (1 / timeSinceLastFrame);
                 if (speed.x > 0.0) speed.x = 0.0;
             }
             if (speed.y < 0)
             {
-                speed.y += deceleration / fps;
+                speed.y += deceleration / (1 / timeSinceLastFrame);
                 if (speed.y > 0.0) speed.y = 0.0;
             }
 
