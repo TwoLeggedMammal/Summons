@@ -16,6 +16,8 @@ namespace Summons
         static Assets instance = new Assets();
         public static Texture2D waterTile, grassTile, mountainTile, swampTile;
         public static Texture2D summonerActor;
+        public static Texture2D uiTexture;
+        public static SpriteFont mainFont;
 
         private Assets() { }
 
@@ -34,6 +36,12 @@ namespace Summons
 
             // Load our actors
             summonerActor = content.Load<Texture2D>("Actors/blackmage");
+
+            // Load UI textures
+            uiTexture = content.Load<Texture2D>("UI/dialog_border");
+
+            // Load our fonts
+            mainFont = content.Load<SpriteFont>("Fonts/Visitor");
         }
     }
 }

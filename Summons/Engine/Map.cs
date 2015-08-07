@@ -25,7 +25,7 @@ namespace Summons
         {
             {'0', 100.0},  // water
             {'1', 1.0},  // grass
-            {'2', 100.0}, // mountain
+            {'2', 4.0}, // mountain
             {'3', 2.0} // swamp
         };
 

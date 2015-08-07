@@ -24,6 +24,7 @@ namespace Summons
 
         // Tilesets
         public static int TILE_SIZE = 64;
+        public static int UI_TILE_SIZE = 32;
 
         private Settings() {}
 

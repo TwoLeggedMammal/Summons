@@ -15,6 +15,7 @@ namespace Summons
         Camera camera;
         List<Actor> actorCollection;
         Actor mainCharacter;
+        UI ui;
 
         public Main()
         {
@@ -30,6 +31,8 @@ namespace Summons
             this.IsMouseVisible = true;
             camera = Camera.getInstance();
             actorCollection = new List<Actor>();
+            ui = UI.getInstance();
+            ui.graphics = GraphicsDevice;
             base.Initialize();
         }
 
@@ -46,6 +49,7 @@ namespace Summons
             camera.Height = Settings.SCREEN_HEIGHT;
             camera.XMax = map.width * Settings.TILE_SIZE;
             camera.YMax = map.height * Settings.TILE_SIZE;
+            ui.OpenDialog(64, 64, 256, 128, "Hi there!");
 
             mainCharacter = new Actor(4, 4);
             actorCollection.Add(mainCharacter);
@@ -111,6 +115,9 @@ namespace Summons
 
             // Draw our characters
             mainCharacter.Draw(GraphicsDevice);
+
+            // Draw the UI last so it's on top
+            ui.Draw();
 
             base.Draw(gameTime);
         }

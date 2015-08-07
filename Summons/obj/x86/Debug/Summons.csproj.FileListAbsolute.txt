@@ -23,9 +23,11 @@ C:\Code\Summons\Summons\bin\Windows\Debug\SharpDX.Direct3D9.xml
 C:\Code\Summons\Summons\obj\x86\Debug\Summons.csprojResolveAssemblyReference.cache
 C:\Code\Summons\Summons\obj\x86\Debug\Summons.exe
 C:\Code\Summons\Summons\obj\x86\Debug\Summons.pdb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\Fonts\Visitor.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\Actors\blackmage.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\grass64.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\mountain64.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\move64.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\swamp64.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\water64.xnb
-C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\mountain64.xnb
-C:\Code\Summons\Summons\bin\Windows\Debug\Content\Actors\blackmage.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\dialog_border.xnb

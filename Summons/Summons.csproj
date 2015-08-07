@@ -60,6 +60,7 @@
     <Compile Include="Engine\Assets.cs" />
     <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\Input.cs" />
+    <Compile Include="Engine\UI.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Engine\Coordinate.cs" />
     <Compile Include="Main.cs" />
@@ -75,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\UI\dialog_border.png" />
     <Content Include="Icon.ico" />
     <Content Include="Content\Maps\map0.txt" />
     <Content Include="Content\Maps\mapLarge.txt" />
@@ -90,7 +92,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="Content\Fonts\visitor.ttf" />
+    <Content Include="Content\Fonts\Visitor.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

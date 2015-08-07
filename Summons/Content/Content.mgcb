@@ -79,3 +79,17 @@
 /processorParam:TextureFormat=Color
 /build:Actors/blackmage.png
 
+#begin UI/dialog_border.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:UI/dialog_border.png
+
+#begin Fonts/Visitor.xnb
+/copy:Fonts/Visitor.xnb
+
