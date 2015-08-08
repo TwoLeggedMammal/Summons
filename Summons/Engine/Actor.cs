@@ -12,8 +12,10 @@ namespace Summons.Engine
         public Texture2D texture;
         public double X;
         public double Y;
+        protected double xOffset = 0.0;
+        protected double yOffset = 0.0;
         Camera camera;
-        SpriteBatch actorSprite;
+        protected SpriteBatch actorSprite;
         public bool Selected;
         Stack<Coordinate> path;
         double speed = 300.0;
@@ -46,7 +48,7 @@ namespace Summons.Engine
         {
             TileX = x;
             TileY = y;
-            texture = Assets.summonerActor;
+            texture = Assets.blackMageActor;
             camera = Camera.getInstance();
             path = new Stack<Coordinate>();
         }
@@ -95,10 +97,10 @@ namespace Summons.Engine
                             texture,
                             new Rectangle
                             (
-                                Convert.ToInt32(X - Camera.getInstance().X),
-                                Convert.ToInt32(Y - Camera.getInstance().Y - 15.0),  // Actors sit a bit higher on the tile so they look 3D
-                                Settings.TILE_SIZE,
-                                Settings.TILE_SIZE
+                                Convert.ToInt32(X - Camera.getInstance().X + this.xOffset),
+                                Convert.ToInt32(Y - Camera.getInstance().Y - 15.0 + this.yOffset),  // Actors sit a bit higher on the tile so they look 3D
+                                texture.Width,
+                                texture.Height
                             ),
                             Selected ? new Color(highlightColor, highlightColor, Convert.ToInt32(highlightColor * 0.8)) : Color.White
                         );
@@ -120,6 +122,72 @@ namespace Summons.Engine
             // Did we click on an inaccessible location?
             if (path.Count == 0)
                 EventsManager.getInstance().RecordEvent(EventsManager.Event.INVALID_ACTOR_DESTINATION);
+        }
+    }
+
+    class Monster : Actor
+    {
+        public String name;
+        public int HP, maxHP, XP, maxXP;
+        public int rangedAP, rangedAccuracy, rangedAttacks; 
+        public int meleeAP, meleeAccuracy, meleeAttacks;
+        public int armor;
+        public MonsterStatusDialog status;
+
+        public Monster(int x, int y) 
+            : base(x, y)
+        {
+            // Default values for everything in case we don't define in a subclass
+            this.name = "???";
+            this.XP = 0;
+            this.maxXP = 100;
+            this.HP = this.maxHP = 10;
+            this.rangedAP = 1;
+            this.rangedAccuracy = 50;
+            this.rangedAttacks = 3;
+            this.meleeAP = 2;
+            this.meleeAccuracy = 75;
+            this.meleeAttacks = 2;
+            this.armor = 0;
+            this.texture = Assets.blackMageActor;
+            this.status = UI.getInstance().MakeMonsterStatusDialog(this);
+        }
+    }
+
+    class BlackMage : Monster
+    {
+        public BlackMage(int x, int y) 
+            : base(x, y)
+        {
+            this.texture = Assets.blackMageActor;
+            this.name = "Black Mage";
+            this.HP = this.maxHP = 25;
+        }
+    }
+
+    class BlueDragon : Monster
+    {
+        public BlueDragon(int x, int y) 
+            : base(x, y)
+        {
+            this.texture = Assets.blueDragonActor;
+            this.xOffset = -10.0;
+            this.name = "Blue Dragon";
+            this.armor = 1;
+            this.HP = this.maxHP = 80;
+        }
+    }
+
+    class HeavyKnight : Monster
+    {
+        public HeavyKnight(int x, int y)
+            : base(x, y)
+        {
+            this.texture = Assets.heavyKnightActor;
+            this.yOffset = -20.0;
+            this.name = "Heavy Knight";
+            this.armor = 2;
+            this.HP = this.maxHP = 50;
         }
     }
 }

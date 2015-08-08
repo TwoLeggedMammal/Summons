@@ -10,11 +10,9 @@ namespace Summons
     public class Main : Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
         Map map;
         Camera camera;
         List<Actor> actorCollection;
-        Actor mainCharacter;
         UI ui;
         EventsManager eventsManager;
 
@@ -51,8 +49,9 @@ namespace Summons
             camera.Height = Settings.SCREEN_HEIGHT;
             camera.XMax = map.width * Settings.TILE_SIZE;
             camera.YMax = map.height * Settings.TILE_SIZE;
-            mainCharacter = new Actor(4, 4);
-            actorCollection.Add(mainCharacter);
+            actorCollection.Add(new BlackMage(4, 4));
+            actorCollection.Add(new BlueDragon(12, 6));
+            actorCollection.Add(new HeavyKnight(10, 2));
             eventsManager.RecordEvent(EventsManager.Event.GAME_STARTED);
         }
 
@@ -118,7 +117,11 @@ namespace Summons
             map.Draw(GraphicsDevice);
 
             // Draw our characters
-            mainCharacter.Draw(GraphicsDevice);
+            foreach (Actor actor in actorCollection)
+            {
+                actor.Draw(GraphicsDevice);
+            }
+            
 
             // Draw the UI last so it's on top
             ui.Draw();

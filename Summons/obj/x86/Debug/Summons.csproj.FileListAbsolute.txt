@@ -31,3 +31,9 @@ C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\move64.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\swamp64.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\water64.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\dialog_border.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\Actors\bluedragon.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\Actors\heavyknight.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\hp_icon.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\ranged_icon.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\shield_icon.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\sword_icon.xnb

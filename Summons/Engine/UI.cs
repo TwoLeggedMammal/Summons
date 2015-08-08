@@ -12,11 +12,13 @@ namespace Summons.Engine
     {
         static UI instance = new UI();
         public Queue<TextDialog> textDialogCollection;
+        public List<MonsterStatusDialog> monsterStatusDialogCollection;
         public GraphicsDevice graphics;
 
         private UI() 
         {
             textDialogCollection = new Queue<TextDialog>();
+            monsterStatusDialogCollection = new List<MonsterStatusDialog>();
         }
 
         public static UI getInstance() 
@@ -27,7 +29,14 @@ namespace Summons.Engine
         public void OpenTextDialog(int x, int y, int width, String text)
         {
             // width and hight should be multiples of the UI_TILE_SIZE
-            textDialogCollection.Enqueue(new TextDialog(x, y, width, text, graphics));
+            textDialogCollection.Enqueue(new TextDialog(x, y, width, text));
+        }
+
+        public MonsterStatusDialog MakeMonsterStatusDialog(Monster monster)
+        {
+            MonsterStatusDialog dialog = new MonsterStatusDialog(monster);
+            monsterStatusDialogCollection.Add(dialog);
+            return dialog;
         }
 
         public void Update(double timeSinceLastFrame)
@@ -47,6 +56,12 @@ namespace Summons.Engine
             if (textDialogCollection.Count > 0)
             {
                 textDialogCollection.Peek().Draw();
+            }
+
+            foreach (MonsterStatusDialog dialog in monsterStatusDialogCollection)
+            {
+                if (dialog.monster.Selected)
+                    dialog.Draw();
             }
         }
 
@@ -69,7 +84,7 @@ namespace Summons.Engine
         public bool visible;
         public SpriteBatch dialogSprite;
 
-        public Dialog(int x, int y, int width, int height, GraphicsDevice graphics)
+        public Dialog(int x, int y, int width, int height)
         {
             this.visible = true;
             this.padding = 1;  // How much extra space we leave around the text in tiles
@@ -79,10 +94,11 @@ namespace Summons.Engine
             this.tileWidth = Convert.ToInt32(width / Settings.UI_TILE_SIZE) + padding;
             this.height = height;
             this.tileHeight = Convert.ToInt32(height / Settings.UI_TILE_SIZE) + padding;
-            this.dialogSprite = new SpriteBatch(graphics);
+            this.dialogSprite = new SpriteBatch(UI.getInstance().graphics);
         }
 
         public virtual void Update(double timeSinceLastFrame) { }
+        
         public virtual void Draw() 
         {
             this.dialogSprite.Begin();
@@ -112,6 +128,35 @@ namespace Summons.Engine
         }
     }
 
+    class MonsterStatusDialog : Dialog
+    {
+        public Monster monster;
+        static int statusWidth = 384;
+        static int statusHeight = 160;
+
+        public MonsterStatusDialog(Monster monster)
+            : base(Settings.SCREEN_WIDTH - (MonsterStatusDialog.statusWidth + 32), 
+                Settings.SCREEN_HEIGHT - (MonsterStatusDialog.statusHeight + 32),
+                MonsterStatusDialog.statusWidth,
+                MonsterStatusDialog.statusHeight)
+        {
+            this.monster = monster;
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
+
+            dialogSprite.Begin();
+
+            dialogSprite.DrawString(Assets.mainFont, this.monster.name, new Vector2(this.x, this.y), Color.White);
+            String xpText = String.Format("XP {0}/{1}", this.monster.XP.ToString(), this.monster.maxXP.ToString());
+            double xpTextWidth = Assets.mainFont.MeasureString(xpText).Length();
+            dialogSprite.DrawString(Assets.mainFont, xpText, new Vector2(this.x + this.width - Convert.ToInt32(xpTextWidth), this.y), Color.White);
+
+            dialogSprite.End();
+        }
+    }
 
     class TextDialog : Dialog
     {
@@ -121,7 +166,7 @@ namespace Summons.Engine
         public bool complete;
         public double lifespan;
 
-        public TextDialog(int x, int y, int width, String text, GraphicsDevice graphics) : base(x, y, width, 0, graphics)
+        public TextDialog(int x, int y, int width, String text) : base(x, y, width, 0)
         {
             this.complete = false;
             this.textSpeed = 32.0;

@@ -11,5 +11,11 @@
     <File>C:/Code/Summons/Summons/Content/Tiles/mountain64.jpg</File>
     <File>C:/Code/Summons/Summons/Content/Actors/blackmage.png</File>
     <File>C:/Code/Summons/Summons/Content/UI/dialog_border.png</File>
+    <File>C:/Code/Summons/Summons/Content/Actors/bluedragon.png</File>
+    <File>C:/Code/Summons/Summons/Content/Actors/heavyknight.png</File>
+    <File>C:/Code/Summons/Summons/Content/UI/hp_icon.png</File>
+    <File>C:/Code/Summons/Summons/Content/UI/ranged_icon.png</File>
+    <File>C:/Code/Summons/Summons/Content/UI/shield_icon.png</File>
+    <File>C:/Code/Summons/Summons/Content/UI/sword_icon.png</File>
   </SourceFiles>
 </SourceFileCollection>
