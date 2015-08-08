@@ -85,15 +85,6 @@ namespace Summons
         {
             Stack<Coordinate> path = new Stack<Coordinate>();
             double[,] moveMap = GetMovementMap(startX, startY, null, 30.0);
-
-            for (int i = 0; i < moveMap.GetLength(0); i++)
-            {
-                for (int j = 0; j < moveMap.GetLength(1); j++)
-                {
-                    Console.Write(moveMap[i, j].ToString());
-                }
-                Console.WriteLine();
-            }
             return ExtractPath(moveMap, destX, destY);
         }
 
@@ -158,7 +149,7 @@ namespace Summons
                 if (up > -1 || down > -1 || left > -1 || right > -1)
                 {
                     double maxMove = Math.Max(up, Math.Max(down, Math.Max(left, right)));
-                    //Console.WriteLine(maxMove.ToString());
+
                     if (up == maxMove)
                         path = ExtractPath(moveMap, x, y - 1, path);
                     else if (down == maxMove)

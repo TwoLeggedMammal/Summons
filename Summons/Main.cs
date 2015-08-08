@@ -49,7 +49,7 @@ namespace Summons
             camera.Height = Settings.SCREEN_HEIGHT;
             camera.XMax = map.width * Settings.TILE_SIZE;
             camera.YMax = map.height * Settings.TILE_SIZE;
-            ui.OpenDialog(64, 64, 256, 128, "Hi there!");
+            ui.OpenDialog(64, 64, 384, "Welcome to Summons! The point of the game is to crush your enemies with brute force!");
 
             mainCharacter = new Actor(4, 4);
             actorCollection.Add(mainCharacter);
@@ -98,6 +98,9 @@ namespace Summons
             {
                 actor.Update(timeSinceLastFrame);
             }
+
+            // Update our UI
+            ui.Update(timeSinceLastFrame);
 
             base.Update(gameTime);
         }
