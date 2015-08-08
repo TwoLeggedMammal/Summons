@@ -4,18 +4,19 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace Summons.Engine
 {
     class UI
     {
         static UI instance = new UI();
-        public List<Dialog> dialogCollection;
+        public Queue<TextDialog> textDialogCollection;
         public GraphicsDevice graphics;
 
         private UI() 
         {
-            dialogCollection = new List<Dialog>();
+            textDialogCollection = new Queue<TextDialog>();
         }
 
         public static UI getInstance() 
@@ -23,26 +24,40 @@ namespace Summons.Engine
             return instance;
         }
 
-        public void OpenDialog(int x, int y, int width, String text)
+        public void OpenTextDialog(int x, int y, int width, String text)
         {
             // width and hight should be multiples of the UI_TILE_SIZE
-            dialogCollection.Add(new TextDialog(x, y, width, text, graphics));
+            textDialogCollection.Enqueue(new TextDialog(x, y, width, text, graphics));
         }
 
         public void Update(double timeSinceLastFrame)
         {
-            foreach (Dialog d in dialogCollection)
+            if (textDialogCollection.Count > 0)
             {
-                d.Update(timeSinceLastFrame);
+                TextDialog dialog = textDialogCollection.Peek();
+                dialog.Update(timeSinceLastFrame);
+
+                if (dialog.complete)
+                    textDialogCollection.Dequeue();
             }
         }
 
         public void Draw()
         {
-            foreach (Dialog d in dialogCollection)
+            if (textDialogCollection.Count > 0)
             {
-                d.Draw();
+                textDialogCollection.Peek().Draw();
             }
+        }
+
+        public bool Click(MouseState mouseState)
+        {
+            bool clicked = false;
+
+            if (textDialogCollection.Count > 0)
+                clicked = textDialogCollection.Peek().Click(mouseState) || clicked;
+
+            return clicked;
         }
     }
 
@@ -51,10 +66,12 @@ namespace Summons.Engine
         public int x, y, width, height;
         public int tileHeight, tileWidth;
         public int padding;
+        public bool visible;
         public SpriteBatch dialogSprite;
 
         public Dialog(int x, int y, int width, int height, GraphicsDevice graphics)
         {
+            this.visible = true;
             this.padding = 1;  // How much extra space we leave around the text in tiles
             this.x = x;
             this.y = y;
@@ -88,6 +105,11 @@ namespace Summons.Engine
 
             this.dialogSprite.End();
         }
+
+        public virtual bool Click(MouseState mouseState)
+        {
+            return false;
+        }
     }
 
 
@@ -96,10 +118,14 @@ namespace Summons.Engine
         public String text;
         public double elapsedTime;
         public double textSpeed;
+        public bool complete;
+        public double lifespan;
 
         public TextDialog(int x, int y, int width, String text, GraphicsDevice graphics) : base(x, y, width, 0, graphics)
         {
+            this.complete = false;
             this.textSpeed = 32.0;
+            this.lifespan = 3.0;
             this.text = this.WrapText(text);
             int lines = this.text.Split('\n').Length;
             this.height = lines * Settings.UI_TILE_SIZE;
@@ -108,7 +134,9 @@ namespace Summons.Engine
 
         public override void Update(double timeSinceLastFrame)
         {
-            elapsedTime += timeSinceLastFrame;
+            this.elapsedTime += timeSinceLastFrame;
+            if (this.elapsedTime > this.lifespan + (this.text.Length / this.textSpeed))
+                this.complete = true;
         }
 
         public override void Draw()
@@ -120,6 +148,30 @@ namespace Summons.Engine
             dialogSprite.Begin();
             dialogSprite.DrawString(Assets.mainFont, this.text.Substring(0, stringEndpoint), new Vector2(this.x, this.y), Color.White);
             dialogSprite.End();
+        }
+
+        public override bool Click(MouseState mouseState)
+        {
+            if ((mouseState.X > this.x - (padding * Settings.UI_TILE_SIZE / 2)) &&
+                (mouseState.X < this.x + (padding * Settings.UI_TILE_SIZE / 2) + this.width) &&
+                (mouseState.Y > this.y - (padding * Settings.UI_TILE_SIZE / 2)) &&
+                (mouseState.Y < this.y + (padding * Settings.UI_TILE_SIZE / 2) + this.height))
+            {
+                // If clicked on a dialog when it's still writing, then we just speed up the process
+                if (Convert.ToInt32(elapsedTime * textSpeed) < text.Length)
+                {
+                    elapsedTime = text.Length / textSpeed;
+                }
+                else
+                {
+                    // And if it's done, then we mark it for deletion
+                    this.complete = true;
+                }
+                
+                return true;
+            }
+
+            return false;
         }
 
         // Taken from https://danieltian.wordpress.com/2008/12/24/xna-tutorial-typewriter-text-box-with-proper-word-wrapping-part-2/

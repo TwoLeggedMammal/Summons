@@ -29,30 +29,38 @@ namespace Summons.Engine
             // Handle left clicks
             if ((previousMouseState == null || previousMouseState.LeftButton == ButtonState.Released) && mouseState.LeftButton == ButtonState.Pressed)
             {
-                bool actorClicked = false;
+                bool uiClicked = false;
+
+                // Send input to the UI
+                uiClicked = UI.getInstance().Click(mouseState);
 
                 // Find out if we clicked on any Actors
-                foreach (Actor actor in actorCollection)
+                if (!uiClicked)
                 {
-                    if (mouseState.X + camera.X > (actor.TileX * Settings.TILE_SIZE) && mouseState.X + camera.X < ((actor.TileX + 1) * Settings.TILE_SIZE) &&
-                        mouseState.Y + camera.Y > (actor.TileY * Settings.TILE_SIZE) && mouseState.Y + camera.Y < ((actor.TileY + 1) * Settings.TILE_SIZE))
-                    {
-                        actor.Select();
-                        actorClicked = true;
-                    }
-                }
-
-                // If we didn't click on an Actor, we must be trying to move the currently selected actor to this location
-                if (!actorClicked)
-                {
-                    int tileX = Convert.ToInt32(Math.Floor((mouseState.X + camera.X) / Settings.TILE_SIZE));
-                    int tileY = Convert.ToInt32(Math.Floor((mouseState.Y + camera.Y) / Settings.TILE_SIZE));
+                    bool actorClicked = false;
 
                     foreach (Actor actor in actorCollection)
                     {
-                        if (actor.Selected)
+                        if (mouseState.X + camera.X > (actor.TileX * Settings.TILE_SIZE) && mouseState.X + camera.X < ((actor.TileX + 1) * Settings.TILE_SIZE) &&
+                            mouseState.Y + camera.Y > (actor.TileY * Settings.TILE_SIZE) && mouseState.Y + camera.Y < ((actor.TileY + 1) * Settings.TILE_SIZE))
                         {
-                            actor.SetDestination(tileX, tileY);
+                            actor.Select();
+                            actorClicked = true;
+                        }
+                    }
+
+                    // If we didn't click on an Actor, we must be trying to move the currently selected actor to this location
+                    if (!actorClicked)
+                    {
+                        int tileX = Convert.ToInt32(Math.Floor((mouseState.X + camera.X) / Settings.TILE_SIZE));
+                        int tileY = Convert.ToInt32(Math.Floor((mouseState.Y + camera.Y) / Settings.TILE_SIZE));
+
+                        foreach (Actor actor in actorCollection)
+                        {
+                            if (actor.Selected)
+                            {
+                                actor.SetDestination(tileX, tileY);
+                            }
                         }
                     }
                 }
