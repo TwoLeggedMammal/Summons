@@ -26,7 +26,7 @@ namespace Summons.Engine
         public void OpenDialog(int x, int y, int width, String text)
         {
             // width and hight should be multiples of the UI_TILE_SIZE
-            dialogCollection.Add(new Dialog(x, y, width, text, graphics));
+            dialogCollection.Add(new TextDialog(x, y, width, text, graphics));
         }
 
         public void Update(double timeSinceLastFrame)
@@ -49,40 +49,28 @@ namespace Summons.Engine
     class Dialog
     {
         public int x, y, width, height;
-        public String text;
-        public double elapsedTime;
-        public double textSpeed;
-        int tileHeight, tileWidth;
-        int padding;
-        SpriteBatch dialogSprite;
+        public int tileHeight, tileWidth;
+        public int padding;
+        public SpriteBatch dialogSprite;
 
-        public Dialog(int x, int y, int width, String text, GraphicsDevice graphics)
+        public Dialog(int x, int y, int width, int height, GraphicsDevice graphics)
         {
             this.padding = 1;  // How much extra space we leave around the text in tiles
-            this.textSpeed = 32.0;
             this.x = x;
             this.y = y;
             this.width = width;
             this.tileWidth = Convert.ToInt32(width / Settings.UI_TILE_SIZE) + padding;
-            this.text = this.WrapText(text);
-            int lines = this.text.Split('\n').Length;
-            Console.WriteLine(lines.ToString());
-            this.height = lines * Settings.UI_TILE_SIZE;
+            this.height = height;
             this.tileHeight = Convert.ToInt32(height / Settings.UI_TILE_SIZE) + padding;
             this.dialogSprite = new SpriteBatch(graphics);
         }
 
-        public void Update(double timeSinceLastFrame)
+        public virtual void Update(double timeSinceLastFrame) { }
+        public virtual void Draw() 
         {
-            elapsedTime += timeSinceLastFrame;
-        }
-
-        public void Draw()
-        {
-            int stringEndpoint = Convert.ToInt32(elapsedTime * textSpeed) > text.Length ? text.Length : Convert.ToInt32(elapsedTime * textSpeed);
-
-            dialogSprite.Begin();
-
+            this.dialogSprite.Begin();
+            
+            // Draw the window in which our content goes
             for (int i = 0; i < tileWidth; i++)
             {
                 for (int j = 0; j < tileHeight; j++)
@@ -98,9 +86,39 @@ namespace Summons.Engine
                 }
             }
 
+            this.dialogSprite.End();
+        }
+    }
 
+
+    class TextDialog : Dialog
+    {
+        public String text;
+        public double elapsedTime;
+        public double textSpeed;
+
+        public TextDialog(int x, int y, int width, String text, GraphicsDevice graphics) : base(x, y, width, 0, graphics)
+        {
+            this.textSpeed = 32.0;
+            this.text = this.WrapText(text);
+            int lines = this.text.Split('\n').Length;
+            this.height = lines * Settings.UI_TILE_SIZE;
+            this.tileHeight = Convert.ToInt32(height / Settings.UI_TILE_SIZE) + padding;
+        }
+
+        public override void Update(double timeSinceLastFrame)
+        {
+            elapsedTime += timeSinceLastFrame;
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
+
+            int stringEndpoint = Convert.ToInt32(elapsedTime * textSpeed) > text.Length ? text.Length : Convert.ToInt32(elapsedTime * textSpeed);
+
+            dialogSprite.Begin();
             dialogSprite.DrawString(Assets.mainFont, this.text.Substring(0, stringEndpoint), new Vector2(this.x, this.y), Color.White);
-
             dialogSprite.End();
         }
 
