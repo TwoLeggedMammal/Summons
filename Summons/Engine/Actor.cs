@@ -109,12 +109,17 @@ namespace Summons.Engine
         public void Select()
         {
             Selected = !Selected;
+            EventsManager.getInstance().RecordEvent(EventsManager.Event.ACTOR_CLICKED);
         }
 
         public void SetDestination(int x, int y)
         {
             Selected = false;
             path = Map.getInstance().FindPath(TileX, TileY, x, y);
+            
+            // Did we click on an inaccessible location?
+            if (path.Count == 0)
+                EventsManager.getInstance().RecordEvent(EventsManager.Event.INVALID_ACTOR_DESTINATION);
         }
     }
 }

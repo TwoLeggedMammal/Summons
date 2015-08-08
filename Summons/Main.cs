@@ -16,6 +16,7 @@ namespace Summons
         List<Actor> actorCollection;
         Actor mainCharacter;
         UI ui;
+        EventsManager eventsManager;
 
         public Main()
         {
@@ -33,6 +34,7 @@ namespace Summons
             actorCollection = new List<Actor>();
             ui = UI.getInstance();
             ui.graphics = GraphicsDevice;
+            eventsManager = EventsManager.getInstance();
             base.Initialize();
         }
 
@@ -49,12 +51,9 @@ namespace Summons
             camera.Height = Settings.SCREEN_HEIGHT;
             camera.XMax = map.width * Settings.TILE_SIZE;
             camera.YMax = map.height * Settings.TILE_SIZE;
-            ui.OpenTextDialog(64, 64, 384, "Welcome to Summons! The point of the game is to crush your enemies with brute force!");
-            ui.OpenTextDialog(64, 64, 384, "You can click on the little mage dude there to move him.");
-            ui.OpenTextDialog(64, 64, 384, "After selecting him, just click a location and he'll move there if he is able.");
-
             mainCharacter = new Actor(4, 4);
             actorCollection.Add(mainCharacter);
+            eventsManager.RecordEvent(EventsManager.Event.GAME_STARTED);
         }
 
         /// <summary>

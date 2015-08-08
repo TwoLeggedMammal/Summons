@@ -6,7 +6,13 @@ using System.Collections;
 
 namespace Summons
 {
-    //This is a singleton class
+    /// <summary>
+    /// Camera is the reference point when viewing all the graphics which aren't fixed to the screen, like the UI.
+    /// We use the camera positions when rendering the map and actors and then every looks right as the 
+    /// camera moves around.
+    /// 
+    /// This is a singleton.
+    /// </summary>
     public class Camera
     {
         static Camera instance = new Camera();
