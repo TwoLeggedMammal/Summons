@@ -14,8 +14,8 @@ namespace Summons
         static Settings instance = new Settings();
         
         // Screen resolution
-        public static int SCREEN_WIDTH = 1000;
-        public static int SCREEN_HEIGHT = 800;
+        public static int SCREEN_WIDTH = 1200;
+        public static int SCREEN_HEIGHT = 1080;
         
         // Media locations
         public static String MEDIA_ROOT = "../../../Content/";

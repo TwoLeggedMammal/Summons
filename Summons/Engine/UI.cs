@@ -132,7 +132,7 @@ namespace Summons.Engine
     {
         public Monster monster;
         static int statusWidth = 384;
-        static int statusHeight = 160;
+        static int statusHeight = 128;
 
         public MonsterStatusDialog(Monster monster)
             : base(Settings.SCREEN_WIDTH - (MonsterStatusDialog.statusWidth + 32), 
@@ -150,9 +150,29 @@ namespace Summons.Engine
             dialogSprite.Begin();
 
             dialogSprite.DrawString(Assets.mainFont, this.monster.name, new Vector2(this.x, this.y), Color.White);
+            
+            // Name and XP
             String xpText = String.Format("XP {0}/{1}", this.monster.XP.ToString(), this.monster.maxXP.ToString());
             double xpTextWidth = Assets.mainFont.MeasureString(xpText).Length();
             dialogSprite.DrawString(Assets.mainFont, xpText, new Vector2(this.x + this.width - Convert.ToInt32(xpTextWidth), this.y), Color.White);
+
+            // Health and defense
+            dialogSprite.Draw(Assets.hpIcon, new Rectangle(this.x, this.y + 32, 24, 24), Color.White);
+            String hpText = String.Format("{0}/{1}", this.monster.HP.ToString(), this.monster.maxHP.ToString());
+            dialogSprite.DrawString(Assets.mainFont, hpText, new Vector2(this.x + 32, this.y + 32), Color.White);
+            double hpTextWidth = Assets.mainFont.MeasureString(hpText).Length();
+            dialogSprite.Draw(Assets.defenseIcon, new Rectangle(this.x + 64 + Convert.ToInt32(hpTextWidth), this.y + 32, 24, 24), Color.White);
+            dialogSprite.DrawString(Assets.mainFont, this.monster.armor.ToString(), new Vector2(this.x + 96 + Convert.ToInt32(hpTextWidth), this.y + 32), Color.White);
+
+            // Melee attack
+            dialogSprite.Draw(Assets.meleeIcon, new Rectangle(this.x, this.y + 64, 24, 24), Color.White);
+            String meleeText = String.Format("{0}x{1} ({2}%)", this.monster.meleeAP.ToString(), this.monster.meleeAttacks.ToString(), this.monster.meleeAccuracy.ToString());
+            dialogSprite.DrawString(Assets.mainFont, meleeText, new Vector2(this.x + 32, this.y + 64), Color.White);
+
+            // Ranged attack
+            dialogSprite.Draw(Assets.rangedIcon, new Rectangle(this.x, this.y + 96, 24, 24), Color.White);
+            String rangedText = String.Format("{0}x{1} ({2}%)", this.monster.rangedAP.ToString(), this.monster.rangedAttacks.ToString(), this.monster.rangedAccuracy.ToString());
+            dialogSprite.DrawString(Assets.mainFont, rangedText, new Vector2(this.x + 32, this.y + 96), Color.White);
 
             dialogSprite.End();
         }
