@@ -64,9 +64,8 @@ namespace Summons.Engine
             }
             else if (e == Event.BATTLE_ENGAGED && CurrentScene != Scene.COMBAT)
             {
-                Console.WriteLine("Battle Start!");
                 CurrentScene = Scene.COMBAT;
-                ui.ShowMessage("Fight it out!");
+                ui.ShowMessage("Fight it out!", FloatingMessage.TransitionType.EXPANDING);
             }
 
             if (triggered.ContainsKey(e))

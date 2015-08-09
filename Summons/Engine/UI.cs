@@ -34,9 +34,9 @@ namespace Summons.Engine
             textDialogCollection.Enqueue(new TextDialog(x, y, width, text));
         }
 
-        public void ShowMessage(String text, Monster monster = null)
+        public void ShowMessage(String text, FloatingMessage.TransitionType transition = FloatingMessage.TransitionType.FIXED, Monster monster = null)
         {
-            floatingMessageCollection.Enqueue(new FloatingMessage(text, monster));
+            floatingMessageCollection.Enqueue(new FloatingMessage(text, transition, monster));
         }
 
         public MonsterStatusDialog MakeMonsterStatusDialog(Monster monster)
@@ -290,12 +290,21 @@ namespace Summons.Engine
         public double lifespan = 0.5;
         public Monster attachedMonster;
         public SpriteBatch dialogSprite;
+        public TransitionType transitionType;
 
-        public FloatingMessage(String text, Monster attachedMonster)
+        public enum TransitionType
+        {
+            FIXED,
+            EXPANDING,
+            FLOATING
+        }
+
+        public FloatingMessage(String text, TransitionType transition = TransitionType.FIXED, Monster attachedMonster = null)
         {
             this.text = text;
             this.attachedMonster = attachedMonster;
             this.dialogSprite = new SpriteBatch(UI.getInstance().graphics);
+            this.transitionType = transition;
         }
 
         public void Update(double timeSinceLastFrame)
@@ -307,7 +316,7 @@ namespace Summons.Engine
 
         public void Draw()
         {
-            double scale = 0.5 + (elapsedTime / lifespan);
+            double scale = this.transitionType == TransitionType.EXPANDING? 0.5 + (elapsedTime / lifespan) : 1.0;
             double textWidth = Assets.mainFont.MeasureString(this.text).Length() * scale;
 
             dialogSprite.Begin();
