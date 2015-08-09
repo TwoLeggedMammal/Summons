@@ -12,7 +12,7 @@ namespace Summons
         GraphicsDeviceManager graphics;
         Map map;
         Camera camera;
-        List<Actor> actorCollection;
+        MonsterManager monsterManager;
         UI ui;
         EventsManager eventsManager;
         List<Player> players;
@@ -30,11 +30,12 @@ namespace Summons
         {
             this.IsMouseVisible = true;
             camera = Camera.getInstance();
-            actorCollection = new List<Actor>();
+            monsterManager = MonsterManager.getInstance();
             ui = UI.getInstance();
             ui.graphics = GraphicsDevice;
             eventsManager = EventsManager.getInstance();
             players = new List<Player>();
+            
             base.Initialize();
         }
 
@@ -56,10 +57,9 @@ namespace Summons
             Monster blackMage = new BlackMage(4, 4, players[0]);
             Monster blueDragon = new BlueDragon(12, 6, players[0]);
             Monster heavyKnight = new HeavyKnight(10, 2, players[1]);
-            actorCollection.Add(blackMage);
-            actorCollection.Add(blueDragon);
-            actorCollection.Add(heavyKnight);
-
+            monsterManager.monsterCollection.Add(blackMage);
+            monsterManager.monsterCollection.Add(blueDragon);
+            monsterManager.monsterCollection.Add(heavyKnight);
             eventsManager.RecordEvent(EventsManager.Event.GAME_STARTED);
         }
 
@@ -96,15 +96,15 @@ namespace Summons
                 camera.Y -= 500.0 * Convert.ToDouble(gameTime.ElapsedGameTime.Milliseconds / 1000.0);
 
             // Mouse input
-            Input.getInstance().HandleMouseInput(Mouse.GetState(), actorCollection);
+            Input.getInstance().HandleMouseInput(Mouse.GetState());
 
             // Update our camera
             camera.Update(timeSinceLastFrame);
 
             // Update our actors
-            foreach (Actor actor in actorCollection)
+            if (eventsManager.CurrentScene == EventsManager.Scene.OVERWORLD)
             {
-                actor.Update(timeSinceLastFrame);
+                monsterManager.Update(timeSinceLastFrame);
             }
 
             // Update our UI
@@ -125,12 +125,8 @@ namespace Summons
             map.Draw(GraphicsDevice);
 
             // Draw our characters
-            foreach (Actor actor in actorCollection)
-            {
-                actor.Draw(GraphicsDevice);
-            }
+            monsterManager.Draw(GraphicsDevice);
             
-
             // Draw the UI last so it's on top
             ui.Draw();
 

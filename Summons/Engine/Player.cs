@@ -21,11 +21,9 @@ namespace Summons.Engine
             {
                 this.flag = Assets.playerOneSymbol;
                 this.symbolColor = Color.Blue;
-                Console.WriteLine("just set the flag");
             }
             else
             {
-                Console.WriteLine("just set the other flag");
                 this.flag = Assets.playerTwoSymbol;
                 this.symbolColor = Color.Red;
             }

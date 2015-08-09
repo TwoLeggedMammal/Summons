@@ -7,6 +7,38 @@ using Microsoft.Xna.Framework;
 
 namespace Summons.Engine
 {
+    class MonsterManager
+    {
+        public List<Monster> monsterCollection;
+        static MonsterManager instance = new MonsterManager();
+
+        private MonsterManager()
+        {
+            monsterCollection = new List<Monster>();
+        }
+
+        public static MonsterManager getInstance()
+        {
+            return instance;
+        }
+
+        public void Update(double timeSinceLastFrame)
+        {
+            foreach (Monster monster in monsterCollection)
+            {
+                monster.Update(timeSinceLastFrame);
+            }
+        }
+
+        public void Draw(GraphicsDevice graphics)
+        {
+            foreach (Monster monster in monsterCollection)
+            {
+                monster.Draw(graphics);
+            }
+        }
+    }
+
     class Actor
     {
         public Texture2D texture;
@@ -17,7 +49,7 @@ namespace Summons.Engine
         Camera camera;
         protected SpriteBatch actorSprite;
         public bool Selected;
-        Stack<Coordinate> path;
+        protected Stack<Coordinate> path;
         double speed = 300.0;
 
         public int TileX
@@ -53,7 +85,7 @@ namespace Summons.Engine
             path = new Stack<Coordinate>();
         }
 
-        public void Update(double timeSinceLastFrame)
+        public virtual void Update(double timeSinceLastFrame)
         {
             if (path.Count > 0)
             {
@@ -177,6 +209,23 @@ namespace Summons.Engine
                         );
 
             actorSprite.End();
+        }
+
+        public override void Update(double timeSinceLastFrame)
+        {
+            base.Update(timeSinceLastFrame);
+
+            // Check to see if we've engaged in battle
+            foreach (Monster monster in MonsterManager.getInstance().monsterCollection)
+            {
+                if (monster != this && this.path.Count > 0 &&
+                    ((monster.TileX == this.TileX && monster.TileY == this.TileY) ||
+                    (monster.TileX == this.path.Peek().x && monster.TileY == this.path.Peek().y)))
+                {
+                    // Fight it out!
+                    EventsManager.getInstance().RecordEvent(EventsManager.Event.BATTLE_ENGAGED);
+                }
+            }
         }
     }
 

@@ -10,11 +10,12 @@ namespace Summons.Engine
     class Input
     {
         MouseState previousMouseState;
+        MonsterManager monsterManager;
         static Input instance = new Input();
 
         private Input()
         {
-
+            monsterManager = MonsterManager.getInstance();
         }
 
         public static Input getInstance()
@@ -22,7 +23,7 @@ namespace Summons.Engine
             return instance;
         }
 
-        public void HandleMouseInput(MouseState mouseState, List<Actor> actorCollection)
+        public void HandleMouseInput(MouseState mouseState)
         {
             Camera camera = Camera.getInstance();
 
@@ -39,7 +40,7 @@ namespace Summons.Engine
                 {
                     bool actorClicked = false;
 
-                    foreach (Actor actor in actorCollection)
+                    foreach (Actor actor in monsterManager.monsterCollection)
                     {
                         if (mouseState.X + camera.X > (actor.TileX * Settings.TILE_SIZE) && mouseState.X + camera.X < ((actor.TileX + 1) * Settings.TILE_SIZE) &&
                             mouseState.Y + camera.Y > (actor.TileY * Settings.TILE_SIZE) && mouseState.Y + camera.Y < ((actor.TileY + 1) * Settings.TILE_SIZE))
@@ -55,7 +56,7 @@ namespace Summons.Engine
                         int tileX = Convert.ToInt32(Math.Floor((mouseState.X + camera.X) / Settings.TILE_SIZE));
                         int tileY = Convert.ToInt32(Math.Floor((mouseState.Y + camera.Y) / Settings.TILE_SIZE));
 
-                        foreach (Actor actor in actorCollection)
+                        foreach (Actor actor in monsterManager.monsterCollection)
                         {
                             if (actor.Selected)
                             {

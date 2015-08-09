@@ -13,12 +13,14 @@ namespace Summons.Engine
         static UI instance = new UI();
         public Queue<TextDialog> textDialogCollection;
         public List<MonsterStatusDialog> monsterStatusDialogCollection;
+        public Queue<FloatingMessage> floatingMessageCollection;
         public GraphicsDevice graphics;
 
         private UI() 
         {
             textDialogCollection = new Queue<TextDialog>();
             monsterStatusDialogCollection = new List<MonsterStatusDialog>();
+            floatingMessageCollection = new Queue<FloatingMessage>();
         }
 
         public static UI getInstance() 
@@ -30,6 +32,11 @@ namespace Summons.Engine
         {
             // width and hight should be multiples of the UI_TILE_SIZE
             textDialogCollection.Enqueue(new TextDialog(x, y, width, text));
+        }
+
+        public void ShowMessage(String text, Monster monster = null)
+        {
+            floatingMessageCollection.Enqueue(new FloatingMessage(text, monster));
         }
 
         public MonsterStatusDialog MakeMonsterStatusDialog(Monster monster)
@@ -49,6 +56,15 @@ namespace Summons.Engine
                 if (dialog.complete)
                     textDialogCollection.Dequeue();
             }
+
+            if (floatingMessageCollection.Count > 0)
+            {
+                FloatingMessage message = floatingMessageCollection.Peek();
+                message.Update(timeSinceLastFrame);
+
+                if (message.complete)
+                    floatingMessageCollection.Dequeue();
+            }
         }
 
         public void Draw()
@@ -62,6 +78,11 @@ namespace Summons.Engine
             {
                 if (dialog.monster.Selected)
                     dialog.Draw();
+            }
+
+            if (floatingMessageCollection.Count > 0)
+            {
+                floatingMessageCollection.Peek().Draw();
             }
         }
 
@@ -189,8 +210,8 @@ namespace Summons.Engine
         public TextDialog(int x, int y, int width, String text) : base(x, y, width, 0)
         {
             this.complete = false;
-            this.textSpeed = 32.0;
-            this.lifespan = 3.0;
+            this.textSpeed = 48.0;
+            this.lifespan = 1.0;
             this.text = this.WrapText(text);
             int lines = this.text.Split('\n').Length;
             this.height = lines * Settings.UI_TILE_SIZE;
@@ -258,6 +279,49 @@ namespace Summons.Engine
             }
 
             return returnString + line;
+        }
+    }
+
+    class FloatingMessage
+    {
+        public String text = "";
+        public double elapsedTime = 0.0;
+        public bool complete = false;
+        public double lifespan = 0.5;
+        public Monster attachedMonster;
+        public SpriteBatch dialogSprite;
+
+        public FloatingMessage(String text, Monster attachedMonster)
+        {
+            this.text = text;
+            this.attachedMonster = attachedMonster;
+            this.dialogSprite = new SpriteBatch(UI.getInstance().graphics);
+        }
+
+        public void Update(double timeSinceLastFrame)
+        {
+            this.elapsedTime += timeSinceLastFrame;
+            if (this.elapsedTime > this.lifespan)
+                this.complete = true;
+        }
+
+        public void Draw()
+        {
+            double scale = 0.5 + (elapsedTime / lifespan);
+            double textWidth = Assets.mainFont.MeasureString(this.text).Length() * scale;
+
+            dialogSprite.Begin();
+            dialogSprite.DrawString(Assets.mainFont, 
+                this.text, 
+                new Vector2(Convert.ToInt32((Settings.SCREEN_WIDTH / 2) - (textWidth / 2.0)), 
+                    Convert.ToInt32((Settings.SCREEN_HEIGHT / 2.0) - ((32 * scale) / 2.0))), 
+                    Color.White,
+                    (float)0.0,  // Rotation
+                    new Vector2(0, 0),  // Origin?
+                    new Vector2((float)scale, (float)scale),  // Scale
+                    SpriteEffects.None,
+                    (float)1.0);  // Layer depth?
+            dialogSprite.End();
         }
     }
 }

@@ -16,12 +16,23 @@ namespace Summons.Engine
     {
         static EventsManager instance = new EventsManager();
         UI ui;
+        public Scene CurrentScene = Scene.OVERWORLD;
+
         public enum Event
         {
             GAME_STARTED,
             ACTOR_CLICKED,
             MAP_CLICKED,
-            INVALID_ACTOR_DESTINATION
+            INVALID_ACTOR_DESTINATION,
+            BATTLE_ENGAGED,
+            MONSTER_EVOLVED
+        }
+        public enum Scene
+        {
+            TITLE_SCREEN,
+            OPTIONS_MENU,
+            OVERWORLD,
+            COMBAT
         }
         Dictionary<Event, bool> triggered;
 
@@ -50,6 +61,12 @@ namespace Summons.Engine
             else if (e == Event.INVALID_ACTOR_DESTINATION)
             {
                 ui.OpenTextDialog(64, 64, 384, "That location can't be reached by this character!");
+            }
+            else if (e == Event.BATTLE_ENGAGED && CurrentScene != Scene.COMBAT)
+            {
+                Console.WriteLine("Battle Start!");
+                CurrentScene = Scene.COMBAT;
+                ui.ShowMessage("Fight it out!");
             }
 
             if (triggered.ContainsKey(e))
