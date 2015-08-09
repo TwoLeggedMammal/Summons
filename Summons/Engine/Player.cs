@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Summons.Engine
 {
-    class Player
+    public class Player
     {
         public Texture2D flag;
         public List<Monster> monsterCollection;

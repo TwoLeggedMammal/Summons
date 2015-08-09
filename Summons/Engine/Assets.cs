@@ -11,7 +11,7 @@ namespace Summons
     /// Holds all the global variables we'll want to use through the project.
     /// Created as a Singleton for easy access.
     /// </summary>
-    class Assets
+    public class Assets
     {
         static Assets instance = new Assets();
         public static Texture2D waterTile, grassTile, mountainTile, swampTile, towerTile;

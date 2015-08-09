@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Summons.Engine
 {
     //This is a singleton class
-    class Input
+    public class Input
     {
         MouseState previousMouseState;
         MonsterManager monsterManager;

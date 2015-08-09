@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Summons.Engine
 {
-    class MonsterManager
+    public class MonsterManager
     {
         public List<Monster> monsterCollection;
         static MonsterManager instance = new MonsterManager();
@@ -39,7 +39,7 @@ namespace Summons.Engine
         }
     }
 
-    class Actor
+    public class Actor
     {
         public Texture2D texture;
         public double X;
@@ -51,6 +51,7 @@ namespace Summons.Engine
         public bool Selected;
         protected Stack<Coordinate> path;
         double speed = 300.0;
+        public Player player;
 
         public int TileX
         {
@@ -76,13 +77,14 @@ namespace Summons.Engine
             }
         }
 
-        public Actor(int x, int y)
+        public Actor(int x, int y, Player player)
         {
             TileX = x;
             TileY = y;
             texture = Assets.blackMageActor;
             camera = Camera.getInstance();
             path = new Stack<Coordinate>();
+            this.player = player;
         }
 
         public virtual void Update(double timeSinceLastFrame)
@@ -149,7 +151,7 @@ namespace Summons.Engine
         public void SetDestination(int x, int y)
         {
             Selected = false;
-            path = Map.getInstance().FindPath(TileX, TileY, x, y);
+            path = Map.getInstance().FindPath(TileX, TileY, x, y, player);
             
             // Did we click on an inaccessible location?
             if (path.Count == 0)
@@ -157,7 +159,7 @@ namespace Summons.Engine
         }
     }
 
-    class Monster : Actor
+    public class Monster : Actor
     {
         public String name;
         public int HP, maxHP, XP, maxXP;
@@ -165,11 +167,10 @@ namespace Summons.Engine
         public int meleeAP, meleeAccuracy, meleeAttacks;
         public int armor;
         public MonsterStatusDialog status;
-        public Player player;
         int symbolSize = 24;
 
         public Monster(int x, int y, Player player) 
-            : base(x, y)
+            : base(x, y, player)
         {
             // Default values for everything in case we don't define in a subclass
             this.name = "???";
@@ -185,7 +186,6 @@ namespace Summons.Engine
             this.armor = 0;
             this.texture = Assets.blackMageActor;
             this.status = UI.getInstance().MakeMonsterStatusDialog(this);
-            this.player = player;
         }
 
         public override void Draw(GraphicsDevice graphics)
@@ -215,21 +215,29 @@ namespace Summons.Engine
         {
             base.Update(timeSinceLastFrame);
 
-            // Check to see if we've engaged in battle
+            // Check to see if we've engaged in battle or bumped into a teammate
             foreach (Monster monster in MonsterManager.getInstance().monsterCollection)
             {
                 if (monster != this && this.path.Count > 0 &&
                     ((monster.TileX == this.TileX && monster.TileY == this.TileY) ||
                     (monster.TileX == this.path.Peek().x && monster.TileY == this.path.Peek().y)))
                 {
-                    // Fight it out!
-                    EventsManager.getInstance().RecordEvent(EventsManager.Event.BATTLE_ENGAGED);
+                    if (this.player == monster.player)
+                    {
+                        // We're friends!
+                        this.path.Clear();
+                    }
+                    else
+                    {
+                        // Fight it out!
+                        EventsManager.getInstance().RecordEvent(EventsManager.Event.BATTLE_ENGAGED);
+                    }
                 }
             }
         }
     }
 
-    class BlackMage : Monster
+    public class BlackMage : Monster
     {
         public BlackMage(int x, int y, Player player) 
             : base(x, y, player)
@@ -240,7 +248,7 @@ namespace Summons.Engine
         }
     }
 
-    class BlueDragon : Monster
+    public class BlueDragon : Monster
     {
         public BlueDragon(int x, int y, Player player) 
             : base(x, y, player)
@@ -253,7 +261,7 @@ namespace Summons.Engine
         }
     }
 
-    class HeavyKnight : Monster
+    public class HeavyKnight : Monster
     {
         public HeavyKnight(int x, int y, Player player)
             : base(x, y, player)

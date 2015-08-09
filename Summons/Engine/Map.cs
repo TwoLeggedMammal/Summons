@@ -6,6 +6,7 @@ using System.Collections;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Summons.Engine;
 
 namespace Summons
 {
@@ -83,14 +84,39 @@ namespace Summons
             mapSprite.End();
         }
 
-        public Stack<Coordinate> FindPath(int startX, int startY, int destX, int destY)
+        public Stack<Coordinate> FindPath(int startX, int startY, int destX, int destY, Player player)
         {
             Stack<Coordinate> path = new Stack<Coordinate>();
-            double[,] moveMap = GetMovementMap(startX, startY, null, 30.0);
+            bool[,] teammateMap = GetTeammateLocations(startX, startY, player);
+            double[,] moveMap = GetMovementMap(startX, startY, null, 30.0, teammateMap);
             return ExtractPath(moveMap, destX, destY);
         }
 
-        private double[,] GetMovementMap(int x, int y, double[,] moveMap, double movement)
+        private bool[,] GetTeammateLocations(int startX, int startY, Player player)
+        {
+            // We don't want to move into the same spot as a teammate
+            bool[,] teammateMap = new bool[height, width];
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    teammateMap[j, i] = false;
+                }
+            }
+            
+            foreach (Monster actor in MonsterManager.getInstance().monsterCollection)
+            {
+                if ((actor.TileX != startX || actor.TileY != startY) && actor.player == player)
+                {
+                    teammateMap[actor.TileY, actor.TileX] = true;
+                }
+            }
+
+            return teammateMap;
+        }
+
+        private double[,] GetMovementMap(int x, int y, double[,] moveMap, double movement, bool[,] teammateMap)
         {
             if (moveMap == null)
             {
@@ -107,6 +133,12 @@ namespace Summons
             }
             else
             {
+                // Don't explore this space if a teammate is standing in it
+                if (teammateMap[y, x])
+                {
+                    return moveMap;
+                }
+
                 movement -= tileMoveCost[mapData[y][x]];  // we don't subtract movement for the starting location
             }
 
@@ -117,13 +149,13 @@ namespace Summons
                 if (movement > 0)
                 {
                     if (x > 0)
-                        GetMovementMap(x - 1, y, moveMap, movement);
+                        GetMovementMap(x - 1, y, moveMap, movement, teammateMap);
                     if (x < width - 1)
-                        GetMovementMap(x + 1, y, moveMap, movement);
+                        GetMovementMap(x + 1, y, moveMap, movement, teammateMap);
                     if (y > 0)
-                        GetMovementMap(x, y - 1, moveMap, movement);
+                        GetMovementMap(x, y - 1, moveMap, movement, teammateMap);
                     if (y < height - 1)
-                        GetMovementMap(x, y + 1, moveMap, movement);
+                        GetMovementMap(x, y + 1, moveMap, movement, teammateMap);
                 }
             }
 

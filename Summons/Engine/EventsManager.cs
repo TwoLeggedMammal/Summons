@@ -12,7 +12,7 @@ namespace Summons.Engine
     /// 
     /// A singleton.
     /// </summary>
-    class EventsManager
+    public class EventsManager
     {
         static EventsManager instance = new EventsManager();
         UI ui;

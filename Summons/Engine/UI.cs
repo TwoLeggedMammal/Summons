@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Summons.Engine
 {
-    class UI
+    public class UI
     {
         static UI instance = new UI();
         public Queue<TextDialog> textDialogCollection;
@@ -97,7 +97,7 @@ namespace Summons.Engine
         }
     }
 
-    class Dialog
+    public class Dialog
     {
         public int x, y, width, height;
         public int tileHeight, tileWidth;
@@ -149,7 +149,7 @@ namespace Summons.Engine
         }
     }
 
-    class MonsterStatusDialog : Dialog
+    public class MonsterStatusDialog : Dialog
     {
         public Monster monster;
         static int statusWidth = 384;
@@ -199,7 +199,7 @@ namespace Summons.Engine
         }
     }
 
-    class TextDialog : Dialog
+    public class TextDialog : Dialog
     {
         public String text;
         public double elapsedTime;
@@ -282,7 +282,7 @@ namespace Summons.Engine
         }
     }
 
-    class FloatingMessage
+    public class FloatingMessage
     {
         public String text = "";
         public double elapsedTime = 0.0;
