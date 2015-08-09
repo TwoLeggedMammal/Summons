@@ -14,12 +14,13 @@ namespace Summons
     class Assets
     {
         static Assets instance = new Assets();
-        public static Texture2D waterTile, grassTile, mountainTile, swampTile;
+        public static Texture2D waterTile, grassTile, mountainTile, swampTile, towerTile;
         public static Texture2D blackMageActor, blueDragonActor, heavyKnightActor;
         public static Texture2D uiTexture;
         public static Texture2D meleeIcon, hpIcon, rangedIcon, defenseIcon;
+        public static Texture2D playerOneSymbol, playerTwoSymbol;
         public static SpriteFont mainFont;
-
+        
         private Assets() { }
 
         public static Assets getInstance()
@@ -34,6 +35,7 @@ namespace Summons
             grassTile = content.Load<Texture2D>("Tiles/grass64");
             mountainTile = content.Load<Texture2D>("Tiles/mountain64");
             swampTile = content.Load<Texture2D>("Tiles/swamp64");
+            towerTile = content.Load<Texture2D>("Tiles/tower64");
 
             // Load our actors
             blackMageActor = content.Load<Texture2D>("Actors/blackmage");
@@ -46,6 +48,10 @@ namespace Summons
             rangedIcon = content.Load<Texture2D>("UI/ranged_icon");
             hpIcon = content.Load<Texture2D>("UI/hp_icon");
             defenseIcon = content.Load<Texture2D>("UI/shield_icon");
+
+            // Load player symbols
+            playerOneSymbol = content.Load<Texture2D>("UI/player1_symbol");
+            playerTwoSymbol = content.Load<Texture2D>("UI/player2_symbol");
 
             // Load our fonts
             mainFont = content.Load<SpriteFont>("Fonts/Visitor");

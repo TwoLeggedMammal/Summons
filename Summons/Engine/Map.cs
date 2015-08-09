@@ -26,7 +26,8 @@ namespace Summons
             {'0', 100.0},  // water
             {'1', 1.0},  // grass
             {'2', 4.0}, // mountain
-            {'3', 2.0} // swamp
+            {'3', 2.0}, // swamp
+            {'t', 1.0} // tower
         };
 
         public static Map getInstance()
@@ -54,6 +55,7 @@ namespace Summons
             textureDict.Add('1', Assets.grassTile);
             textureDict.Add('2', Assets.mountainTile);
             textureDict.Add('3', Assets.swampTile);
+            textureDict.Add('t', Assets.towerTile);
 
             mapSprite = new SpriteBatch(graphics);
 

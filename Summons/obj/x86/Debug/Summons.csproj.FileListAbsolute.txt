@@ -37,3 +37,6 @@ C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\hp_icon.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\ranged_icon.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\shield_icon.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\sword_icon.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\Tiles\tower64.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\player1_symbol.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\player2_symbol.xnb

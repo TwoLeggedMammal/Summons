@@ -17,5 +17,8 @@
     <File>C:/Code/Summons/Summons/Content/UI/ranged_icon.png</File>
     <File>C:/Code/Summons/Summons/Content/UI/shield_icon.png</File>
     <File>C:/Code/Summons/Summons/Content/UI/sword_icon.png</File>
+    <File>C:/Code/Summons/Summons/Content/Tiles/tower64.png</File>
+    <File>C:/Code/Summons/Summons/Content/UI/player1_symbol.png</File>
+    <File>C:/Code/Summons/Summons/Content/UI/player2_symbol.png</File>
   </SourceFiles>
 </SourceFileCollection>

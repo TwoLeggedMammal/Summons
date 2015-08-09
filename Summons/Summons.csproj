@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2DA3741B-1AC5-4FD0-900D-9F4F4342046F}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Summons</RootNamespace>
     <AssemblyName>Summons</AssemblyName>
@@ -61,6 +61,7 @@
     <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\EventsManager.cs" />
     <Compile Include="Engine\Input.cs" />
+    <Compile Include="Engine\Player.cs" />
     <Compile Include="Engine\UI.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Engine\Coordinate.cs" />
@@ -80,8 +81,11 @@
     <Content Include="Content\Actors\blackmage.png" />
     <Content Include="Content\Actors\bluedragon.png" />
     <Content Include="Content\Actors\heavyknight.png" />
+    <Content Include="Content\Tiles\tower64.png" />
     <Content Include="Content\UI\dialog_border.png" />
     <Content Include="Content\UI\hp_icon.png" />
+    <Content Include="Content\UI\player1_symbol.png" />
+    <Content Include="Content\UI\player2_symbol.png" />
     <Content Include="Content\UI\ranged_icon.png" />
     <Content Include="Content\UI\shield_icon.png" />
     <Content Include="Content\UI\sword_icon.png" />

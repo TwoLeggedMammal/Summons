@@ -85,7 +85,7 @@ namespace Summons.Engine
             }
         }
         
-        public void Draw(GraphicsDevice graphics)
+        public virtual void Draw(GraphicsDevice graphics)
         {
             int highlightColor = Convert.ToInt32(170.0 + Math.Abs(((DateTime.Now.Ticks / (TimeSpan.TicksPerMillisecond * 10)) % 80) - 40));
 
@@ -133,8 +133,10 @@ namespace Summons.Engine
         public int meleeAP, meleeAccuracy, meleeAttacks;
         public int armor;
         public MonsterStatusDialog status;
+        public Player player;
+        int symbolSize = 24;
 
-        public Monster(int x, int y) 
+        public Monster(int x, int y, Player player) 
             : base(x, y)
         {
             // Default values for everything in case we don't define in a subclass
@@ -151,13 +153,37 @@ namespace Summons.Engine
             this.armor = 0;
             this.texture = Assets.blackMageActor;
             this.status = UI.getInstance().MakeMonsterStatusDialog(this);
+            this.player = player;
+        }
+
+        public override void Draw(GraphicsDevice graphics)
+        {
+            base.Draw(graphics);
+
+            actorSprite.Begin();
+
+            // Draw the player symbol next to the Monster
+            actorSprite.Draw
+                        (
+                            this.player.flag,
+                            new Rectangle
+                            (
+                                Convert.ToInt32(X - Camera.getInstance().X + Settings.TILE_SIZE - this.symbolSize),
+                                Convert.ToInt32(Y - Camera.getInstance().Y + Settings.TILE_SIZE - this.symbolSize),
+                                this.symbolSize,
+                                this.symbolSize
+                            ),
+                            player.symbolColor
+                        );
+
+            actorSprite.End();
         }
     }
 
     class BlackMage : Monster
     {
-        public BlackMage(int x, int y) 
-            : base(x, y)
+        public BlackMage(int x, int y, Player player) 
+            : base(x, y, player)
         {
             this.texture = Assets.blackMageActor;
             this.name = "Black Mage";
@@ -167,8 +193,8 @@ namespace Summons.Engine
 
     class BlueDragon : Monster
     {
-        public BlueDragon(int x, int y) 
-            : base(x, y)
+        public BlueDragon(int x, int y, Player player) 
+            : base(x, y, player)
         {
             this.texture = Assets.blueDragonActor;
             this.xOffset = -10.0;
@@ -180,8 +206,8 @@ namespace Summons.Engine
 
     class HeavyKnight : Monster
     {
-        public HeavyKnight(int x, int y)
-            : base(x, y)
+        public HeavyKnight(int x, int y, Player player)
+            : base(x, y, player)
         {
             this.texture = Assets.heavyKnightActor;
             this.yOffset = -20.0;

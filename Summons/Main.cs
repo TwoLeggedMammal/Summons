@@ -15,6 +15,7 @@ namespace Summons
         List<Actor> actorCollection;
         UI ui;
         EventsManager eventsManager;
+        List<Player> players;
 
         public Main()
         {
@@ -33,6 +34,7 @@ namespace Summons
             ui = UI.getInstance();
             ui.graphics = GraphicsDevice;
             eventsManager = EventsManager.getInstance();
+            players = new List<Player>();
             base.Initialize();
         }
 
@@ -49,9 +51,15 @@ namespace Summons
             camera.Height = Settings.SCREEN_HEIGHT;
             camera.XMax = map.width * Settings.TILE_SIZE;
             camera.YMax = map.height * Settings.TILE_SIZE;
-            actorCollection.Add(new BlackMage(4, 4));
-            actorCollection.Add(new BlueDragon(12, 6));
-            actorCollection.Add(new HeavyKnight(10, 2));
+            players.Add(new Player(1));
+            players.Add(new Player(2));
+            Monster blackMage = new BlackMage(4, 4, players[0]);
+            Monster blueDragon = new BlueDragon(12, 6, players[0]);
+            Monster heavyKnight = new HeavyKnight(10, 2, players[1]);
+            actorCollection.Add(blackMage);
+            actorCollection.Add(blueDragon);
+            actorCollection.Add(heavyKnight);
+
             eventsManager.RecordEvent(EventsManager.Event.GAME_STARTED);
         }
 
