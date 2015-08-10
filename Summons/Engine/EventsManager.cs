@@ -25,6 +25,7 @@ namespace Summons.Engine
             MAP_CLICKED,
             INVALID_ACTOR_DESTINATION,
             BATTLE_ENGAGED,
+            BATTLE_COMPLETED,
             MONSTER_EVOLVED
         }
         public enum Scene
@@ -66,6 +67,10 @@ namespace Summons.Engine
             {
                 CurrentScene = Scene.COMBAT;
                 ui.ShowMessage("Fight it out!", FloatingMessage.TransitionType.EXPANDING);
+            }
+            else if (e == Event.BATTLE_COMPLETED && CurrentScene == Scene.COMBAT)
+            {
+                CurrentScene = Scene.OVERWORLD;
             }
 
             if (triggered.ContainsKey(e))

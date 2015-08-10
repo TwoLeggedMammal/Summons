@@ -231,7 +231,9 @@ namespace Summons.Engine
                     else
                     {
                         // Fight it out!
+                        this.path.Clear();
                         EventsManager.getInstance().RecordEvent(EventsManager.Event.BATTLE_ENGAGED);
+                        Combat.getInstance().FightItOut(this, monster);
                     }
                 }
             }

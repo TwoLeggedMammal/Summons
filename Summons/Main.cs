@@ -16,6 +16,7 @@ namespace Summons
         UI ui;
         EventsManager eventsManager;
         List<Player> players;
+        Combat combat;
 
         public Main()
         {
@@ -35,6 +36,7 @@ namespace Summons
             ui.graphics = GraphicsDevice;
             eventsManager = EventsManager.getInstance();
             players = new List<Player>();
+            combat = Combat.getInstance();
             
             base.Initialize();
         }
@@ -105,6 +107,10 @@ namespace Summons
             if (eventsManager.CurrentScene == EventsManager.Scene.OVERWORLD)
             {
                 monsterManager.Update(timeSinceLastFrame);
+            }
+            else if (eventsManager.CurrentScene == EventsManager.Scene.COMBAT)
+            {
+                combat.Update(timeSinceLastFrame);
             }
 
             // Update our UI

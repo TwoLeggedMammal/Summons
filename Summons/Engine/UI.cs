@@ -318,12 +318,15 @@ namespace Summons.Engine
         {
             double scale = this.transitionType == TransitionType.EXPANDING? 0.5 + (elapsedTime / lifespan) : 1.0;
             double textWidth = Assets.mainFont.MeasureString(this.text).Length() * scale;
-
+            double yModifier = this.transitionType == TransitionType.FLOATING ? 100.0 * (elapsedTime / lifespan) : 0.0;
+            double xPos = this.attachedMonster == null? (Settings.SCREEN_WIDTH / 2) - (textWidth / 2.0) : this.attachedMonster.X - (textWidth / 2.0) + (Settings.TILE_SIZE / 2);
+            double yPos = this.attachedMonster == null ? (Settings.SCREEN_HEIGHT / 2.0) - ((32 * scale) / 2.0) : this.attachedMonster.Y;
+                
             dialogSprite.Begin();
             dialogSprite.DrawString(Assets.mainFont, 
                 this.text, 
-                new Vector2(Convert.ToInt32((Settings.SCREEN_WIDTH / 2) - (textWidth / 2.0)), 
-                    Convert.ToInt32((Settings.SCREEN_HEIGHT / 2.0) - ((32 * scale) / 2.0))), 
+                new Vector2(Convert.ToInt32(xPos), 
+                    Convert.ToInt32(yPos - yModifier)), 
                     Color.White,
                     (float)0.0,  // Rotation
                     new Vector2(0, 0),  // Origin?
