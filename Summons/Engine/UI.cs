@@ -76,7 +76,7 @@ namespace Summons.Engine
 
             foreach (MonsterStatusDialog dialog in monsterStatusDialogCollection)
             {
-                if (dialog.monster.Selected)
+                if (dialog.monster.Hovered)
                     dialog.Draw();
             }
 

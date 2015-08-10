@@ -27,6 +27,13 @@ namespace Summons.Engine
         {
             Camera camera = Camera.getInstance();
 
+            // Handle hovering
+            foreach (Actor actor in monsterManager.monsterCollection)
+            {
+                actor.Hovered = (mouseState.X + camera.X > (actor.TileX * Settings.TILE_SIZE) && mouseState.X + camera.X < ((actor.TileX + 1) * Settings.TILE_SIZE) &&
+                                mouseState.Y + camera.Y > (actor.TileY * Settings.TILE_SIZE) && mouseState.Y + camera.Y < ((actor.TileY + 1) * Settings.TILE_SIZE));
+            }
+
             // Handle left clicks
             if ((previousMouseState == null || previousMouseState.LeftButton == ButtonState.Released) && mouseState.LeftButton == ButtonState.Pressed)
             {
@@ -42,11 +49,15 @@ namespace Summons.Engine
 
                     foreach (Actor actor in monsterManager.monsterCollection)
                     {
-                        if (mouseState.X + camera.X > (actor.TileX * Settings.TILE_SIZE) && mouseState.X + camera.X < ((actor.TileX + 1) * Settings.TILE_SIZE) &&
-                            mouseState.Y + camera.Y > (actor.TileY * Settings.TILE_SIZE) && mouseState.Y + camera.Y < ((actor.TileY + 1) * Settings.TILE_SIZE))
+                        // You can only click on human controlled monsters
+                        if (!actor.player.isAi)
                         {
-                            actor.Select();
-                            actorClicked = true;
+                            if (mouseState.X + camera.X > (actor.TileX * Settings.TILE_SIZE) && mouseState.X + camera.X < ((actor.TileX + 1) * Settings.TILE_SIZE) &&
+                                mouseState.Y + camera.Y > (actor.TileY * Settings.TILE_SIZE) && mouseState.Y + camera.Y < ((actor.TileY + 1) * Settings.TILE_SIZE))
+                            {
+                                actor.Select();
+                                actorClicked = true;
+                            }
                         }
                     }
 

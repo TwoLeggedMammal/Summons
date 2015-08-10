@@ -52,8 +52,8 @@ namespace Summons
             camera.Height = Settings.SCREEN_HEIGHT;
             camera.XMax = map.width * Settings.TILE_SIZE;
             camera.YMax = map.height * Settings.TILE_SIZE;
-            players.Add(new Player(1));
-            players.Add(new Player(2));
+            players.Add(new Player(1, false));  // player 1 is human
+            players.Add(new Player(2, true));  // player 2 is ai
             Monster blackMage = new BlackMage(4, 4, players[0]);
             Monster blueDragon = new BlueDragon(12, 6, players[0]);
             Monster heavyKnight = new HeavyKnight(10, 2, players[1]);

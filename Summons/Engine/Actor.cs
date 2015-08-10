@@ -48,7 +48,8 @@ namespace Summons.Engine
         protected double yOffset = 0.0;
         Camera camera;
         protected SpriteBatch actorSprite;
-        public bool Selected;
+        public bool Selected = false;
+        public bool Hovered = false;
         protected Stack<Coordinate> path;
         double speed = 300.0;
         public Player player;

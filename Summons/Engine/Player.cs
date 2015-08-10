@@ -12,8 +12,9 @@ namespace Summons.Engine
         public Texture2D flag;
         public List<Monster> monsterCollection;
         public Color symbolColor;
+        public bool isAi;
 
-        public Player(int playerNumber)
+        public Player(int playerNumber, bool isAI)
         {
             monsterCollection = new List<Monster>();
 
@@ -21,11 +22,14 @@ namespace Summons.Engine
             {
                 this.flag = Assets.playerOneSymbol;
                 this.symbolColor = Color.Blue;
+                this.isAi = false;
+
             }
             else
             {
                 this.flag = Assets.playerTwoSymbol;
                 this.symbolColor = Color.Red;
+                this.isAi = true;
             }
         }
     }
