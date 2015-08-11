@@ -79,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Actors\archer.png" />
     <Content Include="Content\Actors\blackmage.png" />
     <Content Include="Content\Actors\bluedragon.png" />
     <Content Include="Content\Actors\heavyknight.png" />

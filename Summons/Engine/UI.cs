@@ -57,13 +57,16 @@ namespace Summons.Engine
                     textDialogCollection.Dequeue();
             }
 
-            if (floatingMessageCollection.Count > 0)
+
+            foreach (FloatingMessage message in floatingMessageCollection)
             {
-                FloatingMessage message = floatingMessageCollection.Peek();
                 message.Update(timeSinceLastFrame);
 
                 if (message.complete)
+                {
                     floatingMessageCollection.Dequeue();
+                    break;
+                }
             }
         }
 
@@ -80,9 +83,9 @@ namespace Summons.Engine
                     dialog.Draw();
             }
 
-            if (floatingMessageCollection.Count > 0)
+            foreach (FloatingMessage message in floatingMessageCollection)
             {
-                floatingMessageCollection.Peek().Draw();
+                message.Draw();
             }
         }
 
@@ -286,6 +289,7 @@ namespace Summons.Engine
     {
         public String text = "";
         public double elapsedTime = 0.0;
+        public double floatAmout = 50.0;
         public bool complete = false;
         public double lifespan = 0.5;
         public Monster attachedMonster;
@@ -318,7 +322,7 @@ namespace Summons.Engine
         {
             double scale = this.transitionType == TransitionType.EXPANDING? 0.5 + (elapsedTime / lifespan) : 1.0;
             double textWidth = Assets.mainFont.MeasureString(this.text).Length() * scale;
-            double yModifier = this.transitionType == TransitionType.FLOATING ? 100.0 * (elapsedTime / lifespan) : 0.0;
+            double yModifier = this.transitionType == TransitionType.FLOATING ? floatAmout * (elapsedTime / lifespan) : 0.0;
             double xPos = this.attachedMonster == null? (Settings.SCREEN_WIDTH / 2) - (textWidth / 2.0) : this.attachedMonster.X - (textWidth / 2.0) + (Settings.TILE_SIZE / 2);
             double yPos = this.attachedMonster == null ? (Settings.SCREEN_HEIGHT / 2.0) - ((32 * scale) / 2.0) : this.attachedMonster.Y;
                 

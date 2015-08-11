@@ -12,7 +12,8 @@ namespace Summons.Engine
         Queue<Tuple<double, Monster>> attacks;  // Stores all the times when attacks happen
         double fightLength = 3.0;
         double elapsedTime = 0.0;
-        int elapsedAttacks;
+        double attackFrequency = 0.0;
+        double attackTimer = 0.0;
 
         public static Combat getInstance()
         {
@@ -26,8 +27,9 @@ namespace Summons.Engine
             this.firstCombatant = first;
             this.secondCombatant = second;
             this.elapsedTime = 0.0;
-            this.elapsedAttacks = 0;
             this.attacks = CalculateAttacks();
+            this.attackFrequency = fightLength / attacks.Count;
+            this.attackTimer = 0.0;
         }
 
         Queue<Tuple<double, Monster>> CalculateAttacks()
@@ -88,12 +90,14 @@ namespace Summons.Engine
         public void Update(double timeSinceLastFrame)
         {
             elapsedTime += timeSinceLastFrame;
+            attackTimer += timeSinceLastFrame;
 
             if (attacks.Count > 0)
             {
-                if (elapsedTime > attacks.Peek().Item1)
+                if (attackTimer > attackFrequency)
                 {
                     PerformAttack(attacks.Dequeue());
+                    attackTimer = 0.0;
                 }
             }
 

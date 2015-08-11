@@ -276,4 +276,17 @@ namespace Summons.Engine
             this.HP = this.maxHP = 50;
         }
     }
+
+    public class Archer : Monster
+    {
+        public Archer(int x, int y, Player player)
+            : base(x, y, player)
+        {
+            this.texture = Assets.archerActor;
+            this.yOffset = -20.0;
+            this.name = "Heavy Knight";
+            this.armor = 0;
+            this.HP = this.maxHP = 45;
+        }
+    }
 }

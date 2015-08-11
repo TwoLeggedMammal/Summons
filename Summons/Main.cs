@@ -59,9 +59,11 @@ namespace Summons
             Monster blackMage = new BlackMage(4, 4, players[0]);
             Monster blueDragon = new BlueDragon(12, 6, players[0]);
             Monster heavyKnight = new HeavyKnight(10, 2, players[1]);
+            Monster archer = new Archer(15, 8, players[1]);
             monsterManager.monsterCollection.Add(blackMage);
             monsterManager.monsterCollection.Add(blueDragon);
             monsterManager.monsterCollection.Add(heavyKnight);
+            monsterManager.monsterCollection.Add(archer);
             eventsManager.RecordEvent(EventsManager.Event.GAME_STARTED);
         }
 
