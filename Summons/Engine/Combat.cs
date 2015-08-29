@@ -10,17 +10,21 @@ namespace Summons.Engine
         static Combat instance = new Combat();
         Monster firstCombatant, secondCombatant;
         Queue<Tuple<double, Monster>> attacks;  // Stores all the times when attacks happen
-        double fightLength = 3.0;
+        double fightLength = 2.0;
         double elapsedTime = 0.0;
         double attackFrequency = 0.0;
         double attackTimer = 0.0;
+        Random random;
 
         public static Combat getInstance()
         {
             return instance;
         }
 
-        private Combat() {}
+        private Combat() 
+        {
+            random = new Random();
+        }
 
         public void FightItOut(Monster first, Monster second)
         {
@@ -81,10 +85,31 @@ namespace Summons.Engine
             Monster defender = thisAttack.Item2 == firstCombatant ? secondCombatant : firstCombatant;
 
             // Here is the real combat math
-            int damage = attacker.meleeAP - defender.armor;
+            bool missed = random.Next(0, 100) > attacker.meleeAccuracy;
+            bool crit = random.Next(0, 100) <= attacker.critRate;
+            int damage = missed? 0 : crit? attacker.meleeAP * 2 : attacker.meleeAP - defender.armor;
             String actionText = String.Format("-{0} HP", damage.ToString());
-            defender.HP -= damage;
+
+            if (missed)
+            {
+                actionText = String.Format("MISSED!");
+            }
+            else if (crit)
+            {
+                actionText = String.Format("CRITICAL!!! -{0} HP", damage.ToString());
+            }
+            else if (damage == 0)
+            {
+                actionText = String.Format("ABSORBED!");
+            }
+
+            defender.ReceiveDamage(damage);
             UI.getInstance().ShowMessage(actionText, FloatingMessage.TransitionType.FLOATING, defender);
+
+            if (defender.HP <= 0)
+            {
+                // TODO: Implement Death
+            }
         }
 
         public void Update(double timeSinceLastFrame)

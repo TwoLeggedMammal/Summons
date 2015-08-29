@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework;
 
 namespace Summons
 {
@@ -19,6 +20,7 @@ namespace Summons
         public static Texture2D uiTexture;
         public static Texture2D meleeIcon, hpIcon, rangedIcon, defenseIcon;
         public static Texture2D playerOneSymbol, playerTwoSymbol;
+        public static Texture2D plainTexture;
         public static SpriteFont mainFont;
         
         private Assets() { }
@@ -28,7 +30,7 @@ namespace Summons
             return instance;
         }
 
-        public void LoadTextures(ContentManager content)
+        public void LoadTextures(ContentManager content, GraphicsDevice graphics)
         {
             // Load our map tiles
             waterTile = content.Load<Texture2D>("Tiles/water64");
@@ -53,6 +55,10 @@ namespace Summons
             // Load player symbols
             playerOneSymbol = content.Load<Texture2D>("UI/player1_symbol");
             playerTwoSymbol = content.Load<Texture2D>("UI/player2_symbol");
+
+            // Generate our plain white pixel texture for use in HP bars
+            plainTexture = new Texture2D(graphics, 1, 1);
+            plainTexture.SetData(new[] { Color.White });
 
             // Load our fonts
             mainFont = content.Load<SpriteFont>("Fonts/Visitor");

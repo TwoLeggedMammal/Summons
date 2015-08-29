@@ -47,7 +47,7 @@ namespace Summons
         /// </summary>
         protected override void LoadContent()
         {
-            Assets.getInstance().LoadTextures(Content);
+            Assets.getInstance().LoadTextures(Content, GraphicsDevice);
             map = Map.getInstance();
             map.LoadMap("map0.txt", GraphicsDevice);
             camera.Width = Settings.SCREEN_WIDTH;
@@ -112,6 +112,7 @@ namespace Summons
             }
             else if (eventsManager.CurrentScene == EventsManager.Scene.COMBAT)
             {
+                monsterManager.UIUpdate(timeSinceLastFrame);
                 combat.Update(timeSinceLastFrame);
             }
 

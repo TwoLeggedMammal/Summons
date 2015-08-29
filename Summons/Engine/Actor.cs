@@ -30,6 +30,14 @@ namespace Summons.Engine
             }
         }
 
+        public void UIUpdate(double timeSinceLastFrame)
+        {
+            foreach (Monster monster in monsterCollection)
+            {
+                monster.UIUpdate(timeSinceLastFrame);
+            }
+        }
+
         public void Draw(GraphicsDevice graphics)
         {
             foreach (Monster monster in monsterCollection)
@@ -166,9 +174,13 @@ namespace Summons.Engine
         public int HP, maxHP, XP, maxXP;
         public int rangedAP, rangedAccuracy, rangedAttacks; 
         public int meleeAP, meleeAccuracy, meleeAttacks;
+        public int critRate;
         public int armor;
         public MonsterStatusDialog status;
         int symbolSize = 24;
+        double damageTimer = 0.0;
+        double fullDamageTime = 0.5;
+        protected int previousHP = -1;
 
         public Monster(int x, int y, Player player) 
             : base(x, y, player)
@@ -177,7 +189,7 @@ namespace Summons.Engine
             this.name = "???";
             this.XP = 0;
             this.maxXP = 100;
-            this.HP = this.maxHP = 10;
+            this.HP = this.maxHP = this.previousHP = 10;
             this.rangedAP = 1;
             this.rangedAccuracy = 50;
             this.rangedAttacks = 3;
@@ -185,6 +197,7 @@ namespace Summons.Engine
             this.meleeAccuracy = 75;
             this.meleeAttacks = 2;
             this.armor = 0;
+            this.critRate = 5;
             this.texture = Assets.blackMageActor;
             this.status = UI.getInstance().MakeMonsterStatusDialog(this);
         }
@@ -195,6 +208,24 @@ namespace Summons.Engine
 
             actorSprite.Begin();
 
+            // Draw the HP bar for the Monster
+            double hpBonus = this.damageTimer >= this.fullDamageTime ? 0.0 : (1.0 - (this.damageTimer / this.fullDamageTime)) * (Convert.ToDouble(this.previousHP - this.HP));
+            double hpPercentage = (Convert.ToDouble(this.HP + hpBonus) / Convert.ToDouble(this.maxHP));
+            Color hpBarColor = hpPercentage == 1.0 ? Color.LimeGreen : hpPercentage > 0.75 ? Color.Blue : hpPercentage > 0.5 ? Color.Yellow : Color.Red;
+
+            actorSprite.Draw
+                        (
+                            Assets.plainTexture,
+                            new Rectangle
+                            (
+                                Convert.ToInt32(X - Camera.getInstance().X + 3),
+                                Convert.ToInt32(Y - Camera.getInstance().Y + Settings.TILE_SIZE - 15),
+                                Convert.ToInt32(Settings.TILE_SIZE * hpPercentage - 6),
+                                5
+                            ),
+                            hpBarColor
+                        );
+
             // Draw the player symbol next to the Monster
             actorSprite.Draw
                         (
@@ -202,7 +233,7 @@ namespace Summons.Engine
                             new Rectangle
                             (
                                 Convert.ToInt32(X - Camera.getInstance().X + Settings.TILE_SIZE - this.symbolSize),
-                                Convert.ToInt32(Y - Camera.getInstance().Y + Settings.TILE_SIZE - this.symbolSize),
+                                Convert.ToInt32(Y - Camera.getInstance().Y + Settings.TILE_SIZE - this.symbolSize - 15),
                                 this.symbolSize,
                                 this.symbolSize
                             ),
@@ -237,6 +268,21 @@ namespace Summons.Engine
                     }
                 }
             }
+
+            this.UIUpdate(timeSinceLastFrame);
+        }
+
+        public void UIUpdate(double timeSinceLastFrame)
+        {
+            // Add time to our hp bar animation
+            this.damageTimer += timeSinceLastFrame;
+        }
+
+        public void ReceiveDamage(int hpLoss)
+        {
+            this.previousHP = this.HP;
+            this.HP -= hpLoss;
+            this.damageTimer = 0.0;
         }
     }
 
@@ -247,7 +293,11 @@ namespace Summons.Engine
         {
             this.texture = Assets.blackMageActor;
             this.name = "Black Mage";
-            this.HP = this.maxHP = 25;
+            this.HP = this.maxHP = this.previousHP = 25;
+            this.meleeAccuracy = 70;
+            this.meleeAP = 3;
+            this.rangedAccuracy = 66;
+            this.rangedAP = 12;
         }
     }
 
@@ -260,7 +310,11 @@ namespace Summons.Engine
             this.xOffset = -10.0;
             this.name = "Blue Dragon";
             this.armor = 1;
-            this.HP = this.maxHP = 80;
+            this.HP = this.maxHP = this.previousHP = 80;
+            this.meleeAccuracy = 85;
+            this.meleeAP = 8;
+            this.rangedAccuracy = 60;
+            this.rangedAP = 6;
         }
     }
 
@@ -273,7 +327,11 @@ namespace Summons.Engine
             this.yOffset = -20.0;
             this.name = "Heavy Knight";
             this.armor = 2;
-            this.HP = this.maxHP = 50;
+            this.HP = this.maxHP = this.previousHP = 50;
+            this.meleeAccuracy = 75;
+            this.meleeAP = 6;
+            this.rangedAccuracy = 50;
+            this.rangedAP = 5;
         }
     }
 
@@ -286,7 +344,11 @@ namespace Summons.Engine
             this.yOffset = -20.0;
             this.name = "Heavy Knight";
             this.armor = 0;
-            this.HP = this.maxHP = 45;
+            this.HP = this.maxHP = this.previousHP = 45;
+            this.meleeAccuracy = 75;
+            this.meleeAP = 5;
+            this.rangedAccuracy = 70;
+            this.rangedAP = 8;
         }
     }
 }
