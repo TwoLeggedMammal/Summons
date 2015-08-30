@@ -45,6 +45,11 @@ namespace Summons.Engine
                 monster.Draw(graphics);
             }
         }
+
+        public void Kill(Monster monster)
+        {
+            this.monsterCollection.Remove(monster);
+        }
     }
 
     public class Actor
@@ -220,7 +225,7 @@ namespace Summons.Engine
                             (
                                 Convert.ToInt32(X - Camera.getInstance().X + 3),
                                 Convert.ToInt32(Y - Camera.getInstance().Y + Settings.TILE_SIZE - 15),
-                                Convert.ToInt32(Settings.TILE_SIZE * hpPercentage - 6),
+                                Convert.ToInt32((Settings.TILE_SIZE - 6) * hpPercentage),
                                 5
                             ),
                             hpBarColor
@@ -280,9 +285,16 @@ namespace Summons.Engine
 
         public void ReceiveDamage(int hpLoss)
         {
-            this.previousHP = this.HP;
+            this.previousHP = this.HP;  // For the hp bar animation
             this.HP -= hpLoss;
             this.damageTimer = 0.0;
+        }
+
+        public void Die()
+        {
+            // TODO: Add death animation
+            MonsterManager.getInstance().Kill(this);
+            this.player.monsterCollection.Remove(this);
         }
     }
 

@@ -79,7 +79,8 @@ namespace Summons.Engine
             return finalAttacks;
         }
 
-        public void PerformAttack(Tuple<double, Monster> thisAttack)
+        // Returns false if the blow was a killing one, which ends combat immediately
+        public bool PerformAttack(Tuple<double, Monster> thisAttack)
         {
             Monster attacker = thisAttack.Item2 == firstCombatant ? firstCombatant : secondCombatant;
             Monster defender = thisAttack.Item2 == firstCombatant ? secondCombatant : firstCombatant;
@@ -108,8 +109,12 @@ namespace Summons.Engine
 
             if (defender.HP <= 0)
             {
-                // TODO: Implement Death
+                AwardXP(attacker, defender);
+                defender.Die();
+                return false;
             }
+
+            return true;
         }
 
         public void Update(double timeSinceLastFrame)
@@ -121,7 +126,13 @@ namespace Summons.Engine
             {
                 if (attackTimer > attackFrequency)
                 {
-                    PerformAttack(attacks.Dequeue());
+                    
+                    // Perform the attack, and if false, then the defender has been killed
+                    if (!PerformAttack(attacks.Dequeue()))
+                    {
+                        this.elapsedTime = this.fightLength;
+                        attacks.Clear();
+                    }
                     attackTimer = 0.0;
                 }
             }
@@ -130,6 +141,12 @@ namespace Summons.Engine
             {
                 EventsManager.getInstance().RecordEvent(EventsManager.Event.BATTLE_COMPLETED);
             }
+        }
+
+        public void AwardXP(Monster winner, Monster loser)
+        {
+            // TODO: Implement better XP logic
+            winner.XP = winner.XP + 10 > winner.maxXP ? winner.maxXP : winner.XP + 10;
         }
     }
 }
