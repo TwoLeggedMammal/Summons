@@ -15,7 +15,7 @@ namespace Summons
         MonsterManager monsterManager;
         UI ui;
         EventsManager eventsManager;
-        List<Player> players;
+        PlayerManager playerManager;
         Combat combat;
 
         public Main()
@@ -33,9 +33,9 @@ namespace Summons
             camera = Camera.getInstance();
             monsterManager = MonsterManager.getInstance();
             ui = UI.getInstance();
-            ui.graphics = GraphicsDevice;
+            ui.Initialize(GraphicsDevice);
             eventsManager = EventsManager.getInstance();
-            players = new List<Player>();
+            playerManager = PlayerManager.getInstance();
             combat = Combat.getInstance();
             
             base.Initialize();
@@ -54,12 +54,12 @@ namespace Summons
             camera.Height = Settings.SCREEN_HEIGHT;
             camera.XMax = map.width * Settings.TILE_SIZE;
             camera.YMax = map.height * Settings.TILE_SIZE;
-            players.Add(new Player(1, false));  // player 1 is human
-            players.Add(new Player(2, true));  // player 2 is ai
-            Monster blackMage = new BlackMage(4, 4, players[0]);
-            Monster blueDragon = new BlueDragon(12, 6, players[0]);
-            Monster heavyKnight = new HeavyKnight(10, 2, players[1]);
-            Monster archer = new Archer(15, 8, players[1]);
+            playerManager.playerCollection.Add(new Player(1, false));  // player 1 is human
+            playerManager.playerCollection.Add(new Player(2, true));  // player 2 is ai
+            Monster blackMage = new BlackMage(4, 4, playerManager.playerCollection[0]);
+            Monster blueDragon = new BlueDragon(12, 6, playerManager.playerCollection[0]);
+            Monster heavyKnight = new HeavyKnight(10, 2, playerManager.playerCollection[1]);
+            Monster archer = new Archer(15, 8, playerManager.playerCollection[1]);
             monsterManager.monsterCollection.Add(blackMage);
             monsterManager.monsterCollection.Add(blueDragon);
             monsterManager.monsterCollection.Add(heavyKnight);

@@ -21,6 +21,7 @@ namespace Summons
         String[] mapData;
         private Map() {}
         public static SpriteBatch mapSprite;
+        
 
         static Dictionary<char, double> tileMoveCost = new Dictionary<char, double>()
         {

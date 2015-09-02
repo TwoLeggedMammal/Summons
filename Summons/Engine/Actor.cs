@@ -182,7 +182,6 @@ namespace Summons.Engine
         public int critRate;
         public int armor;
         public MonsterStatusDialog status;
-        int symbolSize = 24;
         double damageTimer = 0.0;
         double fullDamageTime = 0.5;
         protected int previousHP = -1;
@@ -237,10 +236,10 @@ namespace Summons.Engine
                             this.player.flag,
                             new Rectangle
                             (
-                                Convert.ToInt32(X - Camera.getInstance().X + Settings.TILE_SIZE - this.symbolSize),
-                                Convert.ToInt32(Y - Camera.getInstance().Y + Settings.TILE_SIZE - this.symbolSize - 15),
-                                this.symbolSize,
-                                this.symbolSize
+                                Convert.ToInt32(X - Camera.getInstance().X + Settings.TILE_SIZE - Settings.PLAYER_SYMBOL_SIZE),
+                                Convert.ToInt32(Y - Camera.getInstance().Y + Settings.TILE_SIZE - Settings.PLAYER_SYMBOL_SIZE - 15),
+                                Settings.PLAYER_SYMBOL_SIZE,
+                                Settings.PLAYER_SYMBOL_SIZE
                             ),
                             player.symbolColor
                         );

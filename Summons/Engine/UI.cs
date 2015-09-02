@@ -12,6 +12,7 @@ namespace Summons.Engine
     {
         static UI instance = new UI();
         public Queue<TextDialog> textDialogCollection;
+        public PlayerStatusDialog playerStatusDialog;
         public List<MonsterStatusDialog> monsterStatusDialogCollection;
         public Queue<FloatingMessage> floatingMessageCollection;
         public GraphicsDevice graphics;
@@ -26,6 +27,12 @@ namespace Summons.Engine
         public static UI getInstance() 
         {
             return instance;
+        }
+
+        public void Initialize(GraphicsDevice graphics)
+        {
+            this.graphics = graphics;
+            this.playerStatusDialog = new PlayerStatusDialog();
         }
 
         public void OpenTextDialog(int x, int y, int width, String text)
@@ -87,6 +94,8 @@ namespace Summons.Engine
             {
                 message.Draw();
             }
+
+            playerStatusDialog.Draw();
         }
 
         public bool Click(MouseState mouseState)
@@ -198,6 +207,50 @@ namespace Summons.Engine
             String rangedText = String.Format("{0}x{1} ({2}%)", this.monster.rangedAP.ToString(), this.monster.rangedAttacks.ToString(), this.monster.rangedAccuracy.ToString());
             dialogSprite.DrawString(Assets.mainFont, rangedText, new Vector2(this.x + 32, this.y + 96), Color.White);
 
+            dialogSprite.End();
+        }
+    }
+
+    public class PlayerStatusDialog : Dialog
+    {
+        static int statusWidth = 284;
+        static int statusHeight = 128;
+
+        public PlayerStatusDialog()
+            : base(Settings.SCREEN_WIDTH - (PlayerStatusDialog.statusWidth + 32),
+                32,
+                PlayerStatusDialog.statusWidth,
+                PlayerStatusDialog.statusHeight)
+        {}
+
+        public override void Draw()
+        {
+            base.Draw();
+
+            dialogSprite.Begin();
+
+            List<Player> players = PlayerManager.getInstance().playerCollection;
+
+            for (int i = 0; i < players.Count; i++)
+            {
+                // Player Icon
+                dialogSprite.Draw
+                        (
+                            players[i].flag,
+                            new Rectangle
+                            (
+                                this.x,
+                                this.y + (i * 50),
+                                Settings.PLAYER_SYMBOL_SIZE,
+                                Settings.PLAYER_SYMBOL_SIZE
+                            ),
+                            players[i].symbolColor
+                        );
+
+                // Player Name
+                dialogSprite.DrawString(Assets.mainFont, players[i].name, new Vector2(this.x + Settings.PLAYER_SYMBOL_SIZE + 10, this.y + (i * 50)), Color.White);
+            }
+            
             dialogSprite.End();
         }
     }

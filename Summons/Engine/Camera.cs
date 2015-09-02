@@ -26,9 +26,9 @@ namespace Summons
         Double height = 0;
         bool panning = false;
         public Stack<Coordinate> momentum;
-        int numberOfReadings = 20;
+        int numberOfReadings = 2;
         Coordinate speed;
-        Double deceleration = 20.0;
+        Double deceleration = 200.0;
 
         private Camera()
         {
