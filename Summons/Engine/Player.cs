@@ -14,10 +14,14 @@ namespace Summons.Engine
         public Color symbolColor;
         public bool isAi;
         public String name;
+        public int mana;
+        public int towersOwned;
 
         public Player(int playerNumber, bool isAI)
         {
             monsterCollection = new List<Monster>();
+            this.mana = 100;
+            this.towersOwned = 0;
 
             if (playerNumber == 1)
             {

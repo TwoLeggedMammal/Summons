@@ -86,11 +86,13 @@
     <Content Include="Content\Tiles\tower64.png" />
     <Content Include="Content\UI\dialog_border.png" />
     <Content Include="Content\UI\hp_icon.png" />
+    <Content Include="Content\UI\mana.png" />
     <Content Include="Content\UI\player1_symbol.png" />
     <Content Include="Content\UI\player2_symbol.png" />
     <Content Include="Content\UI\ranged_icon.png" />
     <Content Include="Content\UI\shield_icon.png" />
     <Content Include="Content\UI\sword_icon.png" />
+    <Content Include="Content\UI\tower.png" />
     <Content Include="Icon.ico" />
     <Content Include="Content\Maps\map0.txt" />
     <Content Include="Content\Maps\mapLarge.txt" />

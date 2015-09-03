@@ -353,7 +353,7 @@ namespace Summons.Engine
         {
             this.texture = Assets.archerActor;
             this.yOffset = -20.0;
-            this.name = "Heavy Knight";
+            this.name = "Archer";
             this.armor = 0;
             this.HP = this.maxHP = this.previousHP = 45;
             this.meleeAccuracy = 75;

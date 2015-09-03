@@ -213,8 +213,8 @@ namespace Summons.Engine
 
     public class PlayerStatusDialog : Dialog
     {
-        static int statusWidth = 284;
-        static int statusHeight = 128;
+        static int statusWidth = 402;
+        static int statusHeight = 96;
 
         public PlayerStatusDialog()
             : base(Settings.SCREEN_WIDTH - (PlayerStatusDialog.statusWidth + 32),
@@ -233,22 +233,61 @@ namespace Summons.Engine
 
             for (int i = 0; i < players.Count; i++)
             {
+                int xPos = this.x;
+
                 // Player Icon
                 dialogSprite.Draw
                         (
                             players[i].flag,
                             new Rectangle
                             (
-                                this.x,
+                                xPos,
                                 this.y + (i * 50),
                                 Settings.PLAYER_SYMBOL_SIZE,
                                 Settings.PLAYER_SYMBOL_SIZE
                             ),
                             players[i].symbolColor
                         );
+                xPos += Settings.PLAYER_SYMBOL_SIZE + 10;
 
                 // Player Name
                 dialogSprite.DrawString(Assets.mainFont, players[i].name, new Vector2(this.x + Settings.PLAYER_SYMBOL_SIZE + 10, this.y + (i * 50)), Color.White);
+                xPos += Convert.ToInt32(Assets.mainFont.MeasureString(players[i].name).Length()) + 10;
+
+                // Mana info
+                dialogSprite.Draw
+                        (
+                            Assets.manaIcon,
+                            new Rectangle
+                            (
+                                xPos,
+                                this.y + (i * 50),
+                                24,
+                                24
+                            ),
+                            Color.White
+                        );
+                xPos += 24 + 10;
+
+                dialogSprite.DrawString(Assets.mainFont, Convert.ToString(players[i].mana), new Vector2(xPos, this.y + (i * 50)), Color.White);
+                xPos += Convert.ToInt32(Assets.mainFont.MeasureString(players[i].mana.ToString()).Length()) + 10;
+
+                // Tower info
+                dialogSprite.Draw
+                        (
+                            Assets.towerIcon,
+                            new Rectangle
+                            (
+                                xPos,
+                                this.y + (i * 50),
+                                24,
+                                24
+                            ),
+                            Color.White
+                        );
+                xPos += 24 + 10;
+
+                dialogSprite.DrawString(Assets.mainFont, Convert.ToString(players[i].towersOwned), new Vector2(xPos, this.y + (i * 50)), Color.White);
             }
             
             dialogSprite.End();

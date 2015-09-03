@@ -21,5 +21,7 @@
     <File>C:/Code/Summons/Summons/Content/UI/player1_symbol.png</File>
     <File>C:/Code/Summons/Summons/Content/UI/player2_symbol.png</File>
     <File>C:/Code/Summons/Summons/Content/Actors/archer.png</File>
+    <File>C:/Code/Summons/Summons/Content/UI/mana.png</File>
+    <File>C:/Code/Summons/Summons/Content/UI/tower.png</File>
   </SourceFiles>
 </SourceFileCollection>
