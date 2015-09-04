@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Code/Summons/Summons/Content/UI/mana.png</SourceFile>
-  <SourceTime>2015-09-03T08:07:22.8171526-04:00</SourceTime>
+  <SourceTime>2015-09-04T07:07:58.1066142-04:00</SourceTime>
   <DestFile>C:/Code/Summons/Summons/Content/bin/Windows/UI/mana.xnb</DestFile>
-  <DestTime>2015-09-03T08:11:43.9800903-04:00</DestTime>
+  <DestTime>2015-09-04T07:08:02.6398735-04:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2015-04-29T13:14:44-04:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

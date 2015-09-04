@@ -292,6 +292,7 @@ namespace Summons.Engine
         public void Die()
         {
             // TODO: Add death animation
+            UI.getInstance().monsterStatusDialogCollection.Remove(this.status);
             MonsterManager.getInstance().Kill(this);
             this.player.monsterCollection.Remove(this);
         }
