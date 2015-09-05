@@ -16,6 +16,7 @@ namespace Summons
     {
         static Assets instance = new Assets();
         public static Texture2D waterTile, grassTile, mountainTile, swampTile, towerTile;
+        public static Texture2D towerFlag;
         public static Texture2D blackMageActor, blueDragonActor, heavyKnightActor, archerActor;
         public static Texture2D uiTexture;
         public static Texture2D meleeIcon, hpIcon, rangedIcon, defenseIcon, manaIcon, towerIcon;
@@ -53,6 +54,7 @@ namespace Summons
             defenseIcon = content.Load<Texture2D>("UI/shield_icon");
             manaIcon = content.Load<Texture2D>("UI/mana");
             towerIcon = content.Load<Texture2D>("UI/tower");
+            towerFlag = content.Load<Texture2D>("UI/flag");
 
             // Load player symbols
             playerOneSymbol = content.Load<Texture2D>("UI/player1_symbol");

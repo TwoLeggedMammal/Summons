@@ -85,6 +85,7 @@
     <Content Include="Content\Actors\heavyknight.png" />
     <Content Include="Content\Tiles\tower64.png" />
     <Content Include="Content\UI\dialog_border.png" />
+    <Content Include="Content\UI\flag.png" />
     <Content Include="Content\UI\hp_icon.png" />
     <Content Include="Content\UI\mana.png" />
     <Content Include="Content\UI\player1_symbol.png" />

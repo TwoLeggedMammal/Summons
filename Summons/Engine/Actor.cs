@@ -126,8 +126,18 @@ namespace Summons.Engine
                 else if (yDiff < 0)
                     Y -= moveAmount;
 
+                // We've moved completely into the tile
                 if (xDiff == 0 && yDiff == 0)
                 {
+                    // Check to see if we've moved onto a tower
+                    foreach (Tower tower in Map.getInstance().towers)
+                    {
+                        if (tower.X == this.TileX && tower.Y == this.TileY)
+                        {
+                            tower.Capture(this);
+                        }
+                    }
+
                     Console.WriteLine(path.Pop());
                 }
             }

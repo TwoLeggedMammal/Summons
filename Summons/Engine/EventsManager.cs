@@ -26,7 +26,8 @@ namespace Summons.Engine
             INVALID_ACTOR_DESTINATION,
             BATTLE_ENGAGED,
             BATTLE_COMPLETED,
-            MONSTER_EVOLVED
+            MONSTER_EVOLVED,
+            TOWER_CAPTURED
         }
         public enum Scene
         {
@@ -71,6 +72,10 @@ namespace Summons.Engine
             else if (e == Event.BATTLE_COMPLETED && CurrentScene == Scene.COMBAT)
             {
                 CurrentScene = Scene.OVERWORLD;
+            }
+            else if (e == Event.TOWER_CAPTURED)
+            {
+                ui.ShowMessage("TOWER CAPTURED!", FloatingMessage.TransitionType.EXPANDING);
             }
 
             if (triggered.ContainsKey(e))

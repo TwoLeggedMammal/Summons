@@ -21,7 +21,7 @@ namespace Summons
         String[] mapData;
         private Map() {}
         public static SpriteBatch mapSprite;
-        
+        public List<Tower> towers;
 
         static Dictionary<char, double> tileMoveCost = new Dictionary<char, double>()
         {
@@ -42,11 +42,25 @@ namespace Summons
             // Load the file
             using (StreamReader sr = new StreamReader(Settings.MAPS_ROOT + mapTextFile))
             {
-                mapData = sr.ReadToEnd().Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+                this.mapData = sr.ReadToEnd().Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
                 
                 // Set the dimensions of our map
                 this.height = mapData.Length;
                 this.width = mapData[0].Length;
+            }
+
+            // Extract tower locations
+            towers = new List<Tower>();
+
+            for (int y = 0; y < this.mapData.Length; y++)
+            {
+                for (int x = 0; x < this.mapData[y].Length; x++)
+                {
+                    if (this.mapData[y][x] == 't')
+                    {
+                        towers.Add(new Tower(x, y));
+                    }
+                }
             }
         }
 
@@ -80,6 +94,11 @@ namespace Summons
                             Color.White
                         );
                 }
+            }
+
+            foreach (Tower tower in this.towers)
+            {
+                tower.Draw(graphics, mapSprite);
             }
             
             mapSprite.End();
@@ -202,6 +221,71 @@ namespace Summons
         public double GetTileFactor(int x, int y)
         {
             return tileMoveCost[mapData[y][x]];
+        }
+    }
+
+    public class Tower
+    {
+        public Player owner;
+        public int X;
+        public int Y;
+        int xOffset, yOffset;
+
+        public Tower(int x, int y)
+        {
+            owner = null;
+            this.X = x;
+            this.Y = y;
+            this.xOffset = 25;
+            this.yOffset = -15;
+        }
+
+        public void Capture(Actor monster)
+        {
+            if (this.owner != monster.player)
+            {
+                if (this.owner != null)
+                {
+                    this.owner.towersOwned--;  // Remove from the old owner's tower count
+                }
+                this.owner = monster.player;
+                this.owner.towersOwned++;  // Add to the new owner's tower count
+                EventsManager.getInstance().RecordEvent(EventsManager.Event.TOWER_CAPTURED);
+            }
+        }
+
+        public void Draw(GraphicsDevice graphicsDevice, SpriteBatch sprite)
+        {
+            if (this.owner != null)
+            {
+                // Draw the flag on this tower
+                sprite.Draw
+                    (
+                        Assets.towerFlag,
+                        new Rectangle
+                        (
+                            this.X * Settings.TILE_SIZE - Convert.ToInt32(Camera.getInstance().X) + this.xOffset,
+                            this.Y * Settings.TILE_SIZE - Convert.ToInt32(Camera.getInstance().Y) + this.yOffset,
+                            32,
+                            24
+                        ),
+                        Color.White
+                    );
+
+                // And draw a little player symbol on that flag
+                sprite.Draw
+                    (
+                        this.owner.flag,
+                        new Rectangle
+                        (
+                            this.X * Settings.TILE_SIZE - Convert.ToInt32(Camera.getInstance().X) + this.xOffset + 7,
+                            this.Y * Settings.TILE_SIZE - Convert.ToInt32(Camera.getInstance().Y) + this.yOffset + 3,
+                            16,
+                            16
+                        ),
+                        this.owner.symbolColor
+                    );
+            }
         }
     }
 }
