@@ -49,7 +49,7 @@ namespace Summons.Engine
             return instance;
         }
 
-        public void RecordEvent(Event e)
+        public void RecordEvent(Event e, Actor actor = null)
         {
             if (e == Event.GAME_STARTED && !PreviouslyTriggered(e))
             {
@@ -75,7 +75,7 @@ namespace Summons.Engine
             }
             else if (e == Event.TOWER_CAPTURED)
             {
-                ui.ShowMessage("TOWER CAPTURED!", FloatingMessage.TransitionType.EXPANDING);
+                ui.ShowMessage("TOWER CAPTURED!", FloatingMessage.TransitionType.EXPANDING, actor);
             }
 
             if (triggered.ContainsKey(e))

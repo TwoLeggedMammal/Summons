@@ -41,9 +41,9 @@ namespace Summons.Engine
             textDialogCollection.Enqueue(new TextDialog(x, y, width, text));
         }
 
-        public void ShowMessage(String text, FloatingMessage.TransitionType transition = FloatingMessage.TransitionType.FIXED, Monster monster = null)
+        public void ShowMessage(String text, FloatingMessage.TransitionType transition = FloatingMessage.TransitionType.FIXED, Actor actor = null)
         {
-            floatingMessageCollection.Enqueue(new FloatingMessage(text, transition, monster));
+            floatingMessageCollection.Enqueue(new FloatingMessage(text, transition, actor));
         }
 
         public MonsterStatusDialog MakeMonsterStatusDialog(Monster monster)
@@ -384,7 +384,7 @@ namespace Summons.Engine
         public double floatAmout = 50.0;
         public bool complete = false;
         public double lifespan = 0.5;
-        public Monster attachedMonster;
+        public Actor attachedMonster;
         public SpriteBatch dialogSprite;
         public TransitionType transitionType;
 
@@ -395,7 +395,7 @@ namespace Summons.Engine
             FLOATING
         }
 
-        public FloatingMessage(String text, TransitionType transition = TransitionType.FIXED, Monster attachedMonster = null)
+        public FloatingMessage(String text, TransitionType transition = TransitionType.FIXED, Actor attachedMonster = null)
         {
             this.text = text;
             this.attachedMonster = attachedMonster;
@@ -416,7 +416,7 @@ namespace Summons.Engine
             double textWidth = Assets.mainFont.MeasureString(this.text).Length() * scale;
             double yModifier = this.transitionType == TransitionType.FLOATING ? floatAmout * (elapsedTime / lifespan) : 0.0;
             double xPos = this.attachedMonster == null? (Settings.SCREEN_WIDTH / 2) - (textWidth / 2.0) : this.attachedMonster.X - (textWidth / 2.0) + (Settings.TILE_SIZE / 2) - Camera.getInstance().X;
-            double yPos = this.attachedMonster == null ? (Settings.SCREEN_HEIGHT / 2.0) - ((32 * scale) / 2.0) : this.attachedMonster.Y - Camera.getInstance().Y;
+            double yPos = this.attachedMonster == null ? (Settings.SCREEN_HEIGHT / 2.0) - ((32 * scale) / 2.0) : this.attachedMonster.Y - Camera.getInstance().Y - ((32 * scale) / 2.0) + 16;
                 
             dialogSprite.Begin();
             dialogSprite.DrawString(Assets.mainFont, 
