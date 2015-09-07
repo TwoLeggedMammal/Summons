@@ -31,13 +31,6 @@ namespace Summons
         {
             this.IsMouseVisible = true;
             camera = Camera.getInstance();
-            monsterManager = MonsterManager.getInstance();
-            ui = UI.getInstance();
-            ui.Initialize(GraphicsDevice);
-            eventsManager = EventsManager.getInstance();
-            playerManager = PlayerManager.getInstance();
-            combat = Combat.getInstance();
-            
             base.Initialize();
         }
 
@@ -48,12 +41,29 @@ namespace Summons
         protected override void LoadContent()
         {
             Assets.getInstance().LoadTextures(Content, GraphicsDevice);
+            PostContent();
+        }
+
+        public void PostContent()
+        {
+            monsterManager = MonsterManager.getInstance();
+            ui = UI.getInstance();
+            ui.Initialize(GraphicsDevice);
+            eventsManager = EventsManager.getInstance();
+            playerManager = PlayerManager.getInstance();
+            combat = Combat.getInstance();
+
+            // Loading up our test map
             map = Map.getInstance();
             map.LoadMap("map0.txt", GraphicsDevice);
+
+            // The camera relies on the map being loaded to operate
             camera.Width = Settings.SCREEN_WIDTH;
             camera.Height = Settings.SCREEN_HEIGHT;
             camera.XMax = map.width * Settings.TILE_SIZE;
             camera.YMax = map.height * Settings.TILE_SIZE;
+            
+            // This creates a basic scenario with a couple players and monsters each, for testing
             playerManager.playerCollection.Add(new Player(1, false));  // player 1 is human
             playerManager.playerCollection.Add(new Player(2, true));  // player 2 is ai
             Monster blackMage = new BlackMage(4, 4, playerManager.playerCollection[0]);
@@ -64,6 +74,8 @@ namespace Summons
             monsterManager.monsterCollection.Add(blueDragon);
             monsterManager.monsterCollection.Add(heavyKnight);
             monsterManager.monsterCollection.Add(archer);
+            
+            // Kick things off
             eventsManager.RecordEvent(EventsManager.Event.GAME_STARTED);
         }
 

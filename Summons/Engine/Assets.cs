@@ -20,6 +20,7 @@ namespace Summons
         public static Texture2D blackMageActor, blueDragonActor, heavyKnightActor, archerActor;
         public static Texture2D uiTexture;
         public static Texture2D meleeIcon, hpIcon, rangedIcon, defenseIcon, manaIcon, towerIcon;
+        public static Texture2D summonIcon;
         public static Texture2D playerOneSymbol, playerTwoSymbol;
         public static Texture2D plainTexture;
         public static SpriteFont mainFont;
@@ -55,6 +56,7 @@ namespace Summons
             manaIcon = content.Load<Texture2D>("UI/mana");
             towerIcon = content.Load<Texture2D>("UI/tower");
             towerFlag = content.Load<Texture2D>("UI/flag");
+            summonIcon = content.Load<Texture2D>("UI/summon_icon");
 
             // Load player symbols
             playerOneSymbol = content.Load<Texture2D>("UI/player1_symbol");

@@ -44,3 +44,4 @@ C:\Code\Summons\Summons\bin\Windows\Debug\Content\Actors\archer.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\mana.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\tower.xnb
 C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\flag.xnb
+C:\Code\Summons\Summons\bin\Windows\Debug\Content\UI\summon_icon.xnb

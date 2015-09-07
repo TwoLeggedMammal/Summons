@@ -13,15 +13,18 @@ namespace Summons.Engine
         static UI instance = new UI();
         public Queue<TextDialog> textDialogCollection;
         public PlayerStatusDialog playerStatusDialog;
+        public PlayerActionDialog playerActionDialog;
         public List<MonsterStatusDialog> monsterStatusDialogCollection;
         public Queue<FloatingMessage> floatingMessageCollection;
+        public List<Button> buttonCollection;
         public GraphicsDevice graphics;
 
         private UI() 
         {
-            textDialogCollection = new Queue<TextDialog>();
-            monsterStatusDialogCollection = new List<MonsterStatusDialog>();
-            floatingMessageCollection = new Queue<FloatingMessage>();
+            this.buttonCollection = new List<Button>();
+            this.textDialogCollection = new Queue<TextDialog>();
+            this.monsterStatusDialogCollection = new List<MonsterStatusDialog>();
+            this.floatingMessageCollection = new Queue<FloatingMessage>();
         }
 
         public static UI getInstance() 
@@ -33,11 +36,12 @@ namespace Summons.Engine
         {
             this.graphics = graphics;
             this.playerStatusDialog = new PlayerStatusDialog();
+            this.playerActionDialog = new PlayerActionDialog();
         }
 
         public void OpenTextDialog(int x, int y, int width, String text)
         {
-            // width and hight should be multiples of the UI_TILE_SIZE
+            // Width and hight should be multiples of the UI_TILE_SIZE
             textDialogCollection.Enqueue(new TextDialog(x, y, width, text));
         }
 
@@ -51,6 +55,12 @@ namespace Summons.Engine
             MonsterStatusDialog dialog = new MonsterStatusDialog(monster);
             monsterStatusDialogCollection.Add(dialog);
             return dialog;
+        }
+
+        public void AddButton(Button button)
+        {
+            // Register the button so it can be registered for input
+            this.buttonCollection.Add(button);
         }
 
         public void Update(double timeSinceLastFrame)
@@ -96,14 +106,22 @@ namespace Summons.Engine
             }
 
             playerStatusDialog.Draw();
+            playerActionDialog.Draw();
         }
 
         public bool Click(MouseState mouseState)
         {
             bool clicked = false;
 
+            // Check to see if we clicked on the currently visible text dialog
             if (textDialogCollection.Count > 0)
                 clicked = textDialogCollection.Peek().Click(mouseState) || clicked;
+
+            // Check to see if we've clicked on any buttons
+            foreach (Button button in this.buttonCollection)
+            {
+                button.Click(mouseState);
+            }
 
             return clicked;
         }
@@ -294,6 +312,39 @@ namespace Summons.Engine
         }
     }
 
+    public class PlayerActionDialog : Dialog
+    {
+        static int width = 64;
+        static int height = 192;
+        public List<Button> buttonCollection;
+
+        public PlayerActionDialog()
+            : base(32,
+                Convert.ToInt32((Settings.SCREEN_HEIGHT - PlayerActionDialog.height) / 2.0),
+                PlayerActionDialog.width,
+                PlayerActionDialog.height)
+        {
+            this.buttonCollection = new List<Button>();
+            
+            // Summon button
+            this.buttonCollection.Add(new SummonButton(this));
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
+
+            dialogSprite.Begin();
+
+            foreach (Button b in this.buttonCollection)
+            {
+                b.Draw(this.dialogSprite);
+            }
+
+            dialogSprite.End();
+        }
+    }
+
     public class TextDialog : Dialog
     {
         public String text;
@@ -430,6 +481,66 @@ namespace Summons.Engine
                     SpriteEffects.None,
                     (float)1.0);  // Layer depth?
             dialogSprite.End();
+        }
+    }
+
+    public abstract class Button
+    {
+        public int x, y;
+        public int width, height;
+        public Texture2D icon;
+        public Dialog parent;
+        
+        public Button(Dialog parent, Texture2D icon, int x = 0, int y = 0)
+        {
+            this.parent = parent;
+            this.x = parent.x + x;  // The value passed in is relative to the parent
+            this.y = parent.y + y;  // The value passed in is relative to the parent
+            this.icon = icon;
+            this.width = icon.Width;
+            this.height = icon.Height;
+            UI.getInstance().AddButton(this);
+        }
+
+        public abstract void ClickHandler();
+
+        public void Draw(SpriteBatch sprite)
+        {
+            sprite.Draw
+                        (
+                            icon,
+                            new Rectangle
+                            (
+                                this.x,
+                                this.y,
+                                this.width,
+                                this.height
+                            ),
+                            Color.White
+                        );
+        }
+
+        public void Click(MouseState mouseState)
+        {
+            if (this.parent.visible &&
+                mouseState.X >= this.x &&
+                mouseState.X <= this.x + this.width &&
+                mouseState.Y >= this.y &&
+                mouseState.Y <= this.y + this.height)
+            {
+                this.ClickHandler();   
+            }
+        }
+    }
+
+    public class SummonButton : Button
+    {
+        public SummonButton(Dialog parent, int x = 0, int y = 0) : base(parent, Assets.summonIcon, x, y)
+        {}
+
+        public override void ClickHandler()
+        {
+            Console.WriteLine("Clicked!");
         }
     }
 }
