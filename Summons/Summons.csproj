@@ -58,8 +58,10 @@
   <ItemGroup>
     <Compile Include="Engine\Actor.cs" />
     <Compile Include="Engine\Assets.cs" />
+    <Compile Include="Engine\Button.cs" />
     <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\Combat.cs" />
+    <Compile Include="Engine\Dialog.cs" />
     <Compile Include="Engine\EventsManager.cs" />
     <Compile Include="Engine\Input.cs" />
     <Compile Include="Engine\Player.cs" />
