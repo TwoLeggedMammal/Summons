@@ -27,11 +27,18 @@ namespace Summons.Engine
         {
             Camera camera = Camera.getInstance();
 
-            // Handle hovering
+            // Actor hovering
             foreach (Actor actor in monsterManager.monsterCollection)
             {
                 actor.Hovered = (mouseState.X + camera.X > (actor.TileX * Settings.TILE_SIZE) && mouseState.X + camera.X < ((actor.TileX + 1) * Settings.TILE_SIZE) &&
                                 mouseState.Y + camera.Y > (actor.TileY * Settings.TILE_SIZE) && mouseState.Y + camera.Y < ((actor.TileY + 1) * Settings.TILE_SIZE));
+            }
+
+            // Button hovering
+            foreach (Button button in UI.getInstance().buttonCollection)
+            {
+                button.hovered = (mouseState.X >= button.x && mouseState.X < button.x + button.width &&
+                                mouseState.Y >= button.y && mouseState.Y < button.y + button.height);
             }
 
             // Handle left clicks

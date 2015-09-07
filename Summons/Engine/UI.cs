@@ -490,6 +490,7 @@ namespace Summons.Engine
         public int width, height;
         public Texture2D icon;
         public Dialog parent;
+        public bool hovered = false;
         
         public Button(Dialog parent, Texture2D icon, int x = 0, int y = 0)
         {
@@ -516,7 +517,7 @@ namespace Summons.Engine
                                 this.width,
                                 this.height
                             ),
-                            Color.White
+                            this.hovered ? new Color(230, 230, 230) : Color.White
                         );
         }
 
