@@ -64,16 +64,7 @@ namespace Summons
             camera.YMax = map.height * Settings.TILE_SIZE;
             
             // This creates a basic scenario with a couple players and monsters each, for testing
-            playerManager.playerCollection.Add(new Player(1, false));  // player 1 is human
-            playerManager.playerCollection.Add(new Player(2, true));  // player 2 is ai
-            Monster blackMage = new BlackMage(4, 4, playerManager.playerCollection[0]);
-            Monster blueDragon = new BlueDragon(12, 6, playerManager.playerCollection[0]);
-            Monster heavyKnight = new HeavyKnight(10, 2, playerManager.playerCollection[1]);
-            Monster archer = new Archer(15, 8, playerManager.playerCollection[1]);
-            monsterManager.monsterCollection.Add(blackMage);
-            monsterManager.monsterCollection.Add(blueDragon);
-            monsterManager.monsterCollection.Add(heavyKnight);
-            monsterManager.monsterCollection.Add(archer);
+            playerManager.SpawnPlayers();
             
             // Kick things off
             eventsManager.RecordEvent(EventsManager.Event.GAME_STARTED);

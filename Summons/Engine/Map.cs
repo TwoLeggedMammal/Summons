@@ -29,7 +29,12 @@ namespace Summons
             {'1', 1.0},  // grass
             {'2', 4.0}, // mountain
             {'3', 2.0}, // swamp
-            {'t', 1.0} // tower
+            {'t', 1.0}, // tower
+            {'a', 1.0}, // tower + player 1 starting location
+            {'b', 1.0}, // tower + player 2 starting location
+            {'c', 1.0}, // tower + player 3 starting location
+            {'d', 1.0} // tower + player 4 starting location
+
         };
 
         public static Map getInstance()
@@ -56,7 +61,7 @@ namespace Summons
             {
                 for (int x = 0; x < this.mapData[y].Length; x++)
                 {
-                    if (this.mapData[y][x] == 't')
+                    if (this.mapData[y][x] == 't' || (this.mapData[y][x] >= 'a' && this.mapData[y][x] <= 'd'))
                     {
                         towers.Add(new Tower(x, y));
                     }
@@ -72,6 +77,10 @@ namespace Summons
             textureDict.Add('2', Assets.mountainTile);
             textureDict.Add('3', Assets.swampTile);
             textureDict.Add('t', Assets.towerTile);
+            textureDict.Add('a', Assets.towerTile);  // Player 1 starting location
+            textureDict.Add('b', Assets.towerTile);  // Player 2 starting location
+            textureDict.Add('c', Assets.towerTile);  // Player 3 starting location
+            textureDict.Add('d', Assets.towerTile);  // Player 4 starting location
 
             mapSprite = new SpriteBatch(graphics);
 
@@ -110,6 +119,24 @@ namespace Summons
             bool[,] teammateMap = GetTeammateLocations(startX, startY, player);
             double[,] moveMap = GetMovementMap(startX, startY, null, 30.0, teammateMap);
             return ExtractPath(moveMap, destX, destY);
+        }
+
+        public Coordinate GetSpawnPoint(int playerNumber)
+        {
+            char spawnChar = playerNumber == 1 ? 'a' : playerNumber == 2 ? 'b' : playerNumber == 3 ? 'c' : 'd';
+
+            for (int y = 0; y < this.mapData.Length; y++)
+            {
+                for (int x = 0; x < this.mapData[y].Length; x++ )
+                {
+                    if (mapData[y][x] == spawnChar)
+                    {
+                        return new Coordinate(x, y);
+                    }
+                }
+            }
+
+            return null;
         }
 
         private bool[,] GetTeammateLocations(int startX, int startY, Player player)
