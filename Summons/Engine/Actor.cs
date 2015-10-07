@@ -305,6 +305,7 @@ namespace Summons.Engine
             UI.getInstance().monsterStatusDialogCollection.Remove(this.status);
             MonsterManager.getInstance().Kill(this);
             this.player.monsterCollection.Remove(this);
+            EventsManager.getInstance().RecordEvent(EventsManager.Event.MONSTER_DIED);
         }
     }
 

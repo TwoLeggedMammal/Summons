@@ -27,7 +27,8 @@ namespace Summons.Engine
             BATTLE_ENGAGED,
             BATTLE_COMPLETED,
             MONSTER_EVOLVED,
-            TOWER_CAPTURED
+            TOWER_CAPTURED,
+            MONSTER_DIED
         }
         public enum Scene
         {
@@ -68,6 +69,10 @@ namespace Summons.Engine
             {
                 CurrentScene = Scene.COMBAT;
                 ui.ShowMessage("Fight it out!", FloatingMessage.TransitionType.EXPANDING);
+            }
+            else if (e == Event.MONSTER_DIED)
+            {
+                ui.ShowMessage("Defeated!", FloatingMessage.TransitionType.EXPANDING);
             }
             else if (e == Event.BATTLE_COMPLETED && CurrentScene == Scene.COMBAT)
             {

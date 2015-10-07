@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Code/Summons/Summons/Content/UI/summon_icon.png</SourceFile>
-  <SourceTime>2015-09-07T10:23:42.2445485-04:00</SourceTime>
+  <SourceTime>2015-10-07T08:29:36.736517-04:00</SourceTime>
   <DestFile>C:/Code/Summons/Summons/Content/bin/Windows/UI/summon_icon.xnb</DestFile>
-  <DestTime>2015-09-07T10:29:04.3619726-04:00</DestTime>
+  <DestTime>2015-10-07T08:29:45.3790113-04:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2015-04-29T13:14:44-04:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
