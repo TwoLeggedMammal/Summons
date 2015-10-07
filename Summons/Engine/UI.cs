@@ -14,6 +14,7 @@ namespace Summons.Engine
         public Queue<TextDialog> textDialogCollection;
         public PlayerStatusDialog playerStatusDialog;
         public PlayerActionDialog playerActionDialog;
+        public MonsterSummonDialog monsterSummonDialog;
         public List<MonsterStatusDialog> monsterStatusDialogCollection;
         public Queue<FloatingMessage> floatingMessageCollection;
         public List<Button> buttonCollection;
@@ -37,6 +38,7 @@ namespace Summons.Engine
             this.graphics = graphics;
             this.playerStatusDialog = new PlayerStatusDialog();
             this.playerActionDialog = new PlayerActionDialog();
+            this.monsterSummonDialog = new MonsterSummonDialog();
         }
 
         public void OpenTextDialog(int x, int y, int width, String text)
@@ -107,6 +109,7 @@ namespace Summons.Engine
 
             playerStatusDialog.Draw();
             playerActionDialog.Draw();
+            monsterSummonDialog.Draw();
         }
 
         public bool Click(MouseState mouseState)

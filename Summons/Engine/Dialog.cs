@@ -15,6 +15,7 @@ namespace Summons.Engine
         public int padding;
         public bool visible;
         public SpriteBatch dialogSprite;
+        public List<Button> buttonCollection;
 
         public Dialog(int x, int y, int width, int height)
         {
@@ -27,31 +28,41 @@ namespace Summons.Engine
             this.height = height;
             this.tileHeight = Convert.ToInt32(height / Settings.UI_TILE_SIZE) + padding;
             this.dialogSprite = new SpriteBatch(UI.getInstance().graphics);
+            this.buttonCollection = new List<Button>();
         }
 
         public virtual void Update(double timeSinceLastFrame) { }
 
         public virtual void Draw()
         {
-            this.dialogSprite.Begin();
-
-            // Draw the window in which our content goes
-            for (int i = 0; i < tileWidth; i++)
+            if (this.visible)
             {
-                for (int j = 0; j < tileHeight; j++)
+                this.dialogSprite.Begin();
+
+                // Draw the window in which our content goes
+                for (int i = 0; i < tileWidth; i++)
                 {
-                    // Figure out which part of the textbox texture to use, which is a 3x3 grid of textures rolled up together
-                    int textureX = i == 0 ? 0 : i == tileWidth - 1 ? 2 : 1;
-                    int textureY = j == 0 ? 0 : j == tileHeight - 1 ? 2 : 1;
+                    for (int j = 0; j < tileHeight; j++)
+                    {
+                        // Figure out which part of the textbox texture to use, which is a 3x3 grid of textures rolled up together
+                        int textureX = i == 0 ? 0 : i == tileWidth - 1 ? 2 : 1;
+                        int textureY = j == 0 ? 0 : j == tileHeight - 1 ? 2 : 1;
 
-                    dialogSprite.Draw(Assets.uiTexture,
-                        new Vector2(this.x + (i * Settings.UI_TILE_SIZE) - (this.padding * Settings.UI_TILE_SIZE / 2), this.y + (j * Settings.UI_TILE_SIZE) - (this.padding * Settings.UI_TILE_SIZE / 2)),
-                        new Rectangle(textureX * Settings.UI_TILE_SIZE, textureY * Settings.UI_TILE_SIZE, Settings.UI_TILE_SIZE, Settings.UI_TILE_SIZE),
-                        Color.White);
+                        dialogSprite.Draw(Assets.uiTexture,
+                            new Vector2(this.x + (i * Settings.UI_TILE_SIZE) - (this.padding * Settings.UI_TILE_SIZE / 2), this.y + (j * Settings.UI_TILE_SIZE) - (this.padding * Settings.UI_TILE_SIZE / 2)),
+                            new Rectangle(textureX * Settings.UI_TILE_SIZE, textureY * Settings.UI_TILE_SIZE, Settings.UI_TILE_SIZE, Settings.UI_TILE_SIZE),
+                            Color.White);
+                    }
                 }
-            }
 
-            this.dialogSprite.End();
+                // Draw any buttons which may exist on the dialog
+                foreach (Button b in this.buttonCollection)
+                {
+                    b.Draw(this.dialogSprite);
+                }
+
+                this.dialogSprite.End();
+            }
         }
 
         public virtual bool Click(MouseState mouseState)
@@ -197,7 +208,6 @@ namespace Summons.Engine
     {
         static int width = 64;
         static int height = 192;
-        public List<Button> buttonCollection;
 
         public PlayerActionDialog()
             : base(32,
@@ -205,24 +215,26 @@ namespace Summons.Engine
                 PlayerActionDialog.width,
                 PlayerActionDialog.height)
         {
-            this.buttonCollection = new List<Button>();
-
             // Summon button
             this.buttonCollection.Add(new SummonButton(this));
         }
+    }
 
-        public override void Draw()
+    public class MonsterSummonDialog : Dialog
+    {
+        static int width = 128;
+        static int height = 128;
+
+        public MonsterSummonDialog()
+            : base(Convert.ToInt32((Settings.SCREEN_WIDTH - MonsterSummonDialog.width) / 2.0),
+                Convert.ToInt32((Settings.SCREEN_HEIGHT - MonsterSummonDialog.height) / 2.0),
+                MonsterSummonDialog.width,
+                MonsterSummonDialog.height)
         {
-            base.Draw();
+            this.visible = false;
 
-            dialogSprite.Begin();
-
-            foreach (Button b in this.buttonCollection)
-            {
-                b.Draw(this.dialogSprite);
-            }
-
-            dialogSprite.End();
+            // One button for each monster we could summon
+            this.buttonCollection.Add(new SummonButton(this));
         }
     }
 
