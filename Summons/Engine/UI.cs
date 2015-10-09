@@ -38,13 +38,17 @@ namespace Summons.Engine
             this.graphics = graphics;
             this.playerStatusDialog = new PlayerStatusDialog();
             this.playerActionDialog = new PlayerActionDialog();
-            this.monsterSummonDialog = new MonsterSummonDialog();
         }
 
         public void OpenTextDialog(int x, int y, int width, String text)
         {
             // Width and hight should be multiples of the UI_TILE_SIZE
             textDialogCollection.Enqueue(new TextDialog(x, y, width, text));
+        }
+
+        public void OpenSummonDialog()
+        {
+            this.monsterSummonDialog.visible = true;
         }
 
         public void ShowMessage(String text, FloatingMessage.TransitionType transition = FloatingMessage.TransitionType.FIXED, Actor actor = null)

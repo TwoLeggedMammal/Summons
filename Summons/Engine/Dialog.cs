@@ -16,8 +16,9 @@ namespace Summons.Engine
         public bool visible;
         public SpriteBatch dialogSprite;
         public List<Button> buttonCollection;
+        public bool hasCloseButton;
 
-        public Dialog(int x, int y, int width, int height)
+        public Dialog(int x, int y, int width, int height, bool hasCloseButton = false)
         {
             this.visible = true;
             this.padding = 1;  // How much extra space we leave around the text in tiles
@@ -29,40 +30,48 @@ namespace Summons.Engine
             this.tileHeight = Convert.ToInt32(height / Settings.UI_TILE_SIZE) + padding;
             this.dialogSprite = new SpriteBatch(UI.getInstance().graphics);
             this.buttonCollection = new List<Button>();
+
+            if (hasCloseButton)
+            {
+                CloseButton closeButton = new CloseButton(this, this.width, this.height - 20);
+                closeButton.x = this.width - closeButton.width;
+                this.buttonCollection.Add(closeButton);
+
+            }
         }
 
         public virtual void Update(double timeSinceLastFrame) { }
 
         public virtual void Draw()
         {
-            if (this.visible)
+            if (!this.visible)
+                return;
+
+            this.dialogSprite.Begin();
+
+            // Draw the window in which our content goes
+            for (int i = 0; i < tileWidth; i++)
             {
-                this.dialogSprite.Begin();
-
-                // Draw the window in which our content goes
-                for (int i = 0; i < tileWidth; i++)
+                for (int j = 0; j < tileHeight; j++)
                 {
-                    for (int j = 0; j < tileHeight; j++)
-                    {
-                        // Figure out which part of the textbox texture to use, which is a 3x3 grid of textures rolled up together
-                        int textureX = i == 0 ? 0 : i == tileWidth - 1 ? 2 : 1;
-                        int textureY = j == 0 ? 0 : j == tileHeight - 1 ? 2 : 1;
+                    // Figure out which part of the textbox texture to use, which is a 3x3 grid of textures rolled up together
+                    int textureX = i == 0 ? 0 : i == tileWidth - 1 ? 2 : 1;
+                    int textureY = j == 0 ? 0 : j == tileHeight - 1 ? 2 : 1;
 
-                        dialogSprite.Draw(Assets.uiTexture,
-                            new Vector2(this.x + (i * Settings.UI_TILE_SIZE) - (this.padding * Settings.UI_TILE_SIZE / 2), this.y + (j * Settings.UI_TILE_SIZE) - (this.padding * Settings.UI_TILE_SIZE / 2)),
-                            new Rectangle(textureX * Settings.UI_TILE_SIZE, textureY * Settings.UI_TILE_SIZE, Settings.UI_TILE_SIZE, Settings.UI_TILE_SIZE),
-                            Color.White);
-                    }
+                    dialogSprite.Draw(Assets.uiTexture,
+                        new Vector2(this.x + (i * Settings.UI_TILE_SIZE) - (this.padding * Settings.UI_TILE_SIZE / 2), this.y + (j * Settings.UI_TILE_SIZE) - (this.padding * Settings.UI_TILE_SIZE / 2)),
+                        new Rectangle(textureX * Settings.UI_TILE_SIZE, textureY * Settings.UI_TILE_SIZE, Settings.UI_TILE_SIZE, Settings.UI_TILE_SIZE),
+                        Color.White);
                 }
-
-                // Draw any buttons which may exist on the dialog
-                foreach (Button b in this.buttonCollection)
-                {
-                    b.Draw(this.dialogSprite);
-                }
-
-                this.dialogSprite.End();
             }
+
+            // Draw any buttons which may exist on the dialog
+            foreach (Button b in this.buttonCollection)
+            {
+                b.Draw(this.dialogSprite);
+            }
+
+            this.dialogSprite.End();
         }
 
         public virtual bool Click(MouseState mouseState)
@@ -88,6 +97,9 @@ namespace Summons.Engine
 
         public override void Draw()
         {
+            if (!this.visible)
+                return;
+
             base.Draw();
 
             dialogSprite.Begin();
@@ -135,6 +147,9 @@ namespace Summons.Engine
 
         public override void Draw()
         {
+            if (!this.visible)
+                return;
+
             base.Draw();
 
             dialogSprite.Begin();
@@ -216,25 +231,38 @@ namespace Summons.Engine
                 PlayerActionDialog.height)
         {
             // Summon button
-            this.buttonCollection.Add(new SummonButton(this));
+            this.buttonCollection.Add(new SummonMenuButton(this));
         }
     }
 
     public class MonsterSummonDialog : Dialog
     {
-        static int width = 128;
+        static int width = 256;
         static int height = 128;
+        public List<Monster> summonOptions;
 
-        public MonsterSummonDialog()
+        public MonsterSummonDialog(Player player)
             : base(Convert.ToInt32((Settings.SCREEN_WIDTH - MonsterSummonDialog.width) / 2.0),
                 Convert.ToInt32((Settings.SCREEN_HEIGHT - MonsterSummonDialog.height) / 2.0),
                 MonsterSummonDialog.width,
-                MonsterSummonDialog.height)
+                MonsterSummonDialog.height,
+                true)
         {
             this.visible = false;
 
             // One button for each monster we could summon
-            this.buttonCollection.Add(new SummonButton(this));
+            // Note, we are assuming this is a player vs. CPU game, so only the first player
+            // gets this dialog. If this became multiplayer, we need to make one of these for each player.
+            summonOptions = player.summonOptions;
+
+            for (int i = 0; i < summonOptions.Count; i++)
+            {
+                int posX = i * 64;
+                int posY = 0;
+
+                this.buttonCollection.Add(new SummonMonsterButton(this, posX, posY, summonOptions[i]));
+            }
+            
         }
     }
 
@@ -267,6 +295,9 @@ namespace Summons.Engine
 
         public override void Draw()
         {
+            if (!this.visible)
+                return;
+
             base.Draw();
 
             int stringEndpoint = Convert.ToInt32(elapsedTime * textSpeed) > text.Length ? text.Length : Convert.ToInt32(elapsedTime * textSpeed);

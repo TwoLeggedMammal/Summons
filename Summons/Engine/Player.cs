@@ -17,12 +17,20 @@ namespace Summons.Engine
         public int mana;
         public int towersOwned;
         public Monster summoner;
+        public List<Monster> summonOptions;
 
         public Player(int playerNumber, bool isAI)
         {
             monsterCollection = new List<Monster>();
             this.mana = 100;
             this.towersOwned = 0;
+            this.summonOptions = new List<Monster>()
+            {
+                new BlueDragon(0, 0, this),
+                new Archer(0, 0, this),
+                new HeavyKnight(0, 0, this),
+                new BlackMage(0, 0, this)
+            };
 
             if (playerNumber == 1)
             {
@@ -30,6 +38,7 @@ namespace Summons.Engine
                 this.symbolColor = Color.DeepSkyBlue;
                 this.isAi = false;
                 this.name = "Player 1";
+                UI.getInstance().monsterSummonDialog = new MonsterSummonDialog(this);
             }
             else
             {
@@ -38,6 +47,8 @@ namespace Summons.Engine
                 this.isAi = true;
                 this.name = "CPU";
             }
+
+
         }
     }
 
