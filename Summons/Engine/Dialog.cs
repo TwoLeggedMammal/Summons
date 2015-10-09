@@ -260,7 +260,10 @@ namespace Summons.Engine
                 int posX = i * 64;
                 int posY = 0;
 
-                this.buttonCollection.Add(new SummonMonsterButton(this, posX, posY, summonOptions[i]));
+                this.buttonCollection.Add(new SummonMonsterButton(this, 
+                    posX + Convert.ToInt32(summonOptions[i].xOffset),
+                    posY + Convert.ToInt32(summonOptions[i].yOffset), 
+                    summonOptions[i]));
             }
             
         }

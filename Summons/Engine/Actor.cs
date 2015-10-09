@@ -57,8 +57,8 @@ namespace Summons.Engine
         public Texture2D texture;
         public double X;
         public double Y;
-        protected double xOffset = 0.0;
-        protected double yOffset = 0.0;
+        public double xOffset = 0.0;
+        public double yOffset = 0.0;
         Camera camera;
         protected SpriteBatch actorSprite;
         public bool Selected = false;
