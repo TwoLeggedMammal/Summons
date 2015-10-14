@@ -33,8 +33,7 @@ namespace Summons.Engine
 
             if (hasCloseButton)
             {
-                CloseButton closeButton = new CloseButton(this, this.width, this.height - 20);
-                closeButton.x = this.width - closeButton.width;
+                CloseButton closeButton = new CloseButton(this);
                 this.buttonCollection.Add(closeButton);
 
             }
@@ -237,8 +236,9 @@ namespace Summons.Engine
 
     public class MonsterSummonDialog : Dialog
     {
-        static int width = 256;
-        static int height = 128;
+        static int width = 392;
+        static int height = 196;
+        static int padding = 20;
         public List<Monster> summonOptions;
 
         public MonsterSummonDialog(Player player)
@@ -254,16 +254,25 @@ namespace Summons.Engine
             // Note, we are assuming this is a player vs. CPU game, so only the first player
             // gets this dialog. If this became multiplayer, we need to make one of these for each player.
             summonOptions = player.summonOptions;
+            int posX = 0;
+            int posY = 0;
 
             for (int i = 0; i < summonOptions.Count; i++)
             {
-                int posX = i * 64;
-                int posY = 0;
+                SummonMonsterButton button = new SummonMonsterButton(this, 
+                    posX,
+                    posY, 
+                    summonOptions[i]);
+                this.buttonCollection.Add(button);
 
-                this.buttonCollection.Add(new SummonMonsterButton(this, 
-                    posX + Convert.ToInt32(summonOptions[i].xOffset),
-                    posY + Convert.ToInt32(summonOptions[i].yOffset), 
-                    summonOptions[i]));
+                if (posX + button.width > width)
+                {
+                    posX = 0;
+                    posY += button.height + padding;
+                    button.x = posX;
+                    button.y = posY;
+                }
+                    posX += button.width + padding;
             }
             
         }

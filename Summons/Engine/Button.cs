@@ -16,6 +16,12 @@ namespace Summons.Engine
         public Dialog parent;
         public bool hovered = false;
         private int _x, _y;
+        public FontSize fontSize;
+        public enum FontSize
+        {
+            SMALL,
+            NORMAL
+        }
 
         public int x
         {
@@ -41,14 +47,19 @@ namespace Summons.Engine
             }
         }
 
-        public Button(Dialog parent, Texture2D icon, String text, int x = 0, int y = 0)
+        public Button(Dialog parent, Texture2D icon, String text, int x = 0, int y = 0, FontSize fontSize = FontSize.NORMAL)
         {
             this.parent = parent;
             this.x = x;  // The value passed in is relative to the parent
             this.y = y;  // The value passed in is relative to the parent
             this.icon = icon;
             this.text = text;
-            this.width = icon != null? icon.Width : Convert.ToInt32(Assets.mainFont.MeasureString(this.text).Length());
+            this.fontSize = fontSize;
+
+            int iconWidth = this.icon == null ? 0 : icon.Width;
+            int textWidth = this.text == null ? 0 : Convert.ToInt32(Assets.mainFont.MeasureString(this.text).Length() * this.FontScale());
+
+            this.width = Math.Max(iconWidth, textWidth);
             this.height = icon != null? icon.Height : 32;
             UI.getInstance().AddButton(this);
         }
@@ -66,10 +77,10 @@ namespace Summons.Engine
                                 icon,
                                 new Rectangle
                                 (
-                                    this._x,
+                                    this._x + ((this.width - this.icon.Width) / 2), // Center the icon in case the text is wider
                                     this._y,
-                                    this.width,
-                                    this.height
+                                    this.icon.Width,
+                                    this.icon.Height
                                 ),
                                 color
                             );
@@ -77,8 +88,17 @@ namespace Summons.Engine
 
             if (this.text != null)
             {
-                double textWidth = Assets.mainFont.MeasureString(this.text).Length();
-                sprite.DrawString(Assets.mainFont, this.text, new Vector2(this._x + this.width - Convert.ToInt32(textWidth), this._y), color);
+                float textWidth = Assets.mainFont.MeasureString(this.text).Length() * this.FontScale();
+                
+                sprite.DrawString(Assets.mainFont, 
+                    this.text, 
+                    new Vector2(this._x, this._y), 
+                    color, 
+                    0, 
+                    new Vector2(0f, 0f), 
+                    new Vector2(this.FontScale(), this.FontScale()),
+                    SpriteEffects.None,
+                    0f);
             }
         }
 
@@ -93,12 +113,21 @@ namespace Summons.Engine
                 this.ClickHandler();
             }
         }
+
+        public float FontScale()
+        {
+            return this.fontSize == FontSize.NORMAL ? 1.0f : this.fontSize == FontSize.SMALL ? 0.5f : 1.0f;
+        }
     }
 
     public class CloseButton : Button
     {
-        public CloseButton(Dialog parent, int x = 0, int y = 0)
-            : base(parent, null, "Close", x, y)
+        public CloseButton(Dialog parent)
+            : base(parent, 
+            null, 
+            "Close", 
+            parent.width - 105, 
+            parent.height - 30)
         { }
 
         public override void ClickHandler()
@@ -123,8 +152,10 @@ namespace Summons.Engine
 
     public class SummonMonsterButton : Button
     {
+        public Monster monster;
+
         public SummonMonsterButton(Dialog parent, int x, int y, Monster monster)
-            : base(parent, monster.texture, null, x, y)
+            : base(parent, monster.texture, monster.name, x, y, FontSize.SMALL)
         { }
 
         public override void ClickHandler()
