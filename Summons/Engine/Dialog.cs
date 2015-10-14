@@ -92,6 +92,7 @@ namespace Summons.Engine
                 MonsterStatusDialog.statusHeight)
         {
             this.monster = monster;
+            this.visible = false;
         }
 
         public override void Draw()

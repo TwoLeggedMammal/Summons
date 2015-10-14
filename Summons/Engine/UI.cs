@@ -102,7 +102,7 @@ namespace Summons.Engine
 
             foreach (MonsterStatusDialog dialog in monsterStatusDialogCollection)
             {
-                if (dialog.monster.Hovered)
+                if (dialog.visible)
                     dialog.Draw();
             }
 

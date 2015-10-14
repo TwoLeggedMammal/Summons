@@ -60,14 +60,17 @@ namespace Summons.Engine
             int textWidth = this.text == null ? 0 : Convert.ToInt32(Assets.mainFont.MeasureString(this.text).Length() * this.FontScale());
 
             this.width = Math.Max(iconWidth, textWidth);
-            this.height = icon != null? icon.Height : 32;
+            this.height = this.icon == null ? Convert.ToInt32(32 * this.FontScale()) : Convert.ToInt32(icon.Height);
             UI.getInstance().AddButton(this);
         }
 
         public abstract void ClickHandler();
 
+        public virtual void Update() { }
+
         public void Draw(SpriteBatch sprite)
         {
+            this.Update();
             Color color = this.hovered ? new Color(230, 230, 230) : Color.White;
 
             if (this.icon != null)
@@ -92,7 +95,7 @@ namespace Summons.Engine
                 
                 sprite.DrawString(Assets.mainFont, 
                     this.text, 
-                    new Vector2(this._x, this._y), 
+                    new Vector2(this._x, this._y + (this.icon == null ? 0 : this.height)), 
                     color, 
                     0, 
                     new Vector2(0f, 0f), 
@@ -140,7 +143,7 @@ namespace Summons.Engine
     public class SummonMenuButton : Button
     {
         public SummonMenuButton(Dialog parent, int x = 0, int y = 0)
-            : base(parent, Assets.summonIcon, null, x, y)
+            : base(parent, Assets.summonIcon, "Summon", x, y, FontSize.SMALL)
         { }
 
         public override void ClickHandler()
@@ -153,14 +156,25 @@ namespace Summons.Engine
     public class SummonMonsterButton : Button
     {
         public Monster monster;
+        public MonsterStatusDialog status;
 
         public SummonMonsterButton(Dialog parent, int x, int y, Monster monster)
             : base(parent, monster.texture, monster.name, x, y, FontSize.SMALL)
-        { }
+        {
+            this.status = UI.getInstance().MakeMonsterStatusDialog(monster);
+            this.height += Convert.ToInt32(monster.yOffset);
+        }
 
         public override void ClickHandler()
         {
 
+        }
+
+        public override void Update()
+        {
+            this.status.visible = this.hovered;
+
+            base.Update();
         }
     }    
 }
