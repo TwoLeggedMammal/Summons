@@ -19,9 +19,9 @@ namespace Summons
         double tileSize = Settings.TILE_SIZE;
         Dictionary<char, Texture2D> textureDict;
         String[] mapData;
-        private Map() {}
         public static SpriteBatch mapSprite;
         public List<Tower> towers;
+        public List<Coordinate> summonLocations;
 
         static Dictionary<char, double> tileMoveCost = new Dictionary<char, double>()
         {
@@ -36,6 +36,11 @@ namespace Summons
             {'d', 1.0} // tower + player 4 starting location
 
         };
+
+        private Map() 
+        {
+            summonLocations = new List<Coordinate>();
+        }
 
         public static Map getInstance()
         {
@@ -90,6 +95,16 @@ namespace Summons
             {
                 for (int x = 0; x < mapData[y].Length; x++)
                 {
+                    Color color = Color.White;
+
+                    // Check to see if this is a summoning location
+                    foreach (Coordinate coord in this.summonLocations)
+                    {
+                        if (coord == new Coordinate(x, y))
+                            color = Color.Yellow;
+                    }
+
+
                     mapSprite.Draw
                         (
                             textureDict[mapData[y][x]], 
@@ -100,7 +115,7 @@ namespace Summons
                                 Settings.TILE_SIZE, 
                                 Settings.TILE_SIZE
                             ), 
-                            Color.White
+                            color
                         );
                 }
             }
@@ -116,7 +131,7 @@ namespace Summons
         public Stack<Coordinate> FindPath(int startX, int startY, int destX, int destY, Player player)
         {
             Stack<Coordinate> path = new Stack<Coordinate>();
-            bool[,] teammateMap = GetTeammateLocations(startX, startY, player);
+            bool[,] teammateMap = GetActorLocations(startX, startY, player);
             double[,] moveMap = GetMovementMap(startX, startY, null, 30.0, teammateMap);
             return ExtractPath(moveMap, destX, destY);
         }
@@ -139,7 +154,7 @@ namespace Summons
             return null;
         }
 
-        private bool[,] GetTeammateLocations(int startX, int startY, Player player)
+        private bool[,] GetActorLocations(int startX, int startY, Player player, bool myTeamOnly = true)
         {
             // We don't want to move into the same spot as a teammate
             bool[,] teammateMap = new bool[height, width];
@@ -154,7 +169,7 @@ namespace Summons
             
             foreach (Monster actor in MonsterManager.getInstance().monsterCollection)
             {
-                if ((actor.TileX != startX || actor.TileY != startY) && actor.player == player)
+                if ((actor.TileX != startX || actor.TileY != startY) && (!myTeamOnly || actor.player == player))
                 {
                     teammateMap[actor.TileY, actor.TileX] = true;
                 }
@@ -248,6 +263,25 @@ namespace Summons
         public double GetTileFactor(int x, int y)
         {
             return tileMoveCost[mapData[y][x]];
+        }
+
+        public void LoadSummonOverlay(Player player)
+        {
+            Monster summoner = player.summoner;
+            this.summonLocations = new List<Coordinate>();
+            bool[,] actorLocations = this.GetActorLocations(-1, -1, player, false);
+
+            for (int i = summoner.TileX - 1; i < summoner.TileX + 2; i++)
+            {
+                for (int j = summoner.TileY - 1; j < summoner.TileY + 2; j++)
+                {
+                    // See if this is an elligible location for a spawn point
+                    if (!actorLocations[j, i] && Map.tileMoveCost[this.mapData[j][i]] <= 1.0)
+                    {
+                        summonLocations.Add(new Coordinate(i, j));
+                    }
+                }
+            }
         }
     }
 

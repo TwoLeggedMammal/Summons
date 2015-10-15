@@ -167,13 +167,12 @@ namespace Summons.Engine
 
         public override void ClickHandler()
         {
-
+            Map.getInstance().LoadSummonOverlay(((MonsterSummonDialog)this.parent).player);
         }
 
         public override void Update()
         {
             this.status.visible = this.hovered;
-
             base.Update();
         }
     }    

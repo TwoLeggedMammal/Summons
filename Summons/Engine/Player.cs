@@ -67,14 +67,18 @@ namespace Summons.Engine
             // We look at the map data to determine where to spawn players. Chars a-d are designated spawn points, but also towers.
             // Currently capped at 2 players.
             Coordinate player1Spawn = Map.getInstance().GetSpawnPoint(1);
-            this.playerCollection.Add(new Player(1, false));  // player 1 is human
+            Player player1 = new Player(1, false);
+            this.playerCollection.Add(player1);  // player 1 is human
             Monster blackMage = new BlackMage(Convert.ToInt32(player1Spawn.x), Convert.ToInt32(player1Spawn.y), this.playerCollection[0]);
+            MonsterManager.getInstance().monsterCollection.Add(blackMage);
+            player1.summoner = blackMage;
 
             Coordinate player2Spawn = Map.getInstance().GetSpawnPoint(2);
-            this.playerCollection.Add(new Player(2, true));  // player 2 is ai
+            Player player2 = new Player(2, true);
+            this.playerCollection.Add(player2);  // player 2 is ai
             Monster heavyKnight = new HeavyKnight(Convert.ToInt32(player2Spawn.x), Convert.ToInt32(player2Spawn.y), this.playerCollection[1]);
-            MonsterManager.getInstance().monsterCollection.Add(blackMage);
             MonsterManager.getInstance().monsterCollection.Add(heavyKnight);
+            player2.summoner = heavyKnight;
         }
         
         public static PlayerManager getInstance()

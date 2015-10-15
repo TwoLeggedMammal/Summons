@@ -241,6 +241,7 @@ namespace Summons.Engine
         static int height = 196;
         static int padding = 20;
         public List<Monster> summonOptions;
+        public Player player;
 
         public MonsterSummonDialog(Player player)
             : base(Convert.ToInt32((Settings.SCREEN_WIDTH - MonsterSummonDialog.width) / 2.0),
@@ -254,6 +255,7 @@ namespace Summons.Engine
             // One button for each monster we could summon
             // Note, we are assuming this is a player vs. CPU game, so only the first player
             // gets this dialog. If this became multiplayer, we need to make one of these for each player.
+            this.player = player;
             summonOptions = player.summonOptions;
             int posX = 0;
             int posY = 0;
