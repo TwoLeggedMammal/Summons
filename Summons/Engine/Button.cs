@@ -168,6 +168,7 @@ namespace Summons.Engine
         public override void ClickHandler()
         {
             Map.getInstance().LoadSummonOverlay(((MonsterSummonDialog)this.parent).player);
+            Input.getInstance().clickAction = Input.ClickAction.SUMMON_MONSTER;
         }
 
         public override void Update()

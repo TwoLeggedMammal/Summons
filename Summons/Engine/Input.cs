@@ -12,6 +12,14 @@ namespace Summons.Engine
         MouseState previousMouseState;
         MonsterManager monsterManager;
         static Input instance = new Input();
+        public ClickAction clickAction = ClickAction.NO_ACTION;
+
+        public enum ClickAction
+        {
+            NO_ACTION,
+            MOVE_MONSTER,
+            SUMMON_MONSTER
+        }
 
         private Input()
         {
@@ -77,11 +85,21 @@ namespace Summons.Engine
                         int tileX = Convert.ToInt32(Math.Floor((mouseState.X + camera.X) / Settings.TILE_SIZE));
                         int tileY = Convert.ToInt32(Math.Floor((mouseState.Y + camera.Y) / Settings.TILE_SIZE));
 
-                        foreach (Actor actor in monsterManager.monsterCollection)
+                        if (this.clickAction == ClickAction.MOVE_MONSTER)
                         {
-                            if (actor.Selected)
+                            foreach (Actor actor in monsterManager.monsterCollection)
                             {
-                                actor.SetDestination(tileX, tileY);
+                                if (actor.Selected)
+                                {
+                                    actor.SetDestination(tileX, tileY);
+                                }
+                            }
+                        }
+                        else if (this.clickAction == ClickAction.SUMMON_MONSTER)
+                        {
+                            if (Map.getInstance().IsSummonLocation(tileX, tileY))
+                            {
+
                             }
                         }
                     }

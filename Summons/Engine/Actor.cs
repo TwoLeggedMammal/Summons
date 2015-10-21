@@ -50,6 +50,27 @@ namespace Summons.Engine
         {
             this.monsterCollection.Remove(monster);
         }
+
+        public Monster Spawn(Type monsterType, int x, int y, Player player)
+        {
+            Monster monster = null;
+
+            // This acts as a factory. Any new monsters need a block of logic here
+            if (monsterType == typeof(BlackMage))
+                monster = new BlackMage(x, y, player);
+            else if (monsterType == typeof(BlueDragon))
+                monster = new BlueDragon(x, y, player);
+            else if (monsterType == typeof(HeavyKnight))
+                monster = new HeavyKnight(x, y, player);
+            else if (monsterType == typeof(Archer))
+                monster = new Archer(x, y, player);
+            else
+                throw new System.ArgumentException("Monster type not registered in the MonsterManager.Spawn factory", "monsterType");
+
+
+            this.monsterCollection.Add(monster);
+            return monster;
+        }
     }
 
     public class Actor
@@ -169,6 +190,11 @@ namespace Summons.Engine
         public void Select()
         {
             Selected = !Selected;
+            if (Selected)
+                Input.getInstance().clickAction = Input.ClickAction.MOVE_MONSTER;
+            else
+                Input.getInstance().clickAction = Input.ClickAction.NO_ACTION;
+
             EventsManager.getInstance().RecordEvent(EventsManager.Event.ACTOR_CLICKED);
         }
 

@@ -91,6 +91,8 @@ namespace Summons
 
             mapSprite.Begin();
 
+            int highlightColor = Convert.ToInt32(210.0 + Math.Abs(((DateTime.Now.Ticks / (TimeSpan.TicksPerMillisecond * 10)) % 80) - 40));
+
             for (int y = 0; y < mapData.Length; y++)
             {
                 for (int x = 0; x < mapData[y].Length; x++)
@@ -98,12 +100,11 @@ namespace Summons
                     Color color = Color.White;
 
                     // Check to see if this is a summoning location
-                    foreach (Coordinate coord in this.summonLocations)
+                    if (Input.getInstance().clickAction == Input.ClickAction.SUMMON_MONSTER)
                     {
-                        if (coord == new Coordinate(x, y))
-                            color = Color.Yellow;
+                        if (this.IsSummonLocation(x, y))
+                            color = new Color(highlightColor, highlightColor, Convert.ToInt32(highlightColor * 0.8));
                     }
-
 
                     mapSprite.Draw
                         (
@@ -126,6 +127,16 @@ namespace Summons
             }
             
             mapSprite.End();
+        }
+
+        public bool IsSummonLocation(int x, int y)
+        {
+            foreach (Coordinate coord in this.summonLocations)
+            {
+                if (coord == new Coordinate(x, y))
+                    return true;
+            }
+            return false;
         }
 
         public Stack<Coordinate> FindPath(int startX, int startY, int destX, int destY, Player player)

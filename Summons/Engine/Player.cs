@@ -69,15 +69,13 @@ namespace Summons.Engine
             Coordinate player1Spawn = Map.getInstance().GetSpawnPoint(1);
             Player player1 = new Player(1, false);
             this.playerCollection.Add(player1);  // player 1 is human
-            Monster blackMage = new BlackMage(Convert.ToInt32(player1Spawn.x), Convert.ToInt32(player1Spawn.y), this.playerCollection[0]);
-            MonsterManager.getInstance().monsterCollection.Add(blackMage);
+            Monster blackMage = MonsterManager.getInstance().Spawn(typeof(BlackMage), Convert.ToInt32(player1Spawn.x), Convert.ToInt32(player1Spawn.y), this.playerCollection[0]);
             player1.summoner = blackMage;
 
             Coordinate player2Spawn = Map.getInstance().GetSpawnPoint(2);
             Player player2 = new Player(2, true);
             this.playerCollection.Add(player2);  // player 2 is ai
-            Monster heavyKnight = new HeavyKnight(Convert.ToInt32(player2Spawn.x), Convert.ToInt32(player2Spawn.y), this.playerCollection[1]);
-            MonsterManager.getInstance().monsterCollection.Add(heavyKnight);
+            Monster heavyKnight = MonsterManager.getInstance().Spawn(typeof(HeavyKnight), Convert.ToInt32(player2Spawn.x), Convert.ToInt32(player2Spawn.y), this.playerCollection[1]);
             player2.summoner = heavyKnight;
         }
         
