@@ -47,8 +47,6 @@ namespace Summons.Engine
                 this.isAi = true;
                 this.name = "CPU";
             }
-
-
         }
     }
 
@@ -56,6 +54,7 @@ namespace Summons.Engine
     {
         public List<Player> playerCollection;
         static PlayerManager instance = new PlayerManager();
+        public Player currentPlayer;
 
         private PlayerManager()
         {
@@ -77,6 +76,9 @@ namespace Summons.Engine
             this.playerCollection.Add(player2);  // player 2 is ai
             Monster heavyKnight = MonsterManager.getInstance().Spawn(typeof(HeavyKnight), Convert.ToInt32(player2Spawn.x), Convert.ToInt32(player2Spawn.y), this.playerCollection[1]);
             player2.summoner = heavyKnight;
+
+            // Player 1 goes first
+            this.currentPlayer = player1;
         }
         
         public static PlayerManager getInstance()

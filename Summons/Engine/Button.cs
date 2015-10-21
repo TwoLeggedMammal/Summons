@@ -161,6 +161,7 @@ namespace Summons.Engine
         public SummonMonsterButton(Dialog parent, int x, int y, Monster monster)
             : base(parent, monster.texture, monster.name, x, y, FontSize.SMALL)
         {
+            this.monster = monster;
             this.status = UI.getInstance().MakeMonsterStatusDialog(monster);
             this.height += Convert.ToInt32(monster.yOffset);
         }
@@ -169,6 +170,8 @@ namespace Summons.Engine
         {
             Map.getInstance().LoadSummonOverlay(((MonsterSummonDialog)this.parent).player);
             Input.getInstance().clickAction = Input.ClickAction.SUMMON_MONSTER;
+            Input.getInstance().summonType = this.monster.GetType();
+            this.parent.visible = false;
         }
 
         public override void Update()
