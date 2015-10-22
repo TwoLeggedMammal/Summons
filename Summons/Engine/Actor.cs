@@ -64,7 +64,7 @@ namespace Summons.Engine
             this.monsterCollection.Remove(monster);
         }
 
-        public Monster Spawn(Type monsterType, int x, int y, Player player)
+        public Monster Spawn(Type monsterType, int x, int y, Player player, bool free=false)
         {
             Monster monster = null;
 
@@ -80,15 +80,19 @@ namespace Summons.Engine
             else
                 throw new System.ArgumentException("Monster type not registered in the MonsterManager.Spawn factory", "monsterType");
 
+            // The UI is responsible for ensuring we have enough mana because we can do this
+            if (!free)
+                player.mana -= monster.manaCost;
 
             this.monsterCollection.Add(monster);
             return monster;
         }
 
-        public void UnselectMonsters()
+        public void UnselectMonsters(Actor ignore)
         {
-            foreach (Monster monster in this.monsterCollection)
-                monster.Selected = false;
+            foreach (Actor actor in this.monsterCollection)
+                if (actor != ignore)
+                    actor.Selected = false;
         }
     }
 
@@ -209,11 +213,14 @@ namespace Summons.Engine
         public void Select()
         {
             // We can only select one at a time, so let's unselect other monsters which may be selected
-            MonsterManager.getInstance().UnselectMonsters();
+            
 
             Selected = !Selected;
             if (Selected)
+            {
                 Input.getInstance().clickAction = Input.ClickAction.MOVE_MONSTER;
+                MonsterManager.getInstance().UnselectMonsters(this);
+            }
             else
                 Input.getInstance().clickAction = Input.ClickAction.NO_ACTION;
 
@@ -249,6 +256,7 @@ namespace Summons.Engine
         double damageTimer = 0.0;
         double fullDamageTime = 0.5;
         protected int previousHP = -1;
+        public int manaCost = 20;
 
         public Monster(int x, int y, Player player) 
             : base(x, y, player)
@@ -392,6 +400,7 @@ namespace Summons.Engine
             this.meleeAP = 3;
             this.rangedAccuracy = 66;
             this.rangedAP = 12;
+            this.manaCost = 30;
         }
     }
 
@@ -409,6 +418,7 @@ namespace Summons.Engine
             this.meleeAP = 8;
             this.rangedAccuracy = 60;
             this.rangedAP = 6;
+            this.manaCost = 70;
         }
     }
 
@@ -426,6 +436,7 @@ namespace Summons.Engine
             this.meleeAP = 6;
             this.rangedAccuracy = 50;
             this.rangedAP = 5;
+            this.manaCost = 40;
         }
     }
 
@@ -443,6 +454,7 @@ namespace Summons.Engine
             this.meleeAP = 5;
             this.rangedAccuracy = 70;
             this.rangedAP = 8;
+            this.manaCost = 20;
         }
     }
 }

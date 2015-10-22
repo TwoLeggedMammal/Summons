@@ -159,7 +159,7 @@ namespace Summons.Engine
         public MonsterStatusDialog status;
 
         public SummonMonsterButton(Dialog parent, int x, int y, Monster monster)
-            : base(parent, monster.texture, monster.name, x, y, FontSize.SMALL)
+            : base(parent, monster.texture, String.Format("{0} MP", monster.manaCost), x, y, FontSize.NORMAL)
         {
             this.monster = monster;
             this.status = UI.getInstance().MakeMonsterStatusDialog(monster);
@@ -168,11 +168,18 @@ namespace Summons.Engine
 
         public override void ClickHandler()
         {
-            Map.getInstance().LoadSummonOverlay(((MonsterSummonDialog)this.parent).player);
-            Input.getInstance().clickAction = Input.ClickAction.SUMMON_MONSTER;
-            Input.getInstance().summonType = this.monster.GetType();
-            this.status.visible = false;
-            this.parent.visible = false;
+            if (monster.player.mana >= monster.manaCost)
+            {
+                Map.getInstance().LoadSummonOverlay(((MonsterSummonDialog)this.parent).player);
+                Input.getInstance().clickAction = Input.ClickAction.SUMMON_MONSTER;
+                Input.getInstance().summonType = this.monster.GetType();
+                this.status.visible = false;
+                this.parent.visible = false;
+            }
+            else
+            {
+                EventsManager.getInstance().RecordEvent(EventsManager.Event.NOT_ENOUGH_MANA);
+            }
         }
 
         public override void Update()
