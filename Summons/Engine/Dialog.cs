@@ -73,8 +73,31 @@ namespace Summons.Engine
             this.dialogSprite.End();
         }
 
+        public virtual void ClickHandler()
+        {
+            // Override if anything must happen on click on the dialog, instead of just on buttons
+        }
+
         public virtual bool Click(MouseState mouseState)
         {
+            if (!this.visible)
+                return false;
+
+            if ((mouseState.X > this.x - (padding * Settings.UI_TILE_SIZE / 2)) &&
+                (mouseState.X < this.x + (padding * Settings.UI_TILE_SIZE / 2) + this.width) &&
+                (mouseState.Y > this.y - (padding * Settings.UI_TILE_SIZE / 2)) &&
+                (mouseState.Y < this.y + (padding * Settings.UI_TILE_SIZE / 2) + this.height))
+            {
+                this.ClickHandler();
+
+                foreach (Button button in this.buttonCollection)
+                {
+                    button.Click(mouseState);
+                }
+
+                return true;
+            }
+
             return false;
         }
     }
@@ -322,30 +345,20 @@ namespace Summons.Engine
             dialogSprite.End();
         }
 
-        public override bool Click(MouseState mouseState)
+        public override void ClickHandler()
         {
-            if ((mouseState.X > this.x - (padding * Settings.UI_TILE_SIZE / 2)) &&
-                (mouseState.X < this.x + (padding * Settings.UI_TILE_SIZE / 2) + this.width) &&
-                (mouseState.Y > this.y - (padding * Settings.UI_TILE_SIZE / 2)) &&
-                (mouseState.Y < this.y + (padding * Settings.UI_TILE_SIZE / 2) + this.height))
+            // If clicked on a dialog when it's still writing, then we just speed up the process
+            if (Convert.ToInt32(elapsedTime * textSpeed) < text.Length)
             {
-                // If clicked on a dialog when it's still writing, then we just speed up the process
-                if (Convert.ToInt32(elapsedTime * textSpeed) < text.Length)
-                {
-                    elapsedTime = text.Length / textSpeed;
-                }
-                else
-                {
-                    // And if it's done, then we mark it for deletion
-                    this.complete = true;
-                }
-
-                return true;
+                elapsedTime = text.Length / textSpeed;
             }
-
-            return false;
+            else
+            {
+                // And if it's done, then we mark it for deletion
+                this.complete = true;
+            }
         }
-
+        
         // Taken from https://danieltian.wordpress.com/2008/12/24/xna-tutorial-typewriter-text-box-with-proper-word-wrapping-part-2/
         private String WrapText(String text)
         {

@@ -103,19 +103,7 @@ namespace Summons.Engine
             {
                 bool actorClicked = false;
 
-                foreach (Actor actor in monsterManager.monsterCollection)
-                {
-                    // You can only click on human controlled monsters
-                    if (!actor.player.isAi)
-                    {
-                        if (mouseState.X + camera.X > (actor.TileX * Settings.TILE_SIZE) && mouseState.X + camera.X < ((actor.TileX + 1) * Settings.TILE_SIZE) &&
-                            mouseState.Y + camera.Y > (actor.TileY * Settings.TILE_SIZE) && mouseState.Y + camera.Y < ((actor.TileY + 1) * Settings.TILE_SIZE))
-                        {
-                            actor.Select();
-                            actorClicked = true;
-                        }
-                    }
-                }
+                actorClicked = MonsterManager.getInstance().Click(mouseState) || actorClicked;
 
                 // If we didn't click on an Actor, we must be trying to move the currently selected actor to this location
                 if (!actorClicked)
@@ -138,6 +126,7 @@ namespace Summons.Engine
                         if (Map.getInstance().IsSummonLocation(tileX, tileY))
                         {
                             monsterManager.Spawn(summonType, tileX, tileY, PlayerManager.getInstance().currentPlayer);
+                            this.clickAction = ClickAction.NO_ACTION;
                         }
                     }
                 }

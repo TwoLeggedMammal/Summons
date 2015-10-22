@@ -124,11 +124,9 @@ namespace Summons.Engine
             if (textDialogCollection.Count > 0)
                 clicked = textDialogCollection.Peek().Click(mouseState) || clicked;
 
-            // Check to see if we've clicked on any buttons
-            foreach (Button button in this.buttonCollection)
-            {
-                button.Click(mouseState);
-            }
+            // Check to see if we've clicked on any dialogs/buttons
+            clicked = this.monsterSummonDialog.Click(mouseState) || clicked;
+            clicked = this.playerActionDialog.Click(mouseState) || clicked;
 
             return clicked;
         }

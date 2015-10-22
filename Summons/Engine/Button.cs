@@ -171,6 +171,7 @@ namespace Summons.Engine
             Map.getInstance().LoadSummonOverlay(((MonsterSummonDialog)this.parent).player);
             Input.getInstance().clickAction = Input.ClickAction.SUMMON_MONSTER;
             Input.getInstance().summonType = this.monster.GetType();
+            this.status.visible = false;
             this.parent.visible = false;
         }
 

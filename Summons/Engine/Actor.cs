@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace Summons.Engine
 {
@@ -46,6 +47,18 @@ namespace Summons.Engine
             }
         }
 
+        public virtual bool Click(MouseState mouseState)
+        {
+            bool actorClicked = false;
+
+            foreach (Monster monster in this.monsterCollection)
+            {
+                actorClicked = monster.Click(mouseState) || actorClicked;
+            }
+
+            return actorClicked;
+        }
+
         public void Kill(Monster monster)
         {
             this.monsterCollection.Remove(monster);
@@ -71,6 +84,12 @@ namespace Summons.Engine
             this.monsterCollection.Add(monster);
             return monster;
         }
+
+        public void UnselectMonsters()
+        {
+            foreach (Monster monster in this.monsterCollection)
+                monster.Selected = false;
+        }
     }
 
     public class Actor
@@ -80,7 +99,7 @@ namespace Summons.Engine
         public double Y;
         public double xOffset = 0.0;
         public double yOffset = 0.0;
-        Camera camera;
+        protected Camera camera;
         protected SpriteBatch actorSprite;
         public bool Selected = false;
         public bool Hovered = false;
@@ -189,6 +208,9 @@ namespace Summons.Engine
 
         public void Select()
         {
+            // We can only select one at a time, so let's unselect other monsters which may be selected
+            MonsterManager.getInstance().UnselectMonsters();
+
             Selected = !Selected;
             if (Selected)
                 Input.getInstance().clickAction = Input.ClickAction.MOVE_MONSTER;
@@ -206,6 +228,12 @@ namespace Summons.Engine
             // Did we click on an inaccessible location?
             if (path.Count == 0)
                 EventsManager.getInstance().RecordEvent(EventsManager.Event.INVALID_ACTOR_DESTINATION);
+        }
+
+        public virtual bool Click(MouseState mouseState)
+        {
+            // Override in child classes
+            return false;
         }
     }
 
@@ -333,6 +361,22 @@ namespace Summons.Engine
             MonsterManager.getInstance().Kill(this);
             this.player.monsterCollection.Remove(this);
             EventsManager.getInstance().RecordEvent(EventsManager.Event.MONSTER_DIED);
+        }
+
+        public override bool Click(MouseState mouseState)
+        {
+            // You can only click on human controlled monsters
+            if (!this.player.isAi)
+            {
+                if (mouseState.X + this.camera.X > (this.TileX * Settings.TILE_SIZE) && mouseState.X + this.camera.X < ((this.TileX + 1) * Settings.TILE_SIZE) &&
+                    mouseState.Y + this.camera.Y > (this.TileY * Settings.TILE_SIZE) && mouseState.Y + this.camera.Y < ((this.TileY + 1) * Settings.TILE_SIZE))
+                {
+                    this.Select();
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
