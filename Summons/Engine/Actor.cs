@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Linq.Expressions;
 
 namespace Summons.Engine
 {
@@ -77,6 +78,8 @@ namespace Summons.Engine
                 monster = new HeavyKnight(x, y, player);
             else if (monsterType == typeof(Archer))
                 monster = new Archer(x, y, player);
+            else if (monsterType == typeof(BlackKnight))
+                monster = new BlackKnight(x, y, player);
             else
                 throw new System.ArgumentException("Monster type not registered in the MonsterManager.Spawn factory", "monsterType");
 
@@ -437,6 +440,24 @@ namespace Summons.Engine
             this.rangedAccuracy = 50;
             this.rangedAP = 5;
             this.manaCost = 40;
+        }
+    }
+
+    public class BlackKnight : Monster
+    {
+        public BlackKnight(int x, int y, Player player)
+            : base(x, y, player)
+        {
+            this.texture = Assets.blackKnightActor;
+            this.yOffset = -18.0;
+            this.name = "Black Knight";
+            this.armor = 2;
+            this.HP = this.maxHP = this.previousHP = 75;
+            this.meleeAccuracy = 80;
+            this.meleeAP = 8;
+            this.rangedAccuracy = 50;
+            this.rangedAP = 5;
+            this.manaCost = 60;
         }
     }
 

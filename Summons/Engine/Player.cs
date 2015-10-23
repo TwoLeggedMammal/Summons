@@ -28,8 +28,7 @@ namespace Summons.Engine
             {
                 new BlueDragon(0, 0, this),
                 new Archer(0, 0, this),
-                new HeavyKnight(0, 0, this),
-                new BlackMage(0, 0, this)
+                new HeavyKnight(0, 0, this)
             };
 
             if (playerNumber == 1)
@@ -74,8 +73,8 @@ namespace Summons.Engine
             Coordinate player2Spawn = Map.getInstance().GetSpawnPoint(2);
             Player player2 = new Player(2, true);
             this.playerCollection.Add(player2);  // player 2 is ai
-            Monster heavyKnight = MonsterManager.getInstance().Spawn(typeof(HeavyKnight), Convert.ToInt32(player2Spawn.x), Convert.ToInt32(player2Spawn.y), this.playerCollection[1], true);
-            player2.summoner = heavyKnight;
+            Monster blackKnight = MonsterManager.getInstance().Spawn(typeof(BlackKnight), Convert.ToInt32(player2Spawn.x), Convert.ToInt32(player2Spawn.y), this.playerCollection[1], true);
+            player2.summoner = blackKnight;
 
             // Player 1 goes first
             this.currentPlayer = player1;
