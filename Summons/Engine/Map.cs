@@ -312,7 +312,7 @@ namespace Summons
             this.yOffset = -15;
         }
 
-        public void Capture(Actor monster)
+        public void Capture(Actor monster, bool alert = true)
         {
             if (this.owner != monster.player)
             {
@@ -322,7 +322,8 @@ namespace Summons
                 }
                 this.owner = monster.player;
                 this.owner.towersOwned++;  // Add to the new owner's tower count
-                EventsManager.getInstance().RecordEvent(EventsManager.Event.TOWER_CAPTURED, monster);
+                if (alert)
+                    EventsManager.getInstance().RecordEvent(EventsManager.Event.TOWER_CAPTURED, monster);
             }
         }
 

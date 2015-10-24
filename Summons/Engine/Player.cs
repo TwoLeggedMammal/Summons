@@ -54,6 +54,7 @@ namespace Summons.Engine
         public List<Player> playerCollection;
         static PlayerManager instance = new PlayerManager();
         public Player currentPlayer;
+        public int turnCount = 1;
 
         private PlayerManager()
         {
@@ -72,10 +73,7 @@ namespace Summons.Engine
             foreach (Tower tower in Map.getInstance().towers)
             {
                 if (tower.X == player1Spawn.x && tower.Y == player1Spawn.y)
-                {
-                    tower.owner = player1;
-                    player1.towersOwned++;
-                }
+                    tower.Capture(blackMage, false);
             }
 
             Coordinate player2Spawn = Map.getInstance().GetSpawnPoint(2);
@@ -86,10 +84,7 @@ namespace Summons.Engine
             foreach (Tower tower in Map.getInstance().towers)
             {
                 if (tower.X == player2Spawn.x && tower.Y == player2Spawn.y)
-                {
-                    tower.owner = player2;
-                    player2.towersOwned++;
-                }
+                    tower.Capture(blackKnight, false);
             }
 
             // Player 1 goes first

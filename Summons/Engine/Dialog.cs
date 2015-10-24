@@ -199,7 +199,8 @@ namespace Summons.Engine
                 xPos += Settings.PLAYER_SYMBOL_SIZE + 10;
 
                 // Player Name
-                dialogSprite.DrawString(Assets.mainFont, players[i].name, new Vector2(this.x + Settings.PLAYER_SYMBOL_SIZE + 10, this.y + (i * 50)), Color.White);
+                Color playerNameColor = players[i] == PlayerManager.getInstance().currentPlayer ? new Color(255, 255, 180) : Color.White;
+                dialogSprite.DrawString(Assets.mainFont, players[i].name, new Vector2(this.x + Settings.PLAYER_SYMBOL_SIZE + 10, this.y + (i * 50)), playerNameColor);
                 xPos += Convert.ToInt32(Assets.mainFont.MeasureString(players[i].name).Length()) + 10;
 
                 // Mana info
@@ -255,6 +256,9 @@ namespace Summons.Engine
         {
             // Summon button
             this.buttonCollection.Add(new SummonMenuButton(this));
+
+            // Pass turn button
+            this.buttonCollection.Add(new PassTurnButton(this, 0, 80));
         }
     }
 

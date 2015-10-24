@@ -94,8 +94,9 @@ namespace Summons.Engine
                 float textWidth = Assets.mainFont.MeasureString(this.text).Length() * this.FontScale();
                 
                 sprite.DrawString(Assets.mainFont, 
-                    this.text, 
-                    new Vector2(this._x, this._y + (this.icon == null ? 0 : this.height)), 
+                    this.text,
+                    new Vector2(this._x + ((this.width - textWidth) / 2), // Center the text in case the icon is wider
+                        this._y + (this.icon == null ? 0 : this.height)), 
                     color, 
                     0, 
                     new Vector2(0f, 0f), 
@@ -153,6 +154,18 @@ namespace Summons.Engine
         }
     }
 
+    public class PassTurnButton : Button
+    {
+        public PassTurnButton(Dialog parent, int x = 0, int y = 0)
+            : base(parent, Assets.passIcon, "Pass", x, y, FontSize.SMALL)
+        { }
+
+        public override void ClickHandler()
+        {
+
+        }
+    }
+
     public class SummonMonsterButton : Button
     {
         public Monster monster;
@@ -187,5 +200,5 @@ namespace Summons.Engine
             this.status.visible = this.hovered;
             base.Update();
         }
-    }    
+    }
 }

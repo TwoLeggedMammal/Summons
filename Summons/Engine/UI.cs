@@ -48,7 +48,7 @@ namespace Summons.Engine
 
         public void OpenSummonDialog()
         {
-            this.monsterSummonDialog.visible = true;
+            this.monsterSummonDialog.visible = !this.monsterSummonDialog.visible;
         }
 
         public void ShowMessage(String text, FloatingMessage.TransitionType transition = FloatingMessage.TransitionType.FIXED, Actor actor = null)
