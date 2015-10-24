@@ -162,7 +162,7 @@ namespace Summons.Engine
 
         public override void ClickHandler()
         {
-
+            PlayerManager.getInstance().EndTurn();
         }
     }
 
@@ -183,7 +183,7 @@ namespace Summons.Engine
         {
             if (monster.player.mana >= monster.manaCost)
             {
-                Map.getInstance().LoadSummonOverlay(((MonsterSummonDialog)this.parent).player);
+                Map.getInstance().LoadSummonOverlay(PlayerManager.getInstance().currentPlayer);
                 Input.getInstance().clickAction = Input.ClickAction.SUMMON_MONSTER;
                 Input.getInstance().summonType = this.monster.GetType();
                 this.status.visible = false;

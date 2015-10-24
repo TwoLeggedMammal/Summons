@@ -378,7 +378,7 @@ namespace Summons.Engine
         public override bool Click(MouseState mouseState)
         {
             // You can only click on human controlled monsters
-            if (!this.player.isAi)
+            if (this.player == PlayerManager.getInstance().currentPlayer)
             {
                 if (mouseState.X + this.camera.X > (this.TileX * Settings.TILE_SIZE) && mouseState.X + this.camera.X < ((this.TileX + 1) * Settings.TILE_SIZE) &&
                     mouseState.Y + this.camera.Y > (this.TileY * Settings.TILE_SIZE) && mouseState.Y + this.camera.Y < ((this.TileY + 1) * Settings.TILE_SIZE))

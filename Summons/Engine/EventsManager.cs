@@ -29,7 +29,8 @@ namespace Summons.Engine
             MONSTER_EVOLVED,
             TOWER_CAPTURED,
             MONSTER_DIED,
-            NOT_ENOUGH_MANA
+            NOT_ENOUGH_MANA,
+            START_TURN
         }
         public enum Scene
         {
@@ -82,6 +83,10 @@ namespace Summons.Engine
             else if (e == Event.TOWER_CAPTURED)
             {
                 ui.ShowMessage("TOWER CAPTURED!", FloatingMessage.TransitionType.EXPANDING, actor);
+            }
+            else if (e == Event.START_TURN)
+            {
+                ui.ShowMessage(String.Format("{0}'s TURN", PlayerManager.getInstance().currentPlayer.name), FloatingMessage.TransitionType.EXPANDING);
             }
             else if (e == Event.NOT_ENOUGH_MANA)
             {

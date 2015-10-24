@@ -24,20 +24,19 @@ namespace Summons.Engine
             monsterCollection = new List<Monster>();
             this.mana = 100;
             this.towersOwned = 0;
-            this.summonOptions = new List<Monster>()
-            {
-                new BlueDragon(0, 0, this),
-                new Archer(0, 0, this),
-                new HeavyKnight(0, 0, this)
-            };
-
+            
             if (playerNumber == 1)
             {
                 this.flag = Assets.playerOneSymbol;
                 this.symbolColor = Color.DeepSkyBlue;
                 this.isAi = false;
                 this.name = "Player 1";
-                UI.getInstance().monsterSummonDialog = new MonsterSummonDialog(this);
+
+                this.summonOptions = new List<Monster>()
+                {
+                    new BlueDragon(0, 0, this),
+                    new Archer(0, 0, this)
+                };
             }
             else
             {
@@ -45,6 +44,11 @@ namespace Summons.Engine
                 this.symbolColor = Color.Red;
                 this.isAi = true;
                 this.name = "CPU";
+
+                this.summonOptions = new List<Monster>()
+                {
+                    new HeavyKnight(0, 0, this)
+                };
             }
         }
     }
@@ -55,6 +59,11 @@ namespace Summons.Engine
         static PlayerManager instance = new PlayerManager();
         public Player currentPlayer;
         public int turnCount = 1;
+
+        public static PlayerManager getInstance()
+        {
+            return instance;
+        }
 
         private PlayerManager()
         {
@@ -89,11 +98,38 @@ namespace Summons.Engine
 
             // Player 1 goes first
             this.currentPlayer = player1;
+
+            UI.getInstance().monsterSummonDialog = new MonsterSummonDialog();
         }
-        
-        public static PlayerManager getInstance()
+
+        public void EndTurn()
         {
-            return instance;
+            // Make it the next players turn
+            for (int i = 0; i < this.playerCollection.Count; i++)
+            {
+                if (this.currentPlayer == playerCollection[i])
+                {
+                    if (i == this.playerCollection.Count - 1)
+                        this.currentPlayer = playerCollection[0];
+                    else
+                        this.currentPlayer = this.playerCollection[i + 1];
+
+                    break;
+                }
+            }
+
+            StartTurn();
+        }
+
+        public void StartTurn()
+        {
+            // Give the player mana based on how many towers they control
+            this.currentPlayer.mana += 20 + (this.currentPlayer.towersOwned * 10);
+
+            EventsManager.getInstance().RecordEvent(EventsManager.Event.START_TURN);
+            UI.getInstance().monsterSummonDialog.BuildControls(this.currentPlayer);
+
+            // TODO: reset this player's monster's movement points
         }
     }
 }

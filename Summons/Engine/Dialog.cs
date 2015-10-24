@@ -199,7 +199,7 @@ namespace Summons.Engine
                 xPos += Settings.PLAYER_SYMBOL_SIZE + 10;
 
                 // Player Name
-                Color playerNameColor = players[i] == PlayerManager.getInstance().currentPlayer ? new Color(255, 255, 180) : Color.White;
+                Color playerNameColor = players[i] == PlayerManager.getInstance().currentPlayer ? new Color(255, 255, 150) : Color.White;
                 dialogSprite.DrawString(Assets.mainFont, players[i].name, new Vector2(this.x + Settings.PLAYER_SYMBOL_SIZE + 10, this.y + (i * 50)), playerNameColor);
                 xPos += Convert.ToInt32(Assets.mainFont.MeasureString(players[i].name).Length()) + 10;
 
@@ -268,9 +268,8 @@ namespace Summons.Engine
         static int height = 196;
         static int padding = 20;
         public List<Monster> summonOptions;
-        public Player player;
 
-        public MonsterSummonDialog(Player player)
+        public MonsterSummonDialog()
             : base(Convert.ToInt32((Settings.SCREEN_WIDTH - MonsterSummonDialog.width) / 2.0),
                 Convert.ToInt32((Settings.SCREEN_HEIGHT - MonsterSummonDialog.height) / 2.0),
                 MonsterSummonDialog.width,
@@ -278,20 +277,23 @@ namespace Summons.Engine
                 true)
         {
             this.visible = false;
+            BuildControls(PlayerManager.getInstance().currentPlayer);
+        }
 
+        public void BuildControls(Player player)
+        {
             // One button for each monster we could summon
-            // Note, we are assuming this is a player vs. CPU game, so only the first player
-            // gets this dialog. If this became multiplayer, we need to make one of these for each player.
-            this.player = player;
             summonOptions = player.summonOptions;
+            this.buttonCollection.Clear();
+
             int posX = 0;
             int posY = 0;
 
             for (int i = 0; i < summonOptions.Count; i++)
             {
-                SummonMonsterButton button = new SummonMonsterButton(this, 
+                SummonMonsterButton button = new SummonMonsterButton(this,
                     posX,
-                    posY, 
+                    posY,
                     summonOptions[i]);
                 this.buttonCollection.Add(button);
 
@@ -302,9 +304,8 @@ namespace Summons.Engine
                     button.x = posX;
                     button.y = posY;
                 }
-                    posX += button.width + padding;
+                posX += button.width + padding;
             }
-            
         }
     }
 
