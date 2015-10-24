@@ -5,9 +5,11 @@ Features in development:
   - Map tiles connect smoothly, choosing their tile based on other surrounding tiles.
 - Selectable and moveable characters. DONE
   - Ability to set destination for each unit and have them move towards that location each turn a distance depending on their movement statistics.
-- Ability to summon new units.
+- Ability to summon new units. DONE
 - UI allows for status of your team and of individual units. DONE
 - Ability for units to fight each other when coming in contact. DONE
+  - Monster evolve after gaining enough XP.
+  - Have a separate fight screen with attack animations, damage and death animations.
 - Towers and the ability to capture them for extra mana per turn. DONE
 - Ability to play a complete game from start to finish.
 - Findable relics/XP/mana spread throughout the map (hidden perhaps?).
