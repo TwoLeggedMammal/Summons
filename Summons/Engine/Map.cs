@@ -313,18 +313,16 @@ namespace Summons
 
     public class Route
     {
-        List<Coordinate> routeData;
-        Texture2D texture;
+        Stack<Coordinate> routeData;
 
         public Route(Monster monster, int x, int y)
         {
-            this.texture = Assets.mapDestinationFlag;
-            this.routeData = new List<Coordinate>();
+            this.routeData = new Stack<Coordinate>();
             if (monster.moveMap != null && !(monster.TileX == x && monster.TileY == y))
             {
                 if (monster.moveMap[y, x] > -1)
                 {
-                    this.routeData.Add(new Coordinate(x, y));
+                    this.routeData = Map.getInstance().FindPath(monster.TileX, monster.TileY, x, y, monster.player);
                 }
             }
         }
@@ -332,20 +330,34 @@ namespace Summons
         public void Draw(GraphicsDevice graphicsDevice, SpriteBatch sprite)
         {
             // And draw a little player symbol on that flag
-            foreach (Coordinate coord in this.routeData)
+            for (int i = 0; i < this.routeData.Count; i++)
             {
-                sprite.Draw
-                    (
-                        this.texture,
-                        new Rectangle
+                Texture2D texture = null;
+
+                if (i == this.routeData.Count - 1)
+                    texture = Assets.mapDestinationFlag;
+                else if (this.routeData.ElementAt(i).x < this.routeData.ElementAt(i + 1).x)
+                    texture = Assets.mapArrowRight;
+                else if (this.routeData.ElementAt(i).x > this.routeData.ElementAt(i + 1).x)
+                    texture = Assets.mapArrowLeft;
+                else if (this.routeData.ElementAt(i).y < this.routeData.ElementAt(i + 1).y)
+                    texture = Assets.mapArrowDown;
+                else if (this.routeData.ElementAt(i).y > this.routeData.ElementAt(i + 1).y)
+                    texture = Assets.mapArrowUp;
+
+                if (texture != null)
+                    sprite.Draw
                         (
-                            Convert.ToInt32(coord.x) * Settings.TILE_SIZE - Convert.ToInt32(Camera.getInstance().X),
-                            Convert.ToInt32(coord.y) * Settings.TILE_SIZE - Convert.ToInt32(Camera.getInstance().Y),
-                            Settings.TILE_SIZE,
-                            Settings.TILE_SIZE
-                        ),
-                        Color.White
-                    );
+                            texture,
+                            new Rectangle
+                            (
+                                Convert.ToInt32(this.routeData.ElementAt(i).x) * Settings.TILE_SIZE - Convert.ToInt32(Camera.getInstance().X),
+                                Convert.ToInt32(this.routeData.ElementAt(i).y) * Settings.TILE_SIZE - Convert.ToInt32(Camera.getInstance().Y),
+                                Settings.TILE_SIZE,
+                                Settings.TILE_SIZE
+                            ),
+                            Color.White
+                        );
             }
         }
     }
