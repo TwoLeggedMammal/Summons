@@ -105,6 +105,9 @@ namespace Summons
             // Mouse input
             Input.getInstance().HandleMouseInput(Mouse.GetState());
 
+            // Keyboard input
+            Input.getInstance().HandleKeyboardInput(Keyboard.GetState());
+
             // Update our camera
             camera.Update(timeSinceLastFrame);
 

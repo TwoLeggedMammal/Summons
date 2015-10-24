@@ -10,6 +10,7 @@ namespace Summons.Engine
     public class Input
     {
         MouseState previousMouseState;
+        KeyboardState previousKeyboardState;
         MonsterManager monsterManager;
         static Input instance = new Input();
         public ClickAction clickAction = ClickAction.NO_ACTION;
@@ -31,6 +32,26 @@ namespace Summons.Engine
         public static Input getInstance()
         {
             return instance;
+        }
+
+        public void HandleKeyboardInput(KeyboardState keyboardState)
+        {
+            // Summon monster hotkey
+            if (keyboardState.GetPressedKeys().Contains(Keys.S) && !previousKeyboardState.GetPressedKeys().Contains(Keys.S))
+            {
+                UI.getInstance().OpenSummonDialog();
+            }
+
+            if (keyboardState.GetPressedKeys().Contains(Keys.Enter) && !previousKeyboardState.GetPressedKeys().Contains(Keys.Enter))
+            {
+                foreach (Button button in UI.getInstance().playerActionDialog.buttonCollection)
+                {
+                    if (typeof(PassTurnButton) == button.GetType())
+                        button.ClickHandler();
+                }
+            }
+
+            previousKeyboardState = keyboardState;
         }
 
         public void HandleMouseInput(MouseState mouseState)
