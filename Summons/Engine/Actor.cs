@@ -42,6 +42,7 @@ namespace Summons.Engine
 
         public void Draw(GraphicsDevice graphics)
         {
+            monsterCollection.Sort((a, b) => a.Y.CompareTo(b.Y));  // Higher up monsters get drawn first, for proper layering
             foreach (Monster monster in monsterCollection)
             {
                 monster.Draw(graphics);
@@ -449,7 +450,7 @@ namespace Summons.Engine
             : base(x, y, player)
         {
             this.texture = Assets.blackKnightActor;
-            this.yOffset = -18.0;
+            this.yOffset = -12.0;
             this.name = "Black Knight";
             this.armor = 2;
             this.HP = this.maxHP = this.previousHP = 75;

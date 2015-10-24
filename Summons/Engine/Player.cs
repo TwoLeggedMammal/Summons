@@ -69,12 +69,28 @@ namespace Summons.Engine
             this.playerCollection.Add(player1);  // player 1 is human
             Monster blackMage = MonsterManager.getInstance().Spawn(typeof(BlackMage), Convert.ToInt32(player1Spawn.x), Convert.ToInt32(player1Spawn.y), this.playerCollection[0], true);
             player1.summoner = blackMage;
+            foreach (Tower tower in Map.getInstance().towers)
+            {
+                if (tower.X == player1Spawn.x && tower.Y == player1Spawn.y)
+                {
+                    tower.owner = player1;
+                    player1.towersOwned++;
+                }
+            }
 
             Coordinate player2Spawn = Map.getInstance().GetSpawnPoint(2);
             Player player2 = new Player(2, true);
             this.playerCollection.Add(player2);  // player 2 is ai
             Monster blackKnight = MonsterManager.getInstance().Spawn(typeof(BlackKnight), Convert.ToInt32(player2Spawn.x), Convert.ToInt32(player2Spawn.y), this.playerCollection[1], true);
             player2.summoner = blackKnight;
+            foreach (Tower tower in Map.getInstance().towers)
+            {
+                if (tower.X == player2Spawn.x && tower.Y == player2Spawn.y)
+                {
+                    tower.owner = player2;
+                    player2.towersOwned++;
+                }
+            }
 
             // Player 1 goes first
             this.currentPlayer = player1;
