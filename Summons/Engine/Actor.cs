@@ -112,6 +112,7 @@ namespace Summons.Engine
         public bool Selected = false;
         public bool Hovered = false;
         protected Stack<Coordinate> path;
+        public double[,] moveMap;
         public Coordinate finalDestination;  // This is the location to which the actor will head each turn
         public Coordinate endOfTurnDestination;  // This is final location to which the actor can reach this turn
         double speed = 300.0;
@@ -219,13 +220,21 @@ namespace Summons.Engine
         public void Select()
         {
             // We can only select one at a time, so let's unselect other monsters which may be selected
-            
-
             Selected = !Selected;
+
             if (Selected)
             {
                 Input.getInstance().clickAction = Input.ClickAction.MOVE_MONSTER;
+                Input.getInstance().selectedMonster = (Monster)this;
                 MonsterManager.getInstance().UnselectMonsters(this);
+                
+                // When clicked we build a movement map to refer to when planning a move
+                this.moveMap = Map.getInstance().GetMovementMap(this.TileX, 
+                    this.TileY, 
+                    null, 
+                    50.0, 
+                    Map.getInstance().GetActorLocations(this.TileX, this.TileY, this.player));
+                Console.Write(this.moveMap);
             }
             else
                 Input.getInstance().clickAction = Input.ClickAction.NO_ACTION;

@@ -13,7 +13,8 @@ namespace Summons.Engine
         MonsterManager monsterManager;
         static Input instance = new Input();
         public ClickAction clickAction = ClickAction.NO_ACTION;
-        public Type summonType = null;
+        public Monster selectedMonster;
+        public Type summonType;
 
         public enum ClickAction
         {
@@ -51,6 +52,13 @@ namespace Summons.Engine
                 actor.Hovered = !inputCaptured && (mouseState.X + camera.X > (actor.TileX * Settings.TILE_SIZE) && mouseState.X + camera.X < ((actor.TileX + 1) * Settings.TILE_SIZE) &&
                                 mouseState.Y + camera.Y > (actor.TileY * Settings.TILE_SIZE) && mouseState.Y + camera.Y < ((actor.TileY + 1) * Settings.TILE_SIZE));
                 inputCaptured = inputCaptured || actor.Hovered;
+            }
+
+            // Map hovering when planning a move for a monster
+            if (this.clickAction == ClickAction.MOVE_MONSTER)
+            {
+                Coordinate mapCoordinate = MouseToMap(mouseState);
+                Map.getInstance().PlanRoute(this.selectedMonster, Convert.ToInt32(mapCoordinate.x), Convert.ToInt32(mapCoordinate.y));
             }
 
             // Handle left clicks
@@ -92,7 +100,6 @@ namespace Summons.Engine
 
         void LeftClickHandler(MouseState mouseState)
         {
-            Camera camera = Camera.getInstance();
             bool uiClicked = false;
 
             // Send input to the UI
@@ -108,8 +115,7 @@ namespace Summons.Engine
                 // If we didn't click on an Actor, we must be trying to move the currently selected actor to this location
                 if (!actorClicked)
                 {
-                    int tileX = Convert.ToInt32(Math.Floor((mouseState.X + camera.X) / Settings.TILE_SIZE));
-                    int tileY = Convert.ToInt32(Math.Floor((mouseState.Y + camera.Y) / Settings.TILE_SIZE));
+                    Coordinate mapCoordinate = MouseToMap(mouseState);
 
                     if (this.clickAction == ClickAction.MOVE_MONSTER)
                     {
@@ -117,20 +123,30 @@ namespace Summons.Engine
                         {
                             if (actor.Selected)
                             {
-                                actor.SetDestination(tileX, tileY);
+                                actor.SetDestination(Convert.ToInt32(mapCoordinate.x), Convert.ToInt32(mapCoordinate.y));
                             }
                         }
+                        this.clickAction = ClickAction.NO_ACTION;
+                        Map.getInstance().ClearRoute();
                     }
                     else if (this.clickAction == ClickAction.SUMMON_MONSTER)
                     {
-                        if (Map.getInstance().IsSummonLocation(tileX, tileY))
+                        if (Map.getInstance().IsSummonLocation(Convert.ToInt32(mapCoordinate.x), Convert.ToInt32(mapCoordinate.y)))
                         {
-                            monsterManager.Spawn(summonType, tileX, tileY, PlayerManager.getInstance().currentPlayer);
+                            monsterManager.Spawn(summonType, Convert.ToInt32(mapCoordinate.x), Convert.ToInt32(mapCoordinate.y), PlayerManager.getInstance().currentPlayer);
                             this.clickAction = ClickAction.NO_ACTION;
                         }
                     }
                 }
             }
+        }
+
+        Coordinate MouseToMap(MouseState mouseState)
+        {
+            Camera camera = Camera.getInstance();
+            int tileX = Convert.ToInt32(Math.Floor((mouseState.X + camera.X) / Settings.TILE_SIZE));
+            int tileY = Convert.ToInt32(Math.Floor((mouseState.Y + camera.Y) / Settings.TILE_SIZE));
+            return new Coordinate(tileX, tileY);
         }
     }
 }

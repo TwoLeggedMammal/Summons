@@ -16,6 +16,7 @@ namespace Summons
     {
         static Assets instance = new Assets();
         public static Texture2D waterTile, grassTile, mountainTile, swampTile, towerTile;
+        public static Texture2D mapArrowUp, mapArrowRight, mapArrowDown, mapArrowLeft, mapDestinationFlag;
         public static Texture2D towerFlag;
         public static Texture2D blackMageActor, blueDragonActor, heavyKnightActor, archerActor, blackKnightActor;
         public static Texture2D uiTexture;
@@ -40,6 +41,11 @@ namespace Summons
             mountainTile = content.Load<Texture2D>("Tiles/mountain64");
             swampTile = content.Load<Texture2D>("Tiles/swamp64");
             towerTile = content.Load<Texture2D>("Tiles/tower64");
+            mapArrowUp = content.Load<Texture2D>("Tiles/arrowUp64");
+            mapArrowRight = content.Load<Texture2D>("Tiles/arrowRight64");
+            mapArrowDown = content.Load<Texture2D>("Tiles/arrowDown64");
+            mapArrowLeft = content.Load<Texture2D>("Tiles/arrowLeft64");
+            mapDestinationFlag = content.Load<Texture2D>("Tiles/destinationFlag64");
 
             // Load our actors
             blackMageActor = content.Load<Texture2D>("Actors/blackmage");

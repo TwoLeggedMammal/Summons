@@ -28,5 +28,10 @@
     <File>C:/Code/Summons/Summons/Content/Actors/blackknight.png</File>
     <File>C:/Code/Summons/Summons/Content/UI/curved_arrow.png</File>
     <File>C:/Code/Summons/Summons/Content/UI/go_arrow.png</File>
+    <File>C:/Code/Summons/Summons/Content/Tiles/arrowDown64.png</File>
+    <File>C:/Code/Summons/Summons/Content/Tiles/arrowLeft64.png</File>
+    <File>C:/Code/Summons/Summons/Content/Tiles/arrowRight64.png</File>
+    <File>C:/Code/Summons/Summons/Content/Tiles/arrowUp64.png</File>
+    <File>C:/Code/Summons/Summons/Content/Tiles/destinationFlag64.png</File>
   </SourceFiles>
 </SourceFileCollection>

@@ -7,6 +7,7 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Summons.Engine;
+using Microsoft.Xna.Framework.Input;
 
 namespace Summons
 {
@@ -22,6 +23,7 @@ namespace Summons
         public static SpriteBatch mapSprite;
         public List<Tower> towers;
         public List<Coordinate> summonLocations;
+        Route route;
 
         static Dictionary<char, double> tileMoveCost = new Dictionary<char, double>()
         {
@@ -39,7 +41,7 @@ namespace Summons
 
         private Map() 
         {
-            summonLocations = new List<Coordinate>();
+            this.summonLocations = new List<Coordinate>();
         }
 
         public static Map getInstance()
@@ -125,6 +127,9 @@ namespace Summons
             {
                 tower.Draw(graphics, mapSprite);
             }
+
+            if (this.route != null)
+                route.Draw(graphics, mapSprite);
             
             mapSprite.End();
         }
@@ -165,7 +170,7 @@ namespace Summons
             return null;
         }
 
-        private bool[,] GetActorLocations(int startX, int startY, Player player, bool myTeamOnly = true)
+        public bool[,] GetActorLocations(int startX, int startY, Player player, bool myTeamOnly = true)
         {
             // We don't want to move into the same spot as a teammate
             bool[,] teammateMap = new bool[height, width];
@@ -189,7 +194,7 @@ namespace Summons
             return teammateMap;
         }
 
-        private double[,] GetMovementMap(int x, int y, double[,] moveMap, double movement, bool[,] teammateMap)
+        public double[,] GetMovementMap(int x, int y, double[,] moveMap, double movement, bool[,] teammateMap)
         {
             if (moveMap == null)
             {
@@ -292,6 +297,55 @@ namespace Summons
                         summonLocations.Add(new Coordinate(i, j));
                     }
                 }
+            }
+        }
+
+        public void PlanRoute(Monster monster, int x, int y)
+        {
+            this.route = new Route(monster, x, y);
+        }
+
+        public void ClearRoute()
+        {
+            this.route = null;
+        }
+    }
+
+    public class Route
+    {
+        List<Coordinate> routeData;
+        Texture2D texture;
+
+        public Route(Monster monster, int x, int y)
+        {
+            this.texture = Assets.mapDestinationFlag;
+            this.routeData = new List<Coordinate>();
+            if (monster.moveMap != null && !(monster.TileX == x && monster.TileY == y))
+            {
+                if (monster.moveMap[y, x] > -1)
+                {
+                    this.routeData.Add(new Coordinate(x, y));
+                }
+            }
+        }
+
+        public void Draw(GraphicsDevice graphicsDevice, SpriteBatch sprite)
+        {
+            // And draw a little player symbol on that flag
+            foreach (Coordinate coord in this.routeData)
+            {
+                sprite.Draw
+                    (
+                        this.texture,
+                        new Rectangle
+                        (
+                            Convert.ToInt32(coord.x) * Settings.TILE_SIZE - Convert.ToInt32(Camera.getInstance().X),
+                            Convert.ToInt32(coord.y) * Settings.TILE_SIZE - Convert.ToInt32(Camera.getInstance().Y),
+                            Settings.TILE_SIZE,
+                            Settings.TILE_SIZE
+                        ),
+                        Color.White
+                    );
             }
         }
     }
