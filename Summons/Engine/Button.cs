@@ -166,6 +166,18 @@ namespace Summons.Engine
         }
     }
 
+    public class GoButton : Button
+    {
+        public GoButton(Dialog parent, int x = 0, int y = 0)
+            : base(parent, Assets.goIcon, "Move", x, y, FontSize.SMALL)
+        { }
+
+        public override void ClickHandler()
+        {
+            // Have all monsters move as far as they can
+        }
+    }
+
     public class SummonMonsterButton : Button
     {
         public Monster monster;

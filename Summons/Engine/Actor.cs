@@ -112,6 +112,8 @@ namespace Summons.Engine
         public bool Selected = false;
         public bool Hovered = false;
         protected Stack<Coordinate> path;
+        public Coordinate finalDestination;  // This is the location to which the actor will head each turn
+        public Coordinate endOfTurnDestination;  // This is final location to which the actor can reach this turn
         double speed = 300.0;
         public Player player;
 
@@ -256,11 +258,14 @@ namespace Summons.Engine
         public int meleeAP, meleeAccuracy, meleeAttacks;
         public int critRate;
         public int armor;
+        public double movement = 5.0;
         public MonsterStatusDialog status;
         double damageTimer = 0.0;
         double fullDamageTime = 0.5;
         protected int previousHP = -1;
         public int manaCost = 20;
+        public bool movedThisTurn = false;
+
 
         public Monster(int x, int y, Player player) 
             : base(x, y, player)

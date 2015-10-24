@@ -246,7 +246,7 @@ namespace Summons.Engine
     public class PlayerActionDialog : Dialog
     {
         static int width = 64;
-        static int height = 192;
+        static int height = 256;
 
         public PlayerActionDialog()
             : base(32,
@@ -257,8 +257,11 @@ namespace Summons.Engine
             // Summon button
             this.buttonCollection.Add(new SummonMenuButton(this));
 
+            // Monster move button
+            this.buttonCollection.Add(new GoButton(this, 0, 80));
+
             // Pass turn button
-            this.buttonCollection.Add(new PassTurnButton(this, 0, 80));
+            this.buttonCollection.Add(new PassTurnButton(this, 0, 160));
         }
     }
 
