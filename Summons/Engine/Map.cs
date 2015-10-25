@@ -302,7 +302,8 @@ namespace Summons
 
         public void PlanRoute(Monster monster, int x, int y)
         {
-            this.route = new Route(monster, x, y);
+            if (x >= 0 && x < this.width && y >= 0 && y < this.height)
+                this.route = new Route(monster, x, y);
         }
 
         public void ClearRoute()

@@ -274,6 +274,7 @@ namespace Summons.Engine
         protected int previousHP = -1;
         public int manaCost = 20;
         public bool movedThisTurn = false;
+        public bool prefersMelee = true;
 
 
         public Monster(int x, int y, Player player) 
@@ -419,6 +420,7 @@ namespace Summons.Engine
             this.rangedAccuracy = 66;
             this.rangedAP = 12;
             this.manaCost = 30;
+            this.prefersMelee = false;
         }
     }
 
@@ -491,6 +493,7 @@ namespace Summons.Engine
             this.rangedAccuracy = 70;
             this.rangedAP = 8;
             this.manaCost = 20;
+            this.prefersMelee = false;
         }
     }
 }

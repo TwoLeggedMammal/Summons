@@ -39,18 +39,21 @@ namespace Summons.Engine
         Queue<Tuple<double, Monster>> CalculateAttacks()
         {
             // Figure out the timings of each attack and by whom it was struck
+            // The first attacker gets their preferance at to if this is a melee or ranged battle
             Queue<double> firstAttacks = new Queue<double>();
             Queue<double> secondAttacks = new Queue<double>();
             Queue<Tuple<double, Monster>> finalAttacks = new Queue<Tuple<double,Monster>>();
+            int firstCombatantAttacks = firstCombatant.prefersMelee ? this.firstCombatant.meleeAttacks : this.firstCombatant.rangedAttacks;
+            int secondCombatantAttacks = firstCombatant.prefersMelee ? this.secondCombatant.meleeAttacks : this.secondCombatant.rangedAttacks;
 
-            for (int i = 1; i <= this.firstCombatant.meleeAttacks; i++)
+            for (int i = 1; i <= firstCombatantAttacks; i++)
             {
-                firstAttacks.Enqueue((fightLength / firstCombatant.meleeAttacks) * i);
+                firstAttacks.Enqueue((fightLength / firstCombatantAttacks) * i);
             }
 
-            for (int i = 1; i <= this.secondCombatant.meleeAttacks; i++)
+            for (int i = 1; i <= secondCombatantAttacks; i++)
             {
-                secondAttacks.Enqueue((fightLength / secondCombatant.meleeAttacks) * i);
+                secondAttacks.Enqueue((fightLength / secondCombatantAttacks) * i);
             }
 
             while (firstAttacks.Count > 0 || secondAttacks.Count > 0)
@@ -86,9 +89,11 @@ namespace Summons.Engine
             Monster defender = thisAttack.Item2 == firstCombatant ? secondCombatant : firstCombatant;
 
             // Here is the real combat math
-            bool missed = random.Next(0, 100) > attacker.meleeAccuracy;
+            int accuracy = firstCombatant.prefersMelee ? attacker.meleeAccuracy : attacker.rangedAccuracy;
+            int AP = firstCombatant.prefersMelee ? attacker.meleeAP : attacker.rangedAP;
+            bool missed = random.Next(0, 100) > accuracy;
             bool crit = random.Next(0, 100) <= attacker.critRate;
-            int damage = missed? 0 : crit? attacker.meleeAP * 2 : attacker.meleeAP - defender.armor;
+            int damage = missed? 0 : crit? AP * 2 : AP - defender.armor;
             String actionText = String.Format("-{0} HP", damage.ToString());
 
             if (missed)
