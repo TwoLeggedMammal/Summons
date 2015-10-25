@@ -81,6 +81,8 @@ namespace Summons.Engine
                 monster = new Archer(x, y, player);
             else if (monsterType == typeof(BlackKnight))
                 monster = new BlackKnight(x, y, player);
+            else if (monsterType == typeof(Assassin))
+                monster = new Assassin(x, y, player);
             else
                 throw new System.ArgumentException("Monster type not registered in the MonsterManager.Spawn factory", "monsterType");
 
@@ -275,7 +277,7 @@ namespace Summons.Engine
         public int manaCost = 20;
         public bool movedThisTurn = false;
         public bool prefersMelee = true;
-
+        public int monsterLevel;
 
         public Monster(int x, int y, Player player) 
             : base(x, y, player)
@@ -293,8 +295,19 @@ namespace Summons.Engine
             this.meleeAttacks = 2;
             this.armor = 0;
             this.critRate = 5;
+            this.monsterLevel = 1;  // Used in deciding relative XP gain from battles with this monster
             this.texture = Assets.blackMageActor;
             this.status = UI.getInstance().MakeMonsterStatusDialog(this);
+        }
+
+        public int BonusAccuracy()
+        {
+            return Convert.ToInt32(Convert.ToDouble(this.XP) / 20.0);
+        }
+
+        public int BonusCrit()
+        {
+            return Convert.ToInt32(Convert.ToDouble(this.XP) / 20.0);
         }
 
         public override void Draw(GraphicsDevice graphics)
@@ -421,6 +434,7 @@ namespace Summons.Engine
             this.rangedAP = 12;
             this.manaCost = 30;
             this.prefersMelee = false;
+            this.monsterLevel = 2;
         }
     }
 
@@ -439,6 +453,7 @@ namespace Summons.Engine
             this.rangedAccuracy = 60;
             this.rangedAP = 6;
             this.manaCost = 70;
+            this.monsterLevel = 3;
         }
     }
 
@@ -457,6 +472,7 @@ namespace Summons.Engine
             this.rangedAccuracy = 50;
             this.rangedAP = 5;
             this.manaCost = 40;
+            this.monsterLevel = 2;
         }
     }
 
@@ -475,6 +491,7 @@ namespace Summons.Engine
             this.rangedAccuracy = 50;
             this.rangedAP = 5;
             this.manaCost = 60;
+            this.monsterLevel = 3;
         }
     }
 
@@ -494,6 +511,26 @@ namespace Summons.Engine
             this.rangedAP = 8;
             this.manaCost = 20;
             this.prefersMelee = false;
+        }
+    }
+
+    public class Assassin : Monster
+    {
+        public Assassin(int x, int y, Player player)
+            : base(x, y, player)
+        {
+            this.texture = Assets.assassinActor;
+            this.yOffset = -6.0;
+            this.name = "Assassin";
+            this.armor = 0;
+            this.HP = this.maxHP = this.previousHP = 40;
+            this.meleeAccuracy = 90;
+            this.meleeAP = 2;
+            this.meleeAttacks = 7;
+            this.rangedAccuracy = 80;
+            this.rangedAP = 4;
+            this.manaCost = 25;
+            this.critRate = 40;
         }
     }
 }

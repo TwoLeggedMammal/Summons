@@ -144,7 +144,7 @@ namespace Summons.Engine
 
             // Melee attack
             dialogSprite.Draw(Assets.meleeIcon, new Rectangle(this.x, this.y + 64, 24, 24), Color.White);
-            String meleeText = String.Format("{0}x{1} ({2}%)", this.monster.meleeAP.ToString(), this.monster.meleeAttacks.ToString(), this.monster.meleeAccuracy.ToString());
+            String meleeText = String.Format("{0}x{1} ({2}%)", this.monster.meleeAP.ToString(), this.monster.meleeAttacks.ToString(), (this.monster.meleeAccuracy + this.monster.BonusAccuracy()).ToString());
             dialogSprite.DrawString(Assets.mainFont, meleeText, new Vector2(this.x + 32, this.y + 64), Color.White);
 
             // Ranged attack

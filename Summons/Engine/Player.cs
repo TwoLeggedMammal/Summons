@@ -35,7 +35,8 @@ namespace Summons.Engine
                 this.summonOptions = new List<Monster>()
                 {
                     new BlueDragon(0, 0, this),
-                    new Archer(0, 0, this)
+                    new Archer(0, 0, this),
+                    new Assassin(0, 0, this)
                 };
             }
             else

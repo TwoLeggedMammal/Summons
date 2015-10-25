@@ -18,7 +18,7 @@ namespace Summons
         public static Texture2D waterTile, grassTile, mountainTile, swampTile, towerTile;
         public static Texture2D mapArrowUp, mapArrowRight, mapArrowDown, mapArrowLeft, mapDestinationFlag;
         public static Texture2D towerFlag;
-        public static Texture2D blackMageActor, blueDragonActor, heavyKnightActor, archerActor, blackKnightActor;
+        public static Texture2D blackMageActor, blueDragonActor, heavyKnightActor, archerActor, blackKnightActor, assassinActor;
         public static Texture2D uiTexture;
         public static Texture2D meleeIcon, hpIcon, rangedIcon, defenseIcon, manaIcon, towerIcon;
         public static Texture2D summonIcon, passIcon, goIcon;
@@ -53,6 +53,7 @@ namespace Summons
             heavyKnightActor = content.Load<Texture2D>("Actors/heavyknight");
             archerActor = content.Load<Texture2D>("Actors/archer");
             blackKnightActor = content.Load<Texture2D>("Actors/blackknight");
+            assassinActor = content.Load<Texture2D>("Actors/assassin");
 
             // Load UI textures
             uiTexture = content.Load<Texture2D>("UI/dialog_border");

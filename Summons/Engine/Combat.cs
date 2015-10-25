@@ -89,10 +89,10 @@ namespace Summons.Engine
             Monster defender = thisAttack.Item2 == firstCombatant ? secondCombatant : firstCombatant;
 
             // Here is the real combat math
-            int accuracy = firstCombatant.prefersMelee ? attacker.meleeAccuracy : attacker.rangedAccuracy;
+            int accuracy = (firstCombatant.prefersMelee ? attacker.meleeAccuracy : attacker.rangedAccuracy) + attacker.BonusAccuracy();
             int AP = firstCombatant.prefersMelee ? attacker.meleeAP : attacker.rangedAP;
             bool missed = random.Next(0, 100) > accuracy;
-            bool crit = random.Next(0, 100) <= attacker.critRate;
+            bool crit = random.Next(0, 100) <= attacker.critRate + attacker.BonusCrit();
             int damage = missed? 0 : crit? AP * 2 : AP - defender.armor;
             String actionText = String.Format("-{0} HP", damage.ToString());
 
@@ -151,7 +151,9 @@ namespace Summons.Engine
         public void AwardXP(Monster winner, Monster loser)
         {
             // TODO: Implement better XP logic
-            winner.XP = winner.XP + 10 > winner.maxXP ? winner.maxXP : winner.XP + 10;
+            int levelDifference = winner.monsterLevel - loser.monsterLevel;
+            int xpGain = levelDifference <= -3 ? 100 : levelDifference >= 3 ? 0 : 100 / (levelDifference + 3);
+            winner.XP = winner.XP + xpGain > winner.maxXP ? winner.maxXP : winner.XP + xpGain;
         }
     }
 }
