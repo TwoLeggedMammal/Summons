@@ -23,7 +23,7 @@ namespace Summons
         public static SpriteBatch mapSprite;
         public List<Tower> towers;
         public List<Coordinate> summonLocations;
-        Route route;
+        public Route previewRoute;
 
         static Dictionary<char, double> tileMoveCost = new Dictionary<char, double>()
         {
@@ -128,8 +128,10 @@ namespace Summons
                 tower.Draw(graphics, mapSprite);
             }
 
-            if (this.route != null)
-                route.Draw(graphics, mapSprite);
+            if (previewRoute != null)
+            {
+                previewRoute.Draw(graphics, mapSprite);
+            }
             
             mapSprite.End();
         }
@@ -149,7 +151,7 @@ namespace Summons
             Stack<Coordinate> path = new Stack<Coordinate>();
             bool[,] teammateMap = GetActorLocations(startX, startY, player);
             double[,] moveMap = GetMovementMap(startX, startY, null, 30.0, teammateMap);
-            return ExtractPath(moveMap, destX, destY);
+            return ExtractPath(startX, startY, moveMap, destX, destY);
         }
 
         public Coordinate GetSpawnPoint(int playerNumber)
@@ -240,14 +242,15 @@ namespace Summons
             return moveMap;
         }
 
-        Stack<Coordinate> ExtractPath(double[,] moveMap, int x, int y, Stack<Coordinate> path = null)
+        Stack<Coordinate> ExtractPath(int startX, int startY, double[,] moveMap, int x, int y, Stack<Coordinate> path = null)
         {
             if (path == null)
                 path = new Stack<Coordinate>();
 
             if (moveMap[y, x] > -1)
             {
-                path.Push(new Coordinate(x, y));
+                if (!(x == startX && y == startY))
+                    path.Push(new Coordinate(x, y));
 
                 double up, down, left, right;
 
@@ -263,13 +266,13 @@ namespace Summons
                     double maxMove = Math.Max(up, Math.Max(down, Math.Max(left, right)));
 
                     if (up == maxMove)
-                        path = ExtractPath(moveMap, x, y - 1, path);
+                        path = ExtractPath(startX, startY, moveMap, x, y - 1, path);
                     else if (down == maxMove)
-                        path = ExtractPath(moveMap, x, y + 1, path);
+                        path = ExtractPath(startX, startY, moveMap, x, y + 1, path);
                     else if (left == maxMove)
-                        path = ExtractPath(moveMap, x - 1, y, path);
+                        path = ExtractPath(startX, startY, moveMap, x - 1, y, path);
                     else if (right == maxMove)
-                        path = ExtractPath(moveMap, x + 1, y, path);
+                        path = ExtractPath(startX, startY, moveMap, x + 1, y, path);
                 }
             }
 
@@ -303,21 +306,20 @@ namespace Summons
         public void PlanRoute(Monster monster, int x, int y)
         {
             if (x >= 0 && x < this.width && y >= 0 && y < this.height)
-                this.route = new Route(monster, x, y);
-        }
-
-        public void ClearRoute()
-        {
-            this.route = null;
+            {
+                previewRoute = new Route(monster, x, y);
+            }
         }
     }
 
     public class Route
     {
-        Stack<Coordinate> routeData;
+        public Stack<Coordinate> routeData;
+        public Actor monster;
 
-        public Route(Monster monster, int x, int y)
+        public Route(Actor monster, int x, int y)
         {
+            this.monster = monster;
             this.routeData = new Stack<Coordinate>();
             if (monster.moveMap != null && !(monster.TileX == x && monster.TileY == y))
             {
@@ -346,6 +348,10 @@ namespace Summons
                 else if (this.routeData.ElementAt(i).y > this.routeData.ElementAt(i + 1).y)
                     texture = Assets.mapArrowUp;
 
+                double currentMoveMapValue = monster.moveMap[monster.TileY, monster.TileX];
+                double tileMoveMapValue = monster.moveMap[Convert.ToInt32(this.routeData.ElementAt(i).y), Convert.ToInt32(this.routeData.ElementAt(i).x)];
+                bool moveableThisTurn = monster.remainingMovement >= currentMoveMapValue - tileMoveMapValue;
+
                 if (texture != null)
                     sprite.Draw
                         (
@@ -357,7 +363,7 @@ namespace Summons
                                 Settings.TILE_SIZE,
                                 Settings.TILE_SIZE
                             ),
-                            Color.White
+                            moveableThisTurn ? Color.Blue : Color.White
                         );
             }
         }

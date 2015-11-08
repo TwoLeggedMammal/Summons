@@ -127,6 +127,11 @@ namespace Summons.Engine
             // Give the player mana based on how many towers they control
             this.currentPlayer.mana += 20 + (this.currentPlayer.towersOwned * 10);
 
+            foreach (Monster monster in this.currentPlayer.monsterCollection)
+            {
+                monster.remainingMovement = monster.movement;
+            }
+
             EventsManager.getInstance().RecordEvent(EventsManager.Event.START_TURN);
             UI.getInstance().monsterSummonDialog.BuildControls(this.currentPlayer);
 

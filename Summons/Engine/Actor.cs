@@ -91,6 +91,7 @@ namespace Summons.Engine
                 player.mana -= monster.manaCost;
 
             this.monsterCollection.Add(monster);
+            player.monsterCollection.Add(monster);
             return monster;
         }
 
@@ -113,12 +114,13 @@ namespace Summons.Engine
         protected SpriteBatch actorSprite;
         public bool Selected = false;
         public bool Hovered = false;
+        public Route route;
         protected Stack<Coordinate> path;
         public double[,] moveMap;
-        public Coordinate finalDestination;  // This is the location to which the actor will head each turn
-        public Coordinate endOfTurnDestination;  // This is final location to which the actor can reach this turn
         double speed = 300.0;
         public Player player;
+        public double movement = 5.0;
+        public double remainingMovement;
 
         public int TileX
         {
@@ -152,14 +154,15 @@ namespace Summons.Engine
             camera = Camera.getInstance();
             path = new Stack<Coordinate>();
             this.player = player;
+            this.remainingMovement = this.movement;
         }
 
         public virtual void Update(double timeSinceLastFrame)
         {
-            if (path.Count > 0)
+            if (route != null && route.routeData.Count > 0 && remainingMovement >= Map.getInstance().GetTileFactor(Convert.ToInt32(route.routeData.Peek().x), Convert.ToInt32(route.routeData.Peek().y)))
             {
-                double xDiff = (path.Peek().x * Settings.TILE_SIZE) - X;
-                double yDiff = (path.Peek().y * Settings.TILE_SIZE) - Y;
+                double xDiff = (route.routeData.Peek().x * Settings.TILE_SIZE) - X;
+                double yDiff = (route.routeData.Peek().y * Settings.TILE_SIZE) - Y;
                 double moveAmount = (speed * timeSinceLastFrame);
 
                 // Slow down the movement based on the tile over which they are moving
@@ -182,6 +185,9 @@ namespace Summons.Engine
                 // We've moved completely into the tile
                 if (xDiff == 0 && yDiff == 0)
                 {
+                    route.routeData.Pop();
+                    this.remainingMovement -= Map.getInstance().GetTileFactor(TileX, TileY);
+
                     // Check to see if we've moved onto a tower
                     foreach (Tower tower in Map.getInstance().towers)
                     {
@@ -190,8 +196,6 @@ namespace Summons.Engine
                             tower.Capture(this);
                         }
                     }
-
-                    Console.WriteLine(path.Pop());
                 }
             }
         }
@@ -247,10 +251,10 @@ namespace Summons.Engine
         public void SetDestination(int x, int y)
         {
             Selected = false;
-            path = Map.getInstance().FindPath(TileX, TileY, x, y, player);
+            route = new Route(this, x, y);
             
             // Did we click on an inaccessible location?
-            if (path.Count == 0)
+            if (route.routeData.Count == 0)
                 EventsManager.getInstance().RecordEvent(EventsManager.Event.INVALID_ACTOR_DESTINATION);
         }
 
@@ -269,13 +273,11 @@ namespace Summons.Engine
         public int meleeAP, meleeAccuracy, meleeAttacks;
         public int critRate;
         public int armor;
-        public double movement = 5.0;
         public MonsterStatusDialog status;
         double damageTimer = 0.0;
         double fullDamageTime = 0.5;
         protected int previousHP = -1;
         public int manaCost = 20;
-        public bool movedThisTurn = false;
         public bool prefersMelee = true;
         public int monsterLevel;
 

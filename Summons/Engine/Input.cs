@@ -145,10 +145,10 @@ namespace Summons.Engine
                             if (actor.Selected)
                             {
                                 actor.SetDestination(Convert.ToInt32(mapCoordinate.x), Convert.ToInt32(mapCoordinate.y));
+                                Map.getInstance().previewRoute = null;
                             }
                         }
                         this.clickAction = ClickAction.NO_ACTION;
-                        Map.getInstance().ClearRoute();
                     }
                     else if (this.clickAction == ClickAction.SUMMON_MONSTER)
                     {
