@@ -115,7 +115,6 @@ namespace Summons.Engine
         public bool Selected = false;
         public bool Hovered = false;
         public Route route;
-        protected Stack<Coordinate> path;
         public double[,] moveMap;
         double speed = 300.0;
         public Player player;
@@ -152,7 +151,6 @@ namespace Summons.Engine
             TileY = y;
             texture = Assets.blackMageActor;
             camera = Camera.getInstance();
-            path = new Stack<Coordinate>();
             this.player = player;
             this.remainingMovement = this.movement;
         }
@@ -355,29 +353,29 @@ namespace Summons.Engine
 
         public override void Update(double timeSinceLastFrame)
         {
-            base.Update(timeSinceLastFrame);
-
             // Check to see if we've engaged in battle or bumped into a teammate
             foreach (Monster monster in MonsterManager.getInstance().monsterCollection)
             {
-                if (monster != this && this.path.Count > 0 &&
+                if (monster != this && this.route != null && this.route.routeData.Count > 0 &&
                     ((monster.TileX == this.TileX && monster.TileY == this.TileY) ||
-                    (monster.TileX == this.path.Peek().x && monster.TileY == this.path.Peek().y)))
+                    (monster.TileX == this.route.routeData.Peek().x && monster.TileY == this.route.routeData.Peek().y)))
                 {
                     if (this.player == monster.player)
                     {
                         // We're friends!
-                        this.path.Clear();
+                        this.route.routeData.Clear();
                     }
                     else
                     {
                         // Fight it out!
-                        this.path.Clear();
+                        this.route.routeData.Clear();
                         EventsManager.getInstance().RecordEvent(EventsManager.Event.BATTLE_ENGAGED);
                         Combat.getInstance().FightItOut(this, monster);
                     }
                 }
             }
+
+            base.Update(timeSinceLastFrame);
 
             this.status.visible = this.Hovered;
             this.UIUpdate(timeSinceLastFrame);

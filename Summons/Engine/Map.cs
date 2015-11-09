@@ -132,6 +132,12 @@ namespace Summons
             {
                 previewRoute.Draw(graphics, mapSprite);
             }
+
+            foreach (Monster monster in MonsterManager.getInstance().monsterCollection)
+            {
+                if (monster.route != null && monster.Hovered)
+                    monster.route.Draw(graphics, mapSprite);
+            }
             
             mapSprite.End();
         }
