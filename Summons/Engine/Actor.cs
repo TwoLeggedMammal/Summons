@@ -26,9 +26,26 @@ namespace Summons.Engine
 
         public void Update(double timeSinceLastFrame)
         {
+            bool moved = false;
+
+            // Move each monster one at a time, and only during the movement phase
             foreach (Monster monster in monsterCollection)
             {
-                monster.Update(timeSinceLastFrame);
+                if (monster.player == PlayerManager.getInstance().currentPlayer &&
+                    monster.remainingMovement > 0 &&
+                    monster.route != null &&
+                    monster.route.routeData.Count > 0)
+                {
+                    monster.Update(timeSinceLastFrame);
+                    moved = true;
+                    break;
+                }
+            }
+
+            // If there are no more monsters left to move then we pass the turn
+            if (!moved)
+            {
+                PlayerManager.getInstance().EndTurn();
             }
         }
 

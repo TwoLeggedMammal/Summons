@@ -37,6 +37,7 @@ namespace Summons.Engine
             TITLE_SCREEN,
             OPTIONS_MENU,
             OVERWORLD,
+            MOVEMENT,
             COMBAT
         }
         Dictionary<Event, bool> triggered;

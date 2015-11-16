@@ -106,19 +106,7 @@ namespace Summons.Engine
         public void EndTurn()
         {
             // Make it the next players turn
-            for (int i = 0; i < this.playerCollection.Count; i++)
-            {
-                if (this.currentPlayer == playerCollection[i])
-                {
-                    if (i == this.playerCollection.Count - 1)
-                        this.currentPlayer = playerCollection[0];
-                    else
-                        this.currentPlayer = this.playerCollection[i + 1];
-
-                    break;
-                }
-            }
-
+            this.currentPlayer = this.playerCollection[(this.playerCollection.IndexOf(this.currentPlayer) + 1) % this.playerCollection.Count];
             StartTurn();
         }
 
@@ -134,8 +122,7 @@ namespace Summons.Engine
 
             EventsManager.getInstance().RecordEvent(EventsManager.Event.START_TURN);
             UI.getInstance().monsterSummonDialog.BuildControls(this.currentPlayer);
-
-            // TODO: reset this player's monster's movement points
+            EventsManager.getInstance().CurrentScene = EventsManager.Scene.OVERWORLD;
         }
     }
 }
