@@ -30,7 +30,8 @@ namespace Summons.Engine
             TOWER_CAPTURED,
             MONSTER_DIED,
             NOT_ENOUGH_MANA,
-            START_TURN
+            START_TURN,
+            END_TURN
         }
         public enum Scene
         {
@@ -95,6 +96,10 @@ namespace Summons.Engine
                     ui.OpenTextDialog(64, 64, 384, "You do not have enough mana to perform that action! Capture towers to gain mana each turn.");
                 else
                     ui.OpenTextDialog(64, 64, 384, "Not enough mana!");
+            }
+            else if (e == Event.END_TURN)
+            {
+                PlayerManager.getInstance().EndTurn();
             }
 
             if (triggered.ContainsKey(e))

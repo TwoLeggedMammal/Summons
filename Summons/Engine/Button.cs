@@ -162,7 +162,14 @@ namespace Summons.Engine
 
         public override void ClickHandler()
         {
-            EventsManager.getInstance().CurrentScene = EventsManager.Scene.MOVEMENT;
+            if (Settings.MOVE_DURING_END_OF_TURN)
+            {
+                EventsManager.getInstance().CurrentScene = EventsManager.Scene.MOVEMENT;
+            }
+            else
+            {
+                EventsManager.getInstance().RecordEvent(EventsManager.Event.END_TURN);
+            }
         }
     }
 

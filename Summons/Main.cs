@@ -112,7 +112,7 @@ namespace Summons
             camera.Update(timeSinceLastFrame);
 
             // Update our actors
-            if (eventsManager.CurrentScene == EventsManager.Scene.MOVEMENT)
+            if (eventsManager.CurrentScene == EventsManager.Scene.MOVEMENT || !Settings.MOVE_DURING_END_OF_TURN)
             {
                 monsterManager.Update(timeSinceLastFrame);
             }

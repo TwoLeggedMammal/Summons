@@ -26,6 +26,22 @@ namespace Summons.Engine
 
         public void Update(double timeSinceLastFrame)
         {
+            if (Settings.MOVE_DURING_END_OF_TURN)
+            {
+                // If there are no more monsters left to move then we pass the turn
+                if (!MoveMonsters(timeSinceLastFrame))
+                {
+                    PlayerManager.getInstance().EndTurn();
+                }
+            }
+            else
+            {
+                MoveMonsters(timeSinceLastFrame);
+            }
+        }
+
+        public bool MoveMonsters(double timeSinceLastFrame)
+        {
             bool moved = false;
 
             // Move each monster one at a time, and only during the movement phase
@@ -42,11 +58,7 @@ namespace Summons.Engine
                 }
             }
 
-            // If there are no more monsters left to move then we pass the turn
-            if (!moved)
-            {
-                PlayerManager.getInstance().EndTurn();
-            }
+            return moved;
         }
 
         public void UIUpdate(double timeSinceLastFrame)
@@ -183,7 +195,7 @@ namespace Summons.Engine
                 // Slow down the movement based on the tile over which they are moving
                 moveAmount /= Map.getInstance().GetTileFactor(TileX, TileY);
 
-                // If we've just got a little bit to move, then we only move that little bit this frame
+                // If we've just got a little bit left to move, then we only move that little bit this frame
                 if (moveAmount > Math.Max(Math.Abs(xDiff), Math.Abs(yDiff)))
                     moveAmount = Math.Max(Math.Abs(xDiff), Math.Abs(yDiff));
 

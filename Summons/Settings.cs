@@ -17,6 +17,9 @@ namespace Summons
         public static int SCREEN_WIDTH = 1600;
         public static int SCREEN_HEIGHT = 1080;
         
+        // Gameplay settings
+        public static bool MOVE_DURING_END_OF_TURN = false;
+
         // Media locations
         public static String MEDIA_ROOT = "../../../Content/";
         public static String MAPS_ROOT = MEDIA_ROOT + "Maps/";
