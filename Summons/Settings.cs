@@ -20,6 +20,9 @@ namespace Summons
         // Gameplay settings
         public static bool MOVE_DURING_END_OF_TURN = false;
 
+        // Visual settings
+        public static Microsoft.Xna.Framework.Color OUT_OF_MOVEMENT_COLOR = new Microsoft.Xna.Framework.Color(255, 155, 155);
+
         // Media locations
         public static String MEDIA_ROOT = "../../../Content/";
         public static String MAPS_ROOT = MEDIA_ROOT + "Maps/";

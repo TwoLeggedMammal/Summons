@@ -244,7 +244,9 @@ namespace Summons.Engine
                                 texture.Width,
                                 texture.Height
                             ),
-                            Selected ? new Color(highlightColor, highlightColor, Convert.ToInt32(highlightColor * 0.8)) : Color.White
+                            Selected ? new Color(highlightColor, highlightColor, Convert.ToInt32(highlightColor * 0.8)) : 
+                                this.remainingMovement == 0 ? Settings.OUT_OF_MOVEMENT_COLOR :
+                                    Color.White
                         );
 
             actorSprite.End();
