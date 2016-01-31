@@ -18,6 +18,7 @@ namespace Summons.Engine
         public int towersOwned;
         public Monster summoner;
         public List<Monster> summonOptions;
+        public AI ai;
 
         public Player(int playerNumber, bool isAI)
         {
@@ -50,6 +51,23 @@ namespace Summons.Engine
                 {
                     new HeavyKnight(0, 0, this)
                 };
+            }
+        }
+
+        public void StartTurn()
+        {
+            // Give the player mana based on how many towers they control
+            this.mana += 20 + (this.towersOwned * 10);
+
+            // Reset all moster movement points
+            foreach (Monster monster in this.monsterCollection)
+            {
+                monster.remainingMovement = monster.movement;
+            }
+
+            if (this.ai != null)
+            {
+                this.ai.Delay();
             }
         }
     }
@@ -97,6 +115,15 @@ namespace Summons.Engine
                     tower.Capture(blackKnight, false);
             }
 
+            foreach (Player player in this.playerCollection)
+            {
+                if (player.isAi)
+                {
+                    AI ai = new AI(player);
+                    player.ai = ai;
+                }
+            }
+
             // Player 1 goes first
             this.currentPlayer = player1;
 
@@ -112,18 +139,11 @@ namespace Summons.Engine
 
         public void StartTurn()
         {
-            // Give the player mana based on how many towers they control
-            this.currentPlayer.mana += 20 + (this.currentPlayer.towersOwned * 10);
-
-            // Reset all moster movement points
-            foreach (Monster monster in this.currentPlayer.monsterCollection)
-            {
-                monster.remainingMovement = monster.movement;
-            }
-
             EventsManager.getInstance().RecordEvent(EventsManager.Event.START_TURN);
             UI.getInstance().monsterSummonDialog.BuildControls(this.currentPlayer);
             EventsManager.getInstance().CurrentScene = EventsManager.Scene.OVERWORLD;
+
+            this.currentPlayer.StartTurn();
         }
     }
 }

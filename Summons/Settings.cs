@@ -19,6 +19,7 @@ namespace Summons
         
         // Gameplay settings
         public static bool MOVE_DURING_END_OF_TURN = false;
+        public static double AI_ACTION_DELAY = 0.50;
 
         // Visual settings
         public static Microsoft.Xna.Framework.Color OUT_OF_MOVEMENT_COLOR = new Microsoft.Xna.Framework.Color(255, 155, 155);

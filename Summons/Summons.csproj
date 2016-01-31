@@ -57,6 +57,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Engine\Actor.cs" />
+    <Compile Include="Engine\AI.cs" />
     <Compile Include="Engine\Assets.cs" />
     <Compile Include="Engine\Button.cs" />
     <Compile Include="Engine\Camera.cs" />

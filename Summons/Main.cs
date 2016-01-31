@@ -85,6 +85,7 @@ namespace Summons
         {
             double timeSinceLastFrame = gameTime.ElapsedGameTime.Milliseconds / 1000.0;
             this.Window.Title = Convert.ToString(1.0 / timeSinceLastFrame);
+            Player currentPlayer = PlayerManager.getInstance().currentPlayer;
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -120,6 +121,12 @@ namespace Summons
             {
                 monsterManager.UIUpdate(timeSinceLastFrame);
                 combat.Update(timeSinceLastFrame);
+            }
+
+            // Let our AI do its thing
+            if (currentPlayer.isAi && currentPlayer.ai != null)
+            {
+                currentPlayer.ai.DoStuff(timeSinceLastFrame);
             }
 
             // Update our UI
