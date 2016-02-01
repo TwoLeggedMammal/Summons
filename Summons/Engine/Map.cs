@@ -160,6 +160,14 @@ namespace Summons
             return ExtractPath(startX, startY, moveMap, destX, destY);
         }
 
+        public double[,] MapForAI(Monster monster)
+        {
+            bool[,] teammateMap = GetActorLocations(monster.TileX, monster.TileY, monster.player);
+            double[,] moveMap = GetMovementMap(monster.TileX, monster.TileY, null, 30.0, teammateMap);
+
+            return moveMap;
+        }
+
         public Coordinate GetSpawnPoint(int playerNumber)
         {
             char spawnChar = playerNumber == 1 ? 'a' : playerNumber == 2 ? 'b' : playerNumber == 3 ? 'c' : 'd';
@@ -338,7 +346,6 @@ namespace Summons
 
         public void Draw(GraphicsDevice graphicsDevice, SpriteBatch sprite)
         {
-            // And draw a little player symbol on that flag
             for (int i = 0; i < this.routeData.Count; i++)
             {
                 Texture2D texture = null;

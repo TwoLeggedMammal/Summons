@@ -9,11 +9,13 @@ namespace Summons.Engine
     {
         Player player;
         double delay;
+        Dictionary<Monster, bool> movedThisTurn;
 
         public AI(Player player)
         {
             this.player = player;
             delay = 0.0;
+            movedThisTurn = new Dictionary<Monster, bool>();
         }
         
         public void DoStuff(double timeSinceLastFrame)
@@ -89,6 +91,11 @@ namespace Summons.Engine
             // 1. Occupy tower
             // 2. Kill enemies
             // 3. Move toward enemy summoner
+            if (monster.remainingMovement > 0)
+            {
+                double[,] map = Map.getInstance().MapForAI(monster);
+                movedThisTurn[monster] = true;
+            }
             
             return false;
         }
@@ -97,6 +104,17 @@ namespace Summons.Engine
         {
             // We don't want to make actions too quickly to be seen
             this.delay += Settings.AI_ACTION_DELAY; 
+        }
+
+        public void StartTurn()
+        {
+            Delay();
+
+            movedThisTurn.Clear();
+            foreach (Monster monster in this.player.monsterCollection)
+            {
+                movedThisTurn.Add(monster, false);
+            }
         }
 
         void EndTurn()

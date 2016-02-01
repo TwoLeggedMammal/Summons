@@ -67,7 +67,7 @@ namespace Summons.Engine
 
             if (this.ai != null)
             {
-                this.ai.Delay();
+                this.ai.StartTurn();
             }
         }
     }
