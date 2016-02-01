@@ -124,6 +124,7 @@ namespace Summons.Engine
 
         public void Update(double timeSinceLastFrame)
         {
+            Console.Write("fighting ");
             elapsedTime += timeSinceLastFrame;
             attackTimer += timeSinceLastFrame;
 

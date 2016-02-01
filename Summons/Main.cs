@@ -113,14 +113,14 @@ namespace Summons
             camera.Update(timeSinceLastFrame);
 
             // Update our actors
-            if (eventsManager.CurrentScene == EventsManager.Scene.MOVEMENT || !Settings.MOVE_DURING_END_OF_TURN)
-            {
-                monsterManager.Update(timeSinceLastFrame);
-            }
-            else if (eventsManager.CurrentScene == EventsManager.Scene.COMBAT)
+            if (eventsManager.CurrentScene == EventsManager.Scene.COMBAT)
             {
                 monsterManager.UIUpdate(timeSinceLastFrame);
                 combat.Update(timeSinceLastFrame);
+            }
+            else if (eventsManager.CurrentScene == EventsManager.Scene.MOVEMENT || !Settings.MOVE_DURING_END_OF_TURN)
+            {
+                monsterManager.Update(timeSinceLastFrame);
             }
 
             // Let our AI do its thing
@@ -128,7 +128,7 @@ namespace Summons
             {
                 currentPlayer.ai.DoStuff(timeSinceLastFrame);
             }
-
+            
             // Update our UI
             ui.Update(timeSinceLastFrame);
 

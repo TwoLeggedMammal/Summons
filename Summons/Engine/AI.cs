@@ -55,6 +55,29 @@ namespace Summons.Engine
         bool SummonMonsters()
         {
             // Have mana? Spend it on random monsters
+            int minMana = this.player.summonOptions.Min(x => x.manaCost);
+
+            if (this.player.mana >= minMana)
+            {
+                Map map = Map.getInstance();
+                map.LoadSummonOverlay(this.player);
+
+                // Make sure there are valid places to summon
+                if (map.summonLocations.Count > 0)
+                {
+                    // TODO: randomize on which location the monster is summoned
+                    // TODO: randomize which monster is summoned
+                    Monster summon = this.player.summonOptions.Where(x => x.manaCost <= this.player.mana).First();
+
+                    MonsterManager.getInstance().Spawn(summon.GetType(), 
+                        Convert.ToInt32(map.summonLocations.First().x), 
+                        Convert.ToInt32(map.summonLocations.First().y), 
+                        this.player);
+
+                    return true;
+                }
+            }
+
             return false;
         }
 

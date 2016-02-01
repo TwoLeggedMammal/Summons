@@ -485,6 +485,7 @@ namespace Summons.Engine
             this.rangedAP = 6;
             this.manaCost = 70;
             this.monsterLevel = 3;
+            this.movement = this.remainingMovement = 7;
         }
     }
 
